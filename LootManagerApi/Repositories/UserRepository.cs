@@ -10,15 +10,20 @@ namespace LootManagerApi.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        #region DECLARATIONS
         LootManagerContext context;
         ILogger<UserRepository> logger;
+        #endregion
 
+        #region CONSTRUCTOR
         public UserRepository(LootManagerContext context, ILogger<UserRepository> logger)
         {
             this.context = context;
             this.logger = logger;
         }
+        #endregion
 
+        #region LOG
         public async Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto)
         {
             if (!UtilsEmail.IsValidateEmailAddressAttribute(userLoginDto.Email))
@@ -27,7 +32,7 @@ namespace LootManagerApi.Repositories
             }
             if (!await UtilsEmail.IsEmailExistInContextAsync(userLoginDto.Email, context))
             {
-                throw new Exception(userLoginDto.Email);
+                throw new Exception($"Email does not exist : {userLoginDto.Email}");
             }
             var passwordHash = await context.Users.Where(u => u.Email == userLoginDto.Email).Select(p => p.PasswordHash).FirstOrDefaultAsync();
             if (passwordHash == null)
@@ -41,11 +46,11 @@ namespace LootManagerApi.Repositories
             return true;
         }
 
-        public ClaimsIdentity? GetClaimsIdentity(UserLoginDto userLoginDto)
+        public async Task<ClaimsIdentity?> GetClaimsIdentityAsync(UserLoginDto userLoginDto)
         {
             try
             {
-                var user = context.Users.FirstOrDefault(u => u.Email == userLoginDto.Email);
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
                 ClaimsIdentity identity = new(new List<Claim>
                 {
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -62,5 +67,7 @@ namespace LootManagerApi.Repositories
                 return null;
             }
         }
+        #endregion
+
     }
 }
