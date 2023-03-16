@@ -15,10 +15,10 @@ namespace LootManagerApi.Repositories
 
             // Default data
             // Users
-            var u1 = new User { Id = 1, FullName = "Jerry Seinfeld", Email = "jerry@aol.com", Password = "pwd" };
-            var u2 = new User { Id = 2, FullName = "George Costanza", Email = "George.Costanza@aol.com", Password = "george" };
-            var u3 = new User { Id = 3, FullName = "Elaine Benes", Email = "Elaine.Benes@aol.com", Password = "jerry" };
-            var u4 = new User { Id = 4, FullName = "Cosmo Kramer", Email = "Cosmo.Kramer@aol.com", Password = "qzerty" };
+            var u1 = new User { Id = 1, FullName = "Jerry Seinfeld", Email = "jerry@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
+            var u2 = new User { Id = 2, FullName = "George Costanza", Email = "George.Costanza@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
+            var u3 = new User { Id = 3, FullName = "Elaine Benes", Email = "Elaine.Benes@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
+            var u4 = new User { Id = 4, FullName = "Cosmo Kramer", Email = "Cosmo.Kramer@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
 
             modelBuilder.Entity<User>().HasData(new List<User> { u1, u2, u3, u4 });
            

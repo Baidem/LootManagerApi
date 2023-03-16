@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<LootManagerContext>();
 
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();

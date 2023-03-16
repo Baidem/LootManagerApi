@@ -5,7 +5,7 @@ namespace LootManagerApi.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        bool CheckUserLoginDto();
+        Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto);
         ClaimsIdentity? GetClaimsIdentity(UserLoginDto userLoginDto);
     }
 }

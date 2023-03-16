@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LootManagerApi.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace LootManagerApi.Utils
 {
@@ -24,6 +27,11 @@ namespace LootManagerApi.Utils
                 return false;
 
             return true;
+        }
+
+        public static async Task<bool> IsEmailExistInContextAsync(string email, LootManagerContext context)
+        {
+            return await context.Users.AnyAsync(u => u.Email == email);
         }
     }
 }

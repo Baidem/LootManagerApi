@@ -1,6 +1,8 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Repositories.Interfaces;
+using LootManagerApi.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
@@ -17,9 +19,25 @@ namespace LootManagerApi.Repositories
             this.logger = logger;
         }
 
-        public bool CheckUserLoginDto()
+        public async Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto)
         {
-            
+            if (!UtilsEmail.IsValidateEmailAddressAttribute(userLoginDto.Email))
+            {
+                throw new Exception($"Invalid email address attribute : { userLoginDto.Email }");
+            }
+            if (!await UtilsEmail.IsEmailExistInContextAsync(userLoginDto.Email, context))
+            {
+                throw new Exception(userLoginDto.Email);
+            }
+            var passwordHash = await context.Users.Where(u => u.Email == userLoginDto.Email).Select(p => p.PasswordHash).FirstOrDefaultAsync();
+            if (passwordHash == null)
+            {
+                throw new Exception("The hash search was unsuccessful.");
+            }
+            if (!UtilsPassword.CheckPasswordMatchesHash(userLoginDto.Password, passwordHash))
+            {
+                throw new Exception("The password is invalid.");
+            }
             return true;
         }
 
