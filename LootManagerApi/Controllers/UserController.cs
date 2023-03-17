@@ -7,6 +7,7 @@ using LootManagerApi.Dto;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 namespace LootManagerApi.Controllers
 {
@@ -35,6 +36,7 @@ namespace LootManagerApi.Controllers
             {
                 await userRepository.CheckUserLoginDtoAsync(userLoginDto);
                 var identity = await userRepository.GetClaimsIdentityAsync(userLoginDto);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                 return Ok($"{identity.FindFirst(ClaimTypes.Name).Value} is connected.");
             }
             catch (Exception ex)
