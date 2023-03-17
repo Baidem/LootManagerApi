@@ -90,8 +90,16 @@ namespace LootManagerApi.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<UserSummaryDto>> CreateUser([FromForm] UserCreateDto userCreateDto)
         {
-            var userSummaryDto = await userRepository.CreateUserAsync(userCreateDto);
-            return Ok(userSummaryDto);
+            try
+            {
+                await userRepository.IsValidUserCreateDtoAsync(userCreateDto);
+                var userSummaryDto = await userRepository.CreateUserAsync(userCreateDto);
+                return Ok(userSummaryDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         #endregion

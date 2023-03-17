@@ -9,6 +9,8 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<ClaimsIdentity?> GetClaimsIdentityAsync(UserLoginDto userLoginDto);
         Task<List<UserSummaryDto>> GetAllUsersAsync();
         Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto);
+        Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreatedDto);
+
 
 
     }

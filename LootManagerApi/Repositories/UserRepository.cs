@@ -78,7 +78,7 @@ namespace LootManagerApi.Repositories
         }
         #endregion
 
-        #region POST
+        #region CREATE USER
         public async Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto)
         {
             var user = new User(userCreateDto);
@@ -86,6 +86,28 @@ namespace LootManagerApi.Repositories
             await context.SaveChangesAsync();
             return new UserSummaryDto(user);
         }
+        public async Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreateDto)
+        {
+            if (!UtilsEmail.IsValidateEmailAddressAttribute(userCreateDto.Email))
+            {
+                throw new Exception($"Invalid email address format : {userCreateDto.Email}");
+            }
+            if (await UtilsEmail.IsEmailExistInContextAsync(userCreateDto.Email, context))
+            {
+                throw new Exception(string.Format("Email does not exist : {0}", userCreateDto.Email));
+            }
+            int minLengthPassword = 8;
+            if (UtilsPassword.CheckPasswordLength(userCreateDto.Password, minLengthPassword))
+            {
+                throw new Exception($"The password must have at least {minLengthPassword} characters.");
+            }
+            if (!UtilsPassword.CheckPasswordComplexity(userCreateDto.Password))
+            {
+                throw new Exception("The password must contain at least one upper case letter, one lower case letter, one number and one special character.");
+            }
+            return true;
+        }
+
         #endregion
     }
 }

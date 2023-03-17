@@ -19,6 +19,5 @@ namespace LootManagerApi.Dto
             FullName = identity?.FindFirst(ClaimTypes.Name).Value;
             Email = identity?.FindFirst(ClaimTypes.Email).Value;
         }
-
     }
 }

@@ -10,6 +10,24 @@
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
+        public static bool CheckPasswordLength(string password, int minLength)
+        {
+            if (password.Length < minLength)
+                return true;
+            else
+                return false;
+        }
+        public static bool CheckPasswordComplexity(string password)
+        {
+            bool hasUpperCase = password.Any(c => char.IsUpper(c));
+            bool hasLowerCase = password.Any(c => char.IsLower(c));
+            bool hasDigit = password.Any(c => char.IsDigit(c));
+            bool hasSpecialChar = password.Any(c => char.IsSymbol(c) || char.IsPunctuation(c));
+
+            return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
+        }
+
+
 
     }
 }
