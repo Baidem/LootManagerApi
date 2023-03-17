@@ -82,6 +82,19 @@ namespace LootManagerApi.Controllers
             }
         }
         #endregion
+
+        #region POST
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserSummaryDto>> CreateUser([FromForm] UserCreateDto userCreateDto)
+        {
+            var userSummaryDto = await userRepository.CreateUserAsync(userCreateDto);
+            return Ok(userSummaryDto);
+        }
+
+        #endregion
     }
 }
 

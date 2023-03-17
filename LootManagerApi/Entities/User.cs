@@ -1,4 +1,6 @@
-﻿namespace LootManagerApi.Entities
+﻿using LootManagerApi.Dto;
+
+namespace LootManagerApi.Entities
 {
     public class User
     {
@@ -8,5 +10,17 @@
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
+
+        public User()
+        {
+        }
+
+        public User(UserCreateDto userCreateDto)
+        {
+            FullName = userCreateDto.FullName;
+            Email = userCreateDto.Email;
+            PasswordHash = Utils.UtilsPassword.GenerateHashedPassword(userCreateDto.Password);
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }

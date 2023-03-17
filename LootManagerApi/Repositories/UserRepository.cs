@@ -1,6 +1,7 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Utils;
+using LootManagerApi.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -74,6 +75,16 @@ namespace LootManagerApi.Repositories
         public async Task<List<UserSummaryDto>> GetAllUsersAsync()
         {
             return await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
+        }
+        #endregion
+
+        #region POST
+        public async Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto)
+        {
+            var user = new User(userCreateDto);
+            await context.Users.AddAsync(user);
+            await context.SaveChangesAsync();
+            return new UserSummaryDto(user);
         }
         #endregion
     }
