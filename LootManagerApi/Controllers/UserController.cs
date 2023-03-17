@@ -60,6 +60,25 @@ namespace LootManagerApi.Controllers
             return new UserAuthentifiedDto(identity);
         }
         #endregion
+
+        #region GET
+        [HttpGet]
+        public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsersAsync()
+        {
+            try
+            {
+                loadUserAuthentifiedDto();
+                // To do Vérifier rôle de l'utilisateur
+                var userSummaryDtoList = await userRepository.GetAllUsersAsync();
+                return Ok(userSummaryDtoList);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+        #endregion
     }
 }
 

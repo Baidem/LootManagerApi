@@ -28,7 +28,7 @@ namespace LootManagerApi.Repositories
         {
             if (!UtilsEmail.IsValidateEmailAddressAttribute(userLoginDto.Email))
             {
-                throw new Exception($"Invalid email address attribute : { userLoginDto.Email }");
+                throw new Exception($"Invalid email address attribute : {userLoginDto.Email}");
             }
             if (!await UtilsEmail.IsEmailExistInContextAsync(userLoginDto.Email, context))
             {
@@ -45,6 +45,7 @@ namespace LootManagerApi.Repositories
             }
             return true;
         }
+
 
         public async Task<ClaimsIdentity?> GetClaimsIdentityAsync(UserLoginDto userLoginDto)
         {
@@ -69,5 +70,11 @@ namespace LootManagerApi.Repositories
         }
         #endregion
 
+        #region GET
+        public async Task<List<UserSummaryDto>> GetAllUsersAsync()
+        {
+            return await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
+        }
+        #endregion
     }
 }

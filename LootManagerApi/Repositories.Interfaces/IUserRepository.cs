@@ -7,5 +7,6 @@ namespace LootManagerApi.Repositories.Interfaces
     {
         Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto);
         Task<ClaimsIdentity?> GetClaimsIdentityAsync(UserLoginDto userLoginDto);
+        Task<List<UserSummaryDto>> GetAllUsersAsync();
     }
 }
