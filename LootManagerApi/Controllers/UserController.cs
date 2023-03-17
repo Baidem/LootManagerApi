@@ -6,6 +6,7 @@ using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Dto;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace LootManagerApi.Controllers
 {

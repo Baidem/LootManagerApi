@@ -59,7 +59,7 @@ namespace LootManagerApi.Repositories
                     new(ClaimTypes.Email, user.Email)
                 },
                 CookieAuthenticationDefaults.AuthenticationScheme);
-
+                Console.WriteLine("stop");
                 return identity;
             }
             catch (Exception ex)
