@@ -13,9 +13,5 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto);
         Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
         Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto);
-
-
-
-
     }
 }

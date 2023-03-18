@@ -27,8 +27,5 @@
 
             return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
         }
-
-
-
     }
 }

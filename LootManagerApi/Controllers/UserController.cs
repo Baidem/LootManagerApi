@@ -104,7 +104,6 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region UPDATE USER
-        // to do check newpassword & new email 
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -112,15 +111,10 @@ namespace LootManagerApi.Controllers
         {
             try
             {
-                // Check Login
                 var userAuthDto = loadUserAuthentifiedDto();
-                // Check User 
                 await userRepository.ValidateUserUpdateDtoMatchesUserAuthDto(userUpdateDto, userAuthDto);
-                // Check New Data
                 await userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto);
-                // Update data
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
-                // Update auth
                 string password = (userUpdateDto.NewPassword == null) ? userUpdateDto.CurrentPassword : userUpdateDto.NewPassword;
                 await updateUserIdentity(userSummaryDto.Email, password);
 

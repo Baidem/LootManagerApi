@@ -48,7 +48,6 @@ namespace LootManagerApi.Repositories
             return true;
         }
 
-
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(UserLoginDto userLoginDto)
         {
             try
@@ -73,7 +72,7 @@ namespace LootManagerApi.Repositories
         }
         #endregion
 
-        #region GET
+        #region READ
         public async Task<List<UserSummaryDto>> GetAllUsersAsync()
         {
             return await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
@@ -108,9 +107,6 @@ namespace LootManagerApi.Repositories
             }
             return true;
         }
-
-
-
         #endregion
 
         #region UPDATE USER
@@ -171,14 +167,6 @@ namespace LootManagerApi.Repositories
             }
             return true;
         }
-
-
-
         #endregion
-
-
-
-
-
     }
 }
