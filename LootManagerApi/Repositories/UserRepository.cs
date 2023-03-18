@@ -133,11 +133,11 @@ namespace LootManagerApi.Repositories
             throw new Exception("The user cannot be found.");
         }
 
-        public async Task<bool> CheckUserUpdateDtoIsUserAuthentifiedAsync(UserUpdateDto userUpdateDto, UserAuthentifiedDto userAuthentifiedDto)
+        public async Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
         {
-            if (userUpdateDto.CurrentFullName == userAuthentifiedDto.FullName && userUpdateDto.CurrentEmail == userAuthentifiedDto.Email)
+            if (userUpdateDto.CurrentFullName == userAuthDto.FullName && userUpdateDto.CurrentEmail == userAuthDto.Email)
             {
-                var passwordHash = await context.Users.Where(u => u.Email == userAuthentifiedDto.Email).Select(p => p.PasswordHash).FirstAsync();
+                var passwordHash = await context.Users.Where(u => u.Email == userAuthDto.Email).Select(p => p.PasswordHash).FirstAsync();
                 if (Utils.UtilsPassword.CheckPasswordMatchesHash(userUpdateDto.CurrentPassword, passwordHash))
                 {
                     return true;
@@ -145,6 +145,14 @@ namespace LootManagerApi.Repositories
             }
             throw new Exception("Data does not correspond to the current user.");
         }
+
+        public Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
         #endregion
 
 

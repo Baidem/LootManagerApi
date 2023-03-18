@@ -54,14 +54,14 @@ namespace LootManagerApi.Controllers
             return Ok("Log out");
         }
 
-        private UserAuthentifiedDto loadUserAuthentifiedDto()
+        private UserAuthDto loadUserAuthentifiedDto()
         {
             var identity = User?.Identity as ClaimsIdentity;
             if (identity?.FindFirst(ClaimTypes.NameIdentifier) == null)
             {
                 throw new Exception("You must log in.");
             }
-            return new UserAuthentifiedDto(identity);
+            return new UserAuthDto(identity);
         }
         #endregion
 
@@ -113,11 +113,11 @@ namespace LootManagerApi.Controllers
             try
             {
                 // Check Login
-                var userAuthentified = loadUserAuthentifiedDto();
+                var userAuthDto = loadUserAuthentifiedDto();
                 // Check User 
-                await userRepository.CheckUserUpdateDtoIsUserAuthentifiedAsync(userUpdateDto, userAuthentified);
+                await userRepository.ValidateUserUpdateDtoMatchesUserAuthDto(userUpdateDto, userAuthDto);
                 // Check New Data
-
+                await ValidateUserUpdateDtoDataAsync(userUpdateDto);
                 // Update data
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
                 // Update auth

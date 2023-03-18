@@ -3,17 +3,17 @@ using System.Security.Claims;
 
 namespace LootManagerApi.Dto
 {
-    public class UserAuthentifiedDto
+    public class UserAuthDto
     {
         public int? Id { get; set; }
         public string? FullName { get; set; }
         public string? Email { get; set; }
 
-        public UserAuthentifiedDto()
+        public UserAuthDto()
         {
         }
 
-        public UserAuthentifiedDto(ClaimsIdentity identity)
+        public UserAuthDto(ClaimsIdentity identity)
         {
             Id = Int32.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier).Value);
             FullName = identity?.FindFirst(ClaimTypes.Name).Value;

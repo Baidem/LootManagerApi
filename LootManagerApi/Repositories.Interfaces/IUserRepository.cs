@@ -11,7 +11,9 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto);
         Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreatedDto);
         Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto);
-        Task<bool> CheckUserUpdateDtoIsUserAuthentifiedAsync(UserUpdateDto userUpdateDto, UserAuthentifiedDto userAuthentifiedDto);
+        Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
+        Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto);
+
 
 
 
