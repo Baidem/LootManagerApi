@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace LootManagerApi.Controllers
 {
@@ -103,6 +104,7 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region UPDATE USER
+        // to do check newpassword & new email 
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -110,17 +112,30 @@ namespace LootManagerApi.Controllers
         {
             try
             {
+                // Check Login
                 var userAuthentified = loadUserAuthentifiedDto();
-                // verification userUpdate == userAuth
-                // update date
+                // Check User 
+                await userRepository.CheckUserUpdateDtoIsUserAuthentifiedAsync(userUpdateDto, userAuthentified);
+                // Check New Data
+
+                // Update data
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
+                // Update auth
+                string password = (userUpdateDto.NewPassword == null) ? userUpdateDto.CurrentPassword : userUpdateDto.NewPassword;
+                await updateUserIdentity(userSummaryDto.Email, password);
+
                 return Ok($"The user is update : FullName = {userSummaryDto.FullName}, Email = {userSummaryDto.Email}, Password = {dotsLine(userUpdateDto)}");
             }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
-
+        }
+        private async Task updateUserIdentity(string email, string password)
+        {
+            var userLoginDto = new UserLoginDto { Email = email, Password = password };
+            var identity = await userRepository.GetClaimsIdentityAsync(userLoginDto);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
         private string dotsLine(UserUpdateDto userUpdateDto)
         {

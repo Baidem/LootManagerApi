@@ -49,7 +49,7 @@ namespace LootManagerApi.Repositories
         }
 
 
-        public async Task<ClaimsIdentity?> GetClaimsIdentityAsync(UserLoginDto userLoginDto)
+        public async Task<ClaimsIdentity> GetClaimsIdentityAsync(UserLoginDto userLoginDto)
         {
             try
             {
@@ -66,8 +66,9 @@ namespace LootManagerApi.Repositories
             }
             catch (Exception ex)
             {
-                logger.LogError(ex?.InnerException.ToString());
-                return null;
+                var message = ex?.InnerException.ToString();
+                logger.LogError(message);
+                throw new Exception(message);
             }
         }
         #endregion
@@ -114,7 +115,7 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region UPDATE USER
-        public async Task<UserSummaryDto?> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        public async Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => userUpdateDto.CurrentEmail == u.Email);
             if (user != null)
@@ -132,10 +133,18 @@ namespace LootManagerApi.Repositories
             throw new Exception("The user cannot be found.");
         }
 
-        //public Task<bool> CheckUserUpdateDtoIsUserAuthentifiedAsync(UserUpdateDto userUpdateDto, UserAuthentifiedDto userAuthentifiedDto)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<bool> CheckUserUpdateDtoIsUserAuthentifiedAsync(UserUpdateDto userUpdateDto, UserAuthentifiedDto userAuthentifiedDto)
+        {
+            if (userUpdateDto.CurrentFullName == userAuthentifiedDto.FullName && userUpdateDto.CurrentEmail == userAuthentifiedDto.Email)
+            {
+                var passwordHash = await context.Users.Where(u => u.Email == userAuthentifiedDto.Email).Select(p => p.PasswordHash).FirstAsync();
+                if (Utils.UtilsPassword.CheckPasswordMatchesHash(userUpdateDto.CurrentPassword, passwordHash))
+                {
+                    return true;
+                }
+            }
+            throw new Exception("Data does not correspond to the current user.");
+        }
         #endregion
 
 
