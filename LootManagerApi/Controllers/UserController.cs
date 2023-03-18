@@ -65,7 +65,7 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region GET
+        #region READ
         [HttpGet]
         public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsersAsync()
         {
