@@ -83,8 +83,7 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region POST
-
+        #region CREATE USER
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -101,8 +100,28 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+        #endregion
+
+        #region UPDATE USER
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public ActionResult UpdateUser([FromForm] UserUpdateDto userUpdateDto)
+        {
+            try
+            {
+                var userAuthentified = loadUserAuthentifiedDto();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+
+        }
 
         #endregion
+
     }
 }
 
