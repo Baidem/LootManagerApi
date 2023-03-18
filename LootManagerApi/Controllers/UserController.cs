@@ -106,18 +106,30 @@ namespace LootManagerApi.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public ActionResult UpdateUser([FromForm] UserUpdateDto userUpdateDto)
+        public async Task<ActionResult> UpdateUser([FromForm] UserUpdateDto userUpdateDto)
         {
             try
             {
                 var userAuthentified = loadUserAuthentifiedDto();
-                return Ok();
+                // verification userUpdate == userAuth
+                // update date
+                var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
+                return Ok($"The user is update : FullName = {userSummaryDto.FullName}, Email = {userSummaryDto.Email}, Password = {dotsLine(userUpdateDto)}");
             }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
 
+        }
+        private string dotsLine(UserUpdateDto userUpdateDto)
+        {
+            int dotsLength;
+            if (userUpdateDto.NewPassword == null)
+                dotsLength = userUpdateDto.CurrentPassword.Length;
+            else
+                dotsLength = userUpdateDto.NewPassword.Length;
+            return new string('●', dotsLength);
         }
 
         #endregion

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using System.Reflection.Metadata.Ecma335;
 
 namespace LootManagerApi.Repositories
 {
@@ -108,6 +109,38 @@ namespace LootManagerApi.Repositories
             return true;
         }
 
+
+
         #endregion
+
+        #region UPDATE USER
+        public async Task<UserSummaryDto?> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => userUpdateDto.CurrentEmail == u.Email);
+            if (user != null)
+            {
+                if (userUpdateDto.NewFullName == null && userUpdateDto.NewEmail == null && userUpdateDto.NewPassword == null)
+                {
+                    throw new Exception("No changes needed.");
+                }
+                if (userUpdateDto.NewFullName != null) { user.FullName = userUpdateDto.NewFullName; }
+                if (userUpdateDto.NewEmail != null) { user.Email = userUpdateDto.NewEmail; }
+                if (userUpdateDto.NewPassword != null) { user.PasswordHash = Utils.UtilsPassword.GenerateHashedPassword(userUpdateDto.NewPassword); }
+                await context.SaveChangesAsync();
+                return new UserSummaryDto(user);
+            }
+            throw new Exception("The user cannot be found.");
+        }
+
+        //public Task<bool> CheckUserUpdateDtoIsUserAuthentifiedAsync(UserUpdateDto userUpdateDto, UserAuthentifiedDto userAuthentifiedDto)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        #endregion
+
+
+
+
+
     }
 }
