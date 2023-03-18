@@ -15,7 +15,7 @@ namespace LootManagerApi.Repositories
 
             // Default data
             // Users
-            var u1 = new User { Id = 1, FullName = "test", Email = "test", PasswordHash = BCrypt.Net.BCrypt.HashPassword("test") };
+            var u1 = new User { Id = 1, FullName = "test", Email = "test@test.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("test") };
             var u2 = new User { Id = 2, FullName = "Jerry Seinfeld", Email = "jerry@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
             var u3 = new User { Id = 3, FullName = "George Costanza", Email = "George.Costanza@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
             var u4 = new User { Id = 4, FullName = "Elaine Benes", Email = "Elaine.Benes@aol.com", PasswordHash = BCrypt.Net.BCrypt.HashPassword("userNumber1!") };
