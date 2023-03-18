@@ -117,7 +117,7 @@ namespace LootManagerApi.Controllers
                 // Check User 
                 await userRepository.ValidateUserUpdateDtoMatchesUserAuthDto(userUpdateDto, userAuthDto);
                 // Check New Data
-                await ValidateUserUpdateDtoDataAsync(userUpdateDto);
+                await userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto);
                 // Update data
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
                 // Update auth
@@ -146,7 +146,6 @@ namespace LootManagerApi.Controllers
                 dotsLength = userUpdateDto.NewPassword.Length;
             return new string('●', dotsLength);
         }
-
         #endregion
 
     }

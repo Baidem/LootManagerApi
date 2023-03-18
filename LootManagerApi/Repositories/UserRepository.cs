@@ -96,12 +96,11 @@ namespace LootManagerApi.Repositories
             }
             if (await UtilsEmail.IsEmailExistInContextAsync(userCreateDto.Email, context))
             {
-                throw new Exception(string.Format("Email does not exist : {0}", userCreateDto.Email));
+                throw new Exception(string.Format("Email is already used : {0}", userCreateDto.Email));
             }
-            int minLengthPassword = 8;
-            if (UtilsPassword.CheckPasswordLength(userCreateDto.Password, minLengthPassword))
+            if (UtilsPassword.CheckPasswordLength(userCreateDto.Password))
             {
-                throw new Exception($"The password must have at least {minLengthPassword} characters.");
+                throw new Exception($"The password must have at least {Utils.UtilsPassword.PASSWORD_MIN_LENGTH} characters.");
             }
             if (!UtilsPassword.CheckPasswordComplexity(userCreateDto.Password))
             {
@@ -146,9 +145,31 @@ namespace LootManagerApi.Repositories
             throw new Exception("Data does not correspond to the current user.");
         }
 
-        public Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto)
+        public async Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto)
         {
-            throw new NotImplementedException();
+            if (userUpdateDto.NewEmail != null)
+            {
+                if (!UtilsEmail.IsValidateEmailAddressAttribute(userUpdateDto.NewEmail))
+                {
+                    throw new Exception($"Invalid email address format : {userUpdateDto.NewEmail}");
+                }
+                if (await UtilsEmail.IsEmailExistInContextAsync(userUpdateDto.NewEmail, context))
+                {
+                    throw new Exception(string.Format("Email is already used : {0}", userUpdateDto.NewEmail));
+                }
+            }
+            if (userUpdateDto.NewPassword != null)
+            {
+                if (UtilsPassword.CheckPasswordLength(userUpdateDto.NewPassword))
+                {
+                    throw new Exception($"The password must have at least {Utils.UtilsPassword.PASSWORD_MIN_LENGTH} characters.");
+                }
+                if (!UtilsPassword.CheckPasswordComplexity(userUpdateDto.NewPassword))
+                {
+                    throw new Exception("The password must contain at least one upper case letter, one lower case letter, one number and one special character.");
+                }
+            }
+            return true;
         }
 
 

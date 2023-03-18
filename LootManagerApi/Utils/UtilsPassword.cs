@@ -2,6 +2,7 @@
 {
     public static class UtilsPassword
     {
+        public const int PASSWORD_MIN_LENGTH = 8;
         public static bool CheckPasswordMatchesHash(string password, string hash)
         {
             return BCrypt.Net.BCrypt.Verify(password, hash);
@@ -10,9 +11,9 @@
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-        public static bool CheckPasswordLength(string password, int minLength)
+        public static bool CheckPasswordLength(string password)
         {
-            if (password.Length < minLength)
+            if (password.Length < PASSWORD_MIN_LENGTH)
                 return true;
             else
                 return false;
