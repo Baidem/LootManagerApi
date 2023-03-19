@@ -13524,9 +13524,9 @@
 												"$ref": "AAAAAAGGrEJjgjLZbMQ="
 											},
 											"font": "Arial;13;0",
-											"left": 656,
+											"left": 650,
 											"top": 223,
-											"width": 7.22998046875,
+											"width": 19.5126953125,
 											"height": 13,
 											"alpha": -0.5235987755982988,
 											"distance": 25,
@@ -13534,7 +13534,7 @@
 												"$ref": "AAAAAAGGrEJjgTKy7J8="
 											},
 											"edgePosition": 2,
-											"text": "1"
+											"text": "1..*"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14294,7 +14294,7 @@
 										"reference": {
 											"$ref": "AAAAAAGGrEJjgjLXAOA="
 										},
-										"multiplicity": "1"
+										"multiplicity": "1..*"
 									},
 									"end2": {
 										"_type": "UMLAssociationEnd",
