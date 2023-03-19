@@ -34,6 +34,15 @@ namespace LootManagerApi.Repositories
 
             modelBuilder.Entity<Element>().HasData(new List<Element> { e1, e2, e3, e4, e5 });
 
+            // Locations
+            var l1 = new Location { Id = 1, House = "House1", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
+            var l2 = new Location { Id = 2, House = "House2", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
+            var l3 = new Location { Id = 3, House = "House3", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
+            var l4 = new Location { Id = 4, House = "House4", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
+            var l5 = new Location { Id = 5, House = "House5", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { l1, l2, l3, l4, l5 });
+
             base.OnModelCreating(modelBuilder);
         }
 
