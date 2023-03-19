@@ -122,6 +122,7 @@ namespace LootManagerApi.Repositories
                 if (userUpdateDto.NewFullName != null) { user.FullName = userUpdateDto.NewFullName; }
                 if (userUpdateDto.NewEmail != null) { user.Email = userUpdateDto.NewEmail; }
                 if (userUpdateDto.NewPassword != null) { user.PasswordHash = Utils.UtilsPassword.GenerateHashedPassword(userUpdateDto.NewPassword); }
+                user.UpdateAt = DateTime.UtcNow;
                 await context.SaveChangesAsync();
                 return new UserSummaryDto(user);
             }
