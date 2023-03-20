@@ -11,7 +11,7 @@
 
         // Navigation properties
         public List<User> Users { get; set; }
-        public List<Element> Elements { get; set; }
+        public List<ElementLocation>? ElementLocations { get; set; }
 
         public override string? ToString()
         {

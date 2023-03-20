@@ -11,8 +11,8 @@
         // Navigation properties
         public User User { get; set; }
         public int UserId { get; set; }
-        public Location Location { get; set; }
-        public int LocationId { get; set; }
+        public ElementLocation? ElementLocation { get; set; }
+        public int ElementLocationId { get; set; }
 
     }
 }

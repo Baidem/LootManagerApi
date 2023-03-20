@@ -4,6 +4,7 @@ using LootManagerApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LootManagerApi.Migrations
 {
     [DbContext(typeof(LootManagerContext))]
-    partial class LootManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20230320135629_ElementLocationJoin")]
+    partial class ElementLocationJoin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,9 +132,6 @@ namespace LootManagerApi.Migrations
             modelBuilder.Entity("LootManagerApi.Entities.ElementLocation", b =>
                 {
                     b.Property<int>("ElementId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("LocationId")
@@ -253,42 +253,42 @@ namespace LootManagerApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 3, 20, 14, 13, 10, 800, DateTimeKind.Utc).AddTicks(7590),
+                            CreatedAt = new DateTime(2023, 3, 20, 13, 56, 28, 492, DateTimeKind.Utc).AddTicks(9168),
                             Email = "test@test.com",
                             FullName = "test",
-                            PasswordHash = "$2a$11$0faHZcIDiHhlPm1UX9KCnez07WWJJKJzfaJbYnA4AL67MjFA37reS"
+                            PasswordHash = "$2a$11$h9/FuPDuHQ.Vp38vaMtoX.ml5Zp7gmV1a1DSXBp5n9cSdS7rPijai"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 3, 20, 14, 13, 10, 990, DateTimeKind.Utc).AddTicks(198),
+                            CreatedAt = new DateTime(2023, 3, 20, 13, 56, 28, 670, DateTimeKind.Utc).AddTicks(6680),
                             Email = "jerry@aol.com",
                             FullName = "Jerry Seinfeld",
-                            PasswordHash = "$2a$11$c8SYrEgCr09GR.tmNXMxxOMnPIy0Di5m2YE..y0JqIOWCe/cOLAsi"
+                            PasswordHash = "$2a$11$z9Wwan6wvahlifjzAEnqv.6uVnDoWGs2UG0znw2F6SbgmwUz7NXCu"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 3, 20, 14, 13, 11, 156, DateTimeKind.Utc).AddTicks(8831),
+                            CreatedAt = new DateTime(2023, 3, 20, 13, 56, 28, 854, DateTimeKind.Utc).AddTicks(6266),
                             Email = "George.Costanza@aol.com",
                             FullName = "George Costanza",
-                            PasswordHash = "$2a$11$CXnjVCIcdJy4k0ovEBsjbOEVWe1TZMef7/Zd5sDN6lZgp7OgbN4Um"
+                            PasswordHash = "$2a$11$fZM5eA7sEp8LVsHq/xngw.asq/KLx2.dJOHrlHTNCCQxyhtWjjcbq"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2023, 3, 20, 14, 13, 11, 324, DateTimeKind.Utc).AddTicks(8691),
+                            CreatedAt = new DateTime(2023, 3, 20, 13, 56, 29, 46, DateTimeKind.Utc).AddTicks(7216),
                             Email = "Elaine.Benes@aol.com",
                             FullName = "Elaine Benes",
-                            PasswordHash = "$2a$11$qhXGoQ9JdQKU.uQCkCodPuV5AaCkrcsZhjvje8TpQhNUeItY0ibEe"
+                            PasswordHash = "$2a$11$28fFidvCG7vcvPThQYleSeyiLlM03uxMABths2ogy9NR0wk89p7.e"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2023, 3, 20, 14, 13, 11, 482, DateTimeKind.Utc).AddTicks(3342),
+                            CreatedAt = new DateTime(2023, 3, 20, 13, 56, 29, 210, DateTimeKind.Utc).AddTicks(8190),
                             Email = "Cosmo.Kramer@aol.com",
                             FullName = "Cosmo Kramer",
-                            PasswordHash = "$2a$11$Yg5Pg4S48d9yj49T8LlIFOReMOCMbqPabR/7Q0yswjUeJzBR8YSFi"
+                            PasswordHash = "$2a$11$DW/EuAKm95kEpkQJpMwfS.ZOrguuww4OY.ffruGpCp.2t.YF8nA7y"
                         });
                 });
 
