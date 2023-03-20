@@ -13314,6 +13314,7 @@
 													"model": {
 														"$ref": "AAAAAAGGrEJjgjLu+lQ="
 													},
+													"visible": false,
 													"font": "Arial;13;0",
 													"left": 501,
 													"top": 618,
@@ -13327,7 +13328,7 @@
 											"left": 496,
 											"top": 553,
 											"width": 153.4443359375,
-											"height": 83
+											"height": 68
 										},
 										{
 											"_type": "UMLOperationCompartmentView",
@@ -13340,7 +13341,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 496,
-											"top": 636,
+											"top": 621,
 											"width": 153.4443359375,
 											"height": 10
 										},

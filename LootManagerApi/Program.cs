@@ -18,6 +18,8 @@ builder.Services.AddDbContext<LootManagerContext>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<IElementRepository, ElementRepository>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 var app = builder.Build();

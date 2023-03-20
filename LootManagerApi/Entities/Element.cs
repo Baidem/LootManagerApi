@@ -1,4 +1,6 @@
-﻿namespace LootManagerApi.Entities
+﻿using LootManagerApi.Dto;
+
+namespace LootManagerApi.Entities
 {
     public class Element
     {
@@ -14,5 +16,17 @@
         public ElementLocation? ElementLocation { get; set; }
         public int ElementLocationId { get; set; }
 
+        public Element()
+        {
+        }
+
+        public Element(ElementCreateDto elementCreateDto, int userId)
+        {
+            Name = elementCreateDto.Name;
+            Description = elementCreateDto.Description;
+            Type = elementCreateDto.Type;
+            UserId = userId;
+            LocationAddress = "Empty";
+        }
     }
 }
