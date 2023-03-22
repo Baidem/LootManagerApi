@@ -8,7 +8,6 @@ namespace LootManagerApi.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }
-        public string LocationAddress { get; set; }
 
         // Navigation properties
         public User User { get; set; }
@@ -26,7 +25,6 @@ namespace LootManagerApi.Entities
             Description = elementCreateDto.Description;
             Type = elementCreateDto.Type;
             UserId = userId;
-            LocationAddress = "Empty";
         }
     }
 }

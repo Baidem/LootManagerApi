@@ -27,11 +27,11 @@ namespace LootManagerApi.Repositories
             modelBuilder.Entity<User>().HasData(new List<User> { u1, u2, u3, u4, u5 });
 
             // Elements
-            var e1 = new Element { Id = 1, Name = "element1", Type = "Type undefined ", Description = "Description of the element", LocationAddress = "Location undifined", UserId = 1 };
-            var e2 = new Element { Id = 2, Name = "element2", Type = "Type undefined ", Description = "Description of the element", LocationAddress = "Location undifined", UserId = 2 };
-            var e3 = new Element { Id = 3, Name = "element3", Type = "Type undefined ", Description = "Description of the element", LocationAddress = "Location undifined", UserId = 3 };
-            var e4 = new Element { Id = 4, Name = "element4", Type = "Type undefined ", Description = "Description of the element", LocationAddress = "Location undifined", UserId = 4 };
-            var e5 = new Element { Id = 5, Name = "element5", Type = "Type undefined ", Description = "Description of the element", LocationAddress = "Location undifined", UserId = 5 };
+            var e1 = new Element { Id = 1, Name = "element1", Type = "Type undefined ", Description = "Description of the element", UserId = 1 };
+            var e2 = new Element { Id = 2, Name = "element2", Type = "Type undefined ", Description = "Description of the element", UserId = 2 };
+            var e3 = new Element { Id = 3, Name = "element3", Type = "Type undefined ", Description = "Description of the element", UserId = 3 };
+            var e4 = new Element { Id = 4, Name = "element4", Type = "Type undefined ", Description = "Description of the element", UserId = 4 };
+            var e5 = new Element { Id = 5, Name = "element5", Type = "Type undefined ", Description = "Description of the element", UserId = 5 };
 
             modelBuilder.Entity<Element>().HasData(new List<Element> { e1, e2, e3, e4, e5 });
 
