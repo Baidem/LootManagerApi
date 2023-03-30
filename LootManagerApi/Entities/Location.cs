@@ -1,4 +1,7 @@
-﻿namespace LootManagerApi.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace LootManagerApi.Entities
 {
     public class Location
     {
@@ -10,8 +13,9 @@
         public int Position { get; set; }
 
         // Navigation properties
-        public User? User { get; set; }
+        [Key, ForeignKey("User")]
         public int UserId { get; set; }
+        public User? User { get; set; }
         //public List<ElementLocation>? ElementLocations { get; set; }
         public List<Element> Elements { get; set; }
 

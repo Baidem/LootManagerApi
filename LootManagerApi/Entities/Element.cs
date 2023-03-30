@@ -1,4 +1,6 @@
 ﻿using LootManagerApi.Dto;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace LootManagerApi.Entities
 {
@@ -10,12 +12,14 @@ namespace LootManagerApi.Entities
         public string Type { get; set; }
 
         // Navigation properties
-        public User? User { get; set; }
+        [Key, ForeignKey("User")]
         public int UserId { get; set; }
+        public User? User { get; set; }
         //public ElementLocation? ElementLocation { get; set; }
         //public int ElementLocationId { get; set; }
-        public Location? Location { get; set; }
+        [Key, ForeignKey("Location")]
         public int LocationId { get; set; }
+        public Location? Location { get; set; }
 
         public Element()
         {
