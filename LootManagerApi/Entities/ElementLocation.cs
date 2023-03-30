@@ -5,12 +5,12 @@ namespace LootManagerApi.Entities
 {
     public class ElementLocation
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
-        [Key, ForeignKey("Element")]
-        public int ElementId { get; set; }
-        public Element Element { get; set; }
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
+        //[Key, ForeignKey("Element")]
+        //public int ElementId { get; set; }
+        //public Element Element { get; set; }
+        //public int LocationId { get; set; }
+        //public Location Location { get; set; }
     }
 }

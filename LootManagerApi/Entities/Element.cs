@@ -10,10 +10,12 @@ namespace LootManagerApi.Entities
         public string Type { get; set; }
 
         // Navigation properties
-        public User User { get; set; }
+        public User? User { get; set; }
         public int UserId { get; set; }
-        public ElementLocation? ElementLocation { get; set; }
-        public int ElementLocationId { get; set; }
+        //public ElementLocation? ElementLocation { get; set; }
+        //public int ElementLocationId { get; set; }
+        public Location? Location { get; set; }
+        public int LocationId { get; set; }
 
         public Element()
         {
