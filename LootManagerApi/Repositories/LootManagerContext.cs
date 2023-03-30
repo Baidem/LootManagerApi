@@ -80,36 +80,36 @@ namespace LootManagerApi.Repositories
             var e9 = new Element { Id = 9, Name = "manga4", Type = "Manga", Description = "Description of the element", UserId = 4 };
             var e10 = new Element { Id = 10, Name = "manga5", Type = "Manga", Description = "Description of the element", UserId = 5 };
 
-            var e11 = new Element { Id = 11, Name = "comic11", Type = "Comic", Description = "Description of the element", UserId = 1 };
-            var e12 = new Element { Id = 12, Name = "comic12", Type = "Comic", Description = "Description of the element", UserId = 2 };
-            var e13 = new Element { Id = 13, Name = "comic13", Type = "Comic", Description = "Description of the element", UserId = 3 };
-            var e14 = new Element { Id = 14, Name = "comic14", Type = "Comic", Description = "Description of the element", UserId = 4 };
-            var e15 = new Element { Id = 15, Name = "comic15", Type = "Comic", Description = "Description of the element", UserId = 5 };
+            var e11 = new Element { Id = 11, Name = "comic1", Type = "Comic", Description = "Description of the element", UserId = 1 };
+            var e12 = new Element { Id = 12, Name = "comic2", Type = "Comic", Description = "Description of the element", UserId = 2 };
+            var e13 = new Element { Id = 13, Name = "comic3", Type = "Comic", Description = "Description of the element", UserId = 3 };
+            var e14 = new Element { Id = 14, Name = "comic4", Type = "Comic", Description = "Description of the element", UserId = 4 };
+            var e15 = new Element { Id = 15, Name = "comic5", Type = "Comic", Description = "Description of the element", UserId = 5 };
 
 
             modelBuilder.Entity<Element>().HasData(new List<Element> { e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 });
             #endregion
 
             #region Data Locations
-            var l1 = new Location { Id = 1, House = "House1", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l2 = new Location { Id = 2, House = "House1", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l3 = new Location { Id = 3, House = "House1", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
+            var l1 = new Location { Id = 1, House = "House1", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
+            var l2 = new Location { Id = 2, House = "House1", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
+            var l3 = new Location { Id = 3, House = "House1", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
 
-            var l4 = new Location { Id = 4, House = "House2", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l5 = new Location { Id = 5, House = "House2", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l6 = new Location { Id = 6, House = "House2", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            
-            var l7 = new Location { Id = 7, House = "House3", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l8 = new Location { Id = 8, House = "House3", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l9 = new Location { Id = 9, House = "House3", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            
-            var l10 = new Location { Id = 10, House = "House4", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l11 = new Location { Id = 11, House = "House4", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l12 = new Location { Id = 12, House = "House4", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            
-            var l13 = new Location { Id = 13, House = "House5", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l14 = new Location { Id = 14, House = "House5", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
-            var l15 = new Location { Id = 15, House = "House5", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1 };
+            var l4 = new Location { Id = 4, House = "House2", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
+            var l5 = new Location { Id = 5, House = "House2", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
+            var l6 = new Location { Id = 6, House = "House2", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
+
+            var l7 = new Location { Id = 7, House = "House3", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
+            var l8 = new Location { Id = 8, House = "House3", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
+            var l9 = new Location { Id = 9, House = "House3", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
+
+            var l10 = new Location { Id = 10, House = "House4", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
+            var l11 = new Location { Id = 11, House = "House4", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
+            var l12 = new Location { Id = 12, House = "House4", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
+
+            var l13 = new Location { Id = 13, House = "House5", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
+            var l14 = new Location { Id = 14, House = "House5", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
+            var l15 = new Location { Id = 15, House = "House5", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
 
             modelBuilder.Entity<Location>().HasData(new List<Location> { l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15 });
             #endregion

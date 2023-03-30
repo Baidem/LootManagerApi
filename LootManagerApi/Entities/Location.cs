@@ -10,13 +10,11 @@ namespace LootManagerApi.Entities
         public string? Room { get; set; }
         public string? Furniture { get; set; }
         public string? Shelf { get; set; }
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         // Navigation properties
-        [Key, ForeignKey("User")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public User? User { get; set; }
-        //public List<ElementLocation>? ElementLocations { get; set; }
         public List<Element> Elements { get; set; }
 
 

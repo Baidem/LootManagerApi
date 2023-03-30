@@ -12,13 +12,9 @@ namespace LootManagerApi.Entities
         public string Type { get; set; }
 
         // Navigation properties
-        [Key, ForeignKey("User")]
         public int UserId { get; set; }
-        public User? User { get; set; }
-        //public ElementLocation? ElementLocation { get; set; }
-        //public int ElementLocationId { get; set; }
-        [Key, ForeignKey("Location")]
-        public int LocationId { get; set; }
+        public User User { get; set; }
+        public int? LocationId { get; set; }
         public Location? Location { get; set; }
 
         public Element()
