@@ -15,8 +15,7 @@ namespace LootManagerApi.Repositories
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            // Default data
+            // Default datas
             #region Data Users
             var u1 = new User
             {
