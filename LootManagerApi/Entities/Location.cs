@@ -10,7 +10,8 @@
         public int Position { get; set; }
 
         // Navigation properties
-        public List<User> Users { get; set; }
+        public User User { get; set; }
+        public int UserId { get; set; }
         public List<ElementLocation>? ElementLocations { get; set; }
 
         public override string? ToString()
