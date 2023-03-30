@@ -10,6 +10,7 @@ namespace LootManagerApi.Entities
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
+        public UserRole Role { get; set; }
 
         // Navigation properties
         public List<Element> Elements { get; set; }
