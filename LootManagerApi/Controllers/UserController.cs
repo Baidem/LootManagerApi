@@ -66,24 +66,6 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region READ
-        [HttpGet]
-        public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsersAsync()
-        {
-            try
-            {
-                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                UtilsRole.CheckOnlyAdmin(userAuthDto);
-                var userSummaryDtoList = await userRepository.GetAllUsersAsync();
-                return Ok(userSummaryDtoList);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-        #endregion
-
         #region CREATE USER
         [HttpPost]
         [ProducesResponseType(200)]
@@ -95,6 +77,24 @@ namespace LootManagerApi.Controllers
                 await userRepository.IsValidUserCreateDtoAsync(userCreateDto);
                 var userSummaryDto = await userRepository.CreateUserAsync(userCreateDto);
                 return Ok(userSummaryDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+        #endregion
+
+        #region READ
+        [HttpGet]
+        public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsersAsync()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                UtilsRole.CheckOnlyAdmin(userAuthDto);
+                var userSummaryDtoList = await userRepository.GetAllUsersAsync();
+                return Ok(userSummaryDtoList);
             }
             catch (Exception ex)
             {
@@ -140,6 +140,27 @@ namespace LootManagerApi.Controllers
                 dotsLength = userUpdateDto.NewPassword.Length;
             return new string('●', dotsLength);
         }
+        #endregion
+
+        #region DELETE USER
+
+        [HttpDelete("{userId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<string>> DeleteUserAsync(int userId)
+        {
+            // check log
+            UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+            // check role
+            UtilsRole.CheckOnlyAdmin(userAuthDto);
+            // check user to delete
+
+            // Delete the user
+            // Exception
+
+        }
+
+
         #endregion
 
     }
