@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using LootManagerApi.Utils;
 
 namespace LootManagerApi.Controllers
 {
@@ -72,7 +73,7 @@ namespace LootManagerApi.Controllers
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                userRepository.CheckOnlyAdmin(userAuthDto);
+                UtilsRole.CheckOnlyAdmin(userAuthDto);
                 var userSummaryDtoList = await userRepository.GetAllUsersAsync();
                 return Ok(userSummaryDtoList);
             }

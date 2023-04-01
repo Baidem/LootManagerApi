@@ -72,15 +72,6 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        public bool CheckOnlyAdmin(UserAuthDto userAuthDto)
-        {
-            if (!userAuthDto.Role.Equals("Admin"))
-            {
-                throw new Exception("This function is only available to users with the administrator role.");
-            }
-            return true;
-        }
-
         #endregion
 
         #region READ
