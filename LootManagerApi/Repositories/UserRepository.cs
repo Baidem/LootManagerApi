@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using System.Reflection.Metadata.Ecma335;
+using System.Xml.Linq;
 
 namespace LootManagerApi.Repositories
 {
@@ -169,6 +170,30 @@ namespace LootManagerApi.Repositories
                 }
             }
             return true;
+        }
+
+        #endregion
+
+        #region DELETE USER
+        public async Task<UserSummaryDto> DeleteElementAsync(int userId)
+        {
+            User user = await context.Users.FirstAsync(u => u.Id == userId);
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
+
+            return new UserSummaryDto(user);
+        }
+
+        #endregion
+
+        #region UTILS USER
+
+        public async Task<bool> IsUserExistByIdAsync(int userId)
+        {
+            if (await context.Users.AnyAsync(u => u.Id == userId))
+                return true;
+
+            throw new Exception("The user cannot be found.");
         }
 
         #endregion

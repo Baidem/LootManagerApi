@@ -147,16 +147,26 @@ namespace LootManagerApi.Controllers
         [HttpDelete("{userId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<string>> DeleteUserAsync(int userId)
+        public async Task<ActionResult<string>> DeleteUserByIdAsync(int userId)
         {
-            // check log
-            UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-            // check role
-            UtilsRole.CheckOnlyAdmin(userAuthDto);
-            // check user to delete
+            try
+            {
+                // check log
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                // check role
+                UtilsRole.CheckOnlyAdmin(userAuthDto);
+                // check user to delete
+                await userRepository.IsUserExistByIdAsync(userId);
+                // Delete the user
+                UserSummaryDto userSummaryDto = await userRepository.DeleteElementAsync(userId);
 
-            // Delete the user
-            // Exception
+                return Ok($"{userSummaryDto.FullName} was deleted.");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
         }
 

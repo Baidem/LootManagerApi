@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Entities;
 using System.Security.Claims;
 
 namespace LootManagerApi.Repositories.Interfaces
@@ -14,6 +15,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
         Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto);
         Task<bool> IsUserExistByIdAsync(int userId);
+        Task<UserSummaryDto> DeleteElementAsync(int userId);
 
     }
 }
