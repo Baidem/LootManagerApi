@@ -26,6 +26,7 @@ namespace LootManagerApi.Entities
             Email = userCreateDto.Email;
             PasswordHash = Utils.UtilsPassword.GenerateHashedPassword(userCreateDto.Password);
             CreatedAt = DateTime.UtcNow;
+            Role = UserRole.User;
         }
     }
 }
