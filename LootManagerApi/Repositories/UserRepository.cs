@@ -171,6 +171,13 @@ namespace LootManagerApi.Repositories
             }
             return true;
         }
+        public async Task<UserSummaryDto> UpdateUserRoleAsync(int userId, UserRole userRole)
+        {
+            User user = await context.Users.FirstAsync(u => u.Id == userId);
+            user.Role = userRole;
+            await context.SaveChangesAsync();
+            return new UserSummaryDto(user);
+        }
 
         #endregion
 

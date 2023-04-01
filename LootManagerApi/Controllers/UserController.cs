@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using LootManagerApi.Utils;
+using LootManagerApi.Entities;
 
 namespace LootManagerApi.Controllers
 {
@@ -66,7 +67,7 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region CREATE USER
+        #region CREATE USER    
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -140,6 +141,26 @@ namespace LootManagerApi.Controllers
                 dotsLength = userUpdateDto.NewPassword.Length;
             return new string('●', dotsLength);
         }
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> UpdateUserRole(int userId, UserRole userRole)
+        {
+            try
+            {
+                var userAuthDto = loadUserAuthentifiedDto();
+                UtilsRole.CheckOnlyAdmin(userAuthDto);
+                await userRepository.IsUserExistByIdAsync(userId);
+                UserSummaryDto userSummaryDto = await userRepository.UpdateUserRoleAsync(userId, userRole);
+
+                return Ok($"The role of {userSummaryDto.FullName} {userSummaryDto.Email} is : {userRole}");
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
         #endregion
 
         #region DELETE USER
@@ -164,7 +185,7 @@ namespace LootManagerApi.Controllers
             }
             catch (Exception)
             {
-
+                // TODO return
                 throw;
             }
 
@@ -172,6 +193,8 @@ namespace LootManagerApi.Controllers
 
 
         #endregion
+
+
 
     }
 }
