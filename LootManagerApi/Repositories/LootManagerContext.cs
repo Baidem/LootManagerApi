@@ -56,7 +56,7 @@ namespace LootManagerApi.Repositories
             {
                 Id = 5,
                 FullName = "user5",
-                Email = "user5",
+                Email = "user5@loot.com",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
                 CreatedAt = DateTime.UtcNow,
                 Role = UserRole.User

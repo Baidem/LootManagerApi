@@ -17,6 +17,5 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<bool> IsUserExistByIdAsync(int userId);
         Task<UserSummaryDto> DeleteElementAsync(int userId);
         Task<UserSummaryDto> UpdateUserRoleAsync(int userId, UserRole userRole);
-
     }
 }

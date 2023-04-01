@@ -189,8 +189,6 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-
-
     }
 }
 

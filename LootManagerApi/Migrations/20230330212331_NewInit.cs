@@ -91,7 +91,7 @@ namespace LootManagerApi.Migrations
                     { 2, new DateTime(2023, 3, 30, 21, 23, 30, 549, DateTimeKind.Utc).AddTicks(5876), "user@loot.com", "user", "$2a$11$ZVQsXweagD/OfVscFFtJS.csoW.k42MXNWhjFFsFLoILFTX8GzS3K", 1, null },
                     { 3, new DateTime(2023, 3, 30, 21, 23, 30, 714, DateTimeKind.Utc).AddTicks(8780), "contributor@loot.com", "contributor", "$2a$11$av5Qnmr/UCYEnfU4ghTzY.tPztboyyJ4YLIiGToFhVo4AmRg2rCnq", 2, null },
                     { 4, new DateTime(2023, 3, 30, 21, 23, 30, 878, DateTimeKind.Utc).AddTicks(8304), "user4@loot.com", "user4", "$2a$11$uOuXWNuf2RNBPbg0ee.7z.IHGU9rLcO79VJmZLwMi8XQ83iy9y.Ey", 1, null },
-                    { 5, new DateTime(2023, 3, 30, 21, 23, 31, 48, DateTimeKind.Utc).AddTicks(733), "user5", "user5", "$2a$11$EBzaVUZRf8vGB2FwGaGnAOLaay.M/0vIoxHUJKtUeQxodjrjF.doO", 1, null }
+                    { 5, new DateTime(2023, 3, 30, 21, 23, 31, 48, DateTimeKind.Utc).AddTicks(733), "user5@loot.com", "user5", "$2a$11$EBzaVUZRf8vGB2FwGaGnAOLaay.M/0vIoxHUJKtUeQxodjrjF.doO", 1, null }
                 });
 
             migrationBuilder.InsertData(
