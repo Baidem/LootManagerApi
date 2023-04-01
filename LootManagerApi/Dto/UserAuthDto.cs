@@ -8,6 +8,7 @@ namespace LootManagerApi.Dto
         public int? Id { get; set; }
         public string? FullName { get; set; }
         public string? Email { get; set; }
+        public string Role { get; set; }
 
         public UserAuthDto()
         {
@@ -18,6 +19,7 @@ namespace LootManagerApi.Dto
             Id = Int32.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier).Value);
             FullName = identity?.FindFirst(ClaimTypes.Name).Value;
             Email = identity?.FindFirst(ClaimTypes.Email).Value;
+            Role = identity?.FindFirst(ClaimTypes.Role).Value;
         }
     }
 }

@@ -57,7 +57,8 @@ namespace LootManagerApi.Repositories
                 {
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new(ClaimTypes.Name, user.FullName),
-                    new(ClaimTypes.Email, user.Email)
+                    new(ClaimTypes.Email, user.Email),
+                    new(ClaimTypes.Role, user.Role.ToString())
                 },
                 CookieAuthenticationDefaults.AuthenticationScheme);
                 Console.WriteLine("stop");
@@ -70,6 +71,16 @@ namespace LootManagerApi.Repositories
                 throw new Exception(message);
             }
         }
+
+        public bool CheckOnlyAdmin(UserAuthDto userAuthDto)
+        {
+            if (!userAuthDto.Role.Equals("Admin"))
+            {
+                throw new Exception("This function is only available to users with the administrator role.");
+            }
+            return true;
+        }
+
         #endregion
 
         #region READ
@@ -168,6 +179,7 @@ namespace LootManagerApi.Repositories
             }
             return true;
         }
+
         #endregion
     }
 }

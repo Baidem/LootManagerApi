@@ -71,11 +71,10 @@ namespace LootManagerApi.Controllers
         {
             try
             {
-                loadUserAuthentifiedDto();
-                // To do Vérifier rôle de l'utilisateur
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                userRepository.CheckOnlyAdmin(userAuthDto);
                 var userSummaryDtoList = await userRepository.GetAllUsersAsync();
                 return Ok(userSummaryDtoList);
-
             }
             catch (Exception ex)
             {
