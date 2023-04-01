@@ -172,21 +172,16 @@ namespace LootManagerApi.Controllers
         {
             try
             {
-                // check log
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                // check role
                 UtilsRole.CheckOnlyAdmin(userAuthDto);
-                // check user to delete
                 await userRepository.IsUserExistByIdAsync(userId);
-                // Delete the user
                 UserSummaryDto userSummaryDto = await userRepository.DeleteElementAsync(userId);
 
                 return Ok($"{userSummaryDto.FullName} was deleted.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO return
-                throw;
+                return Problem(ex.Message);
             }
 
         }
