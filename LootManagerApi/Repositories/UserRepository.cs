@@ -27,6 +27,13 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region LOG
+
+        /// <summary>
+        /// Checks if the provided user login DTO is valid.
+        /// </summary>
+        /// <param name="userLoginDto">The user login DTO to check.</param>
+        /// <returns>True if the user login DTO is valid, false otherwise.</returns>
+        /// <exception cref="Exception">Thrown if the email address attribute is invalid, the email does not exist, the password hash search was unsuccessful, or the password is invalid.</exception>
         public async Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto)
         {
             if (!UtilsEmail.IsValidateEmailAddressAttribute(userLoginDto.Email))
@@ -49,6 +56,12 @@ namespace LootManagerApi.Repositories
             return true;
         }
 
+        /// <summary>
+        /// Gets the claims identity for a user based on their login information.
+        /// </summary>
+        /// <param name="userLoginDto">The user's login information.</param>
+        /// <returns>A <see cref="ClaimsIdentity"/> object.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs while getting the claims identity.</exception>
         public async Task<ClaimsIdentity> GetClaimsIdentityAsync(UserLoginDto userLoginDto)
         {
             try
@@ -62,7 +75,6 @@ namespace LootManagerApi.Repositories
                     new(ClaimTypes.Role, user.Role.ToString())
                 },
                 CookieAuthenticationDefaults.AuthenticationScheme);
-                Console.WriteLine("stop");
                 return identity;
             }
             catch (Exception ex)
@@ -76,6 +88,10 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region READ
+        /// <summary>
+        /// Retrieves a list of all user summary data asynchronously from the database.
+        /// </summary>
+        /// <returns>A list of UserSummaryDto objects containing summary data for all users.</returns>
         public async Task<List<UserSummaryDto>> GetAllUsersAsync()
         {
             return await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
@@ -83,13 +99,34 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region CREATE USER
+
+        /// <summary>
+        /// Creates a new user asynchronously and returns a summary of the created user.
+        /// </summary>
+        /// <param name="userCreateDto">The DTO containing the user's information.</param>
+        /// <returns>A UserSummaryDto representing the created user.</returns>
+        /// <exception cref="Exception">Throws an exception if there is an error while saving the changes to the database.</exception>
         public async Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto)
         {
-            var user = new User(userCreateDto);
-            await context.Users.AddAsync(user);
-            await context.SaveChangesAsync();
-            return new UserSummaryDto(user);
+            try
+            {
+                var user = new User(userCreateDto);
+                await context.Users.AddAsync(user);
+                await context.SaveChangesAsync();
+                return new UserSummaryDto(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while creating the user.", ex);
+            }
         }
+
+        /// <summary>
+        /// Checks if the provided user creation DTO is valid.
+        /// </summary>
+        /// <param name="userCreateDto">The DTO containing the user's information.</param>
+        /// <returns>A boolean indicating whether the DTO is valid or not.</returns>
+        /// <exception cref="Exception">Throws an exception if the email is invalid, if the email is already used, if the password length is too short, or if the password complexity requirements are not met.</exception>
         public async Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreateDto)
         {
             if (!UtilsEmail.IsValidateEmailAddressAttribute(userCreateDto.Email))
@@ -113,6 +150,13 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region UPDATE USER
+
+        /// <summary>
+        /// Updates an existing user's information in the database.
+        /// </summary>
+        /// <param name="userUpdateDto">The user update DTO containing the updated user information.</param>
+        /// <returns>A UserSummaryDto object containing the updated user information.</returns>
+        /// <exception cref="Exception">Thrown if the user cannot be found or if no changes were made.</exception>
         public async Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => userUpdateDto.CurrentEmail == u.Email);
@@ -132,6 +176,13 @@ namespace LootManagerApi.Repositories
             throw new Exception("The user cannot be found.");
         }
 
+        /// <summary>
+        /// Validates if the data in the UserUpdateDto matches the data in the UserAuthDto.
+        /// </summary>
+        /// <param name="userUpdateDto">The UserUpdateDto to be validated.</param>
+        /// <param name="userAuthDto">The UserAuthDto to compare with.</param>
+        /// <returns>True if the data in UserUpdateDto matches the data in UserAuthDto, false otherwise.</returns>
+        /// <exception cref="Exception">Throws an exception if the data does not correspond to the current user.</exception>
         public async Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
         {
             if (userUpdateDto.CurrentFullName == userAuthDto.FullName && userUpdateDto.CurrentEmail == userAuthDto.Email)
@@ -145,6 +196,12 @@ namespace LootManagerApi.Repositories
             throw new Exception("Data does not correspond to the current user.");
         }
 
+        /// <summary>
+        /// Validates user update DTO data.
+        /// </summary>
+        /// <param name="userUpdateDto">The user update DTO to validate.</param>
+        /// <returns>True if the DTO data is valid.</returns>
+        /// <exception cref="Exception">Thrown if the DTO data is invalid.</exception>
         public async Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto)
         {
             if (userUpdateDto.NewEmail != null)
@@ -171,36 +228,64 @@ namespace LootManagerApi.Repositories
             }
             return true;
         }
+
+        /// <summary>
+        /// Updates the role of a user with the specified user ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user to update.</param>
+        /// <param name="userRole">The new role for the user.</param>
+        /// <returns>A UserSummaryDto object representing the updated user.</returns>
+        /// <exception cref="Exception">Thrown if the user cannot be found.</exception>
         public async Task<UserSummaryDto> UpdateUserRoleAsync(int userId, UserRole userRole)
         {
-            User user = await context.Users.FirstAsync(u => u.Id == userId);
-            user.Role = userRole;
-            await context.SaveChangesAsync();
-            return new UserSummaryDto(user);
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                user.Role = userRole;
+                await context.SaveChangesAsync();
+                return new UserSummaryDto(user);
+            }
+            throw new Exception("The user cannot be found.");
         }
 
         #endregion
 
         #region DELETE USER
+
+        /// <summary>
+        /// Deletes the specified user from the database.
+        /// </summary>
+        /// <param name="userId">The ID of the user to delete.</param>
+        /// <returns>A UserSummaryDto object representing the deleted user.</returns>
+        /// <exception cref="Exception">Thrown if the specified user cannot be found.</exception>
         public async Task<UserSummaryDto> DeleteElementAsync(int userId)
         {
-            User user = await context.Users.FirstAsync(u => u.Id == userId);
-            context.Users.Remove(user);
-            await context.SaveChangesAsync();
-
-            return new UserSummaryDto(user);
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                context.Users.Remove(user);
+                await context.SaveChangesAsync();
+                return new UserSummaryDto(user);
+            }
+            throw new Exception("The user cannot be found.");
         }
 
         #endregion
 
         #region UTILS USER
 
+        /// <summary>
+        /// Check if user with given userId exists in the database
+        /// </summary>
+        /// <param name="userId">The ID of the user to check for.</param>
+        /// <returns>Returns true if the user with given userId exists in the database, otherwise throws an exception.</returns>
+        /// <exception cref="Exception">Throws exception if user with given userId doesn't exist in the database.</exception>
         public async Task<bool> IsUserExistByIdAsync(int userId)
         {
             if (await context.Users.AnyAsync(u => u.Id == userId))
                 return true;
 
-            throw new Exception("The user cannot be found.");
+            throw new Exception($"User with ID {userId} does not exist in the database.");
         }
 
         #endregion

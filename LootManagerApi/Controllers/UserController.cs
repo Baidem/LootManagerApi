@@ -30,6 +30,13 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region LOG
+
+        /// <summary>
+        /// Logs a user into the system using their login credentials.
+        /// </summary>
+        /// <param name="userLoginDto">The user's login credentials.</param>
+        /// <returns>An HTTP 200 (OK) response with a message indicating that the user is connected.</returns>
+        /// <exception cref="Exception">Thrown if an error occurs during the login process.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -48,6 +55,10 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        /// <summary>
+        /// This function logs out the currently signed in user and returns an Ok result indicating success.
+        /// </summary>
+        /// <returns>An IActionResult indicating the result of the logout process, which is always Ok if the logout was successful.</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         public async Task<IActionResult> Logout()
@@ -56,6 +67,11 @@ namespace LootManagerApi.Controllers
             return Ok("Log out");
         }
 
+        /// <summary>
+        /// Loads the UserAuthDto for an authenticated user.
+        /// </summary>
+        /// <returns>The UserAuthDto for the authenticated user.</returns>
+        /// <exception cref="Exception">Thrown if the user is not authenticated.</exception>
         private UserAuthDto loadUserAuthentifiedDto()
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -65,9 +81,17 @@ namespace LootManagerApi.Controllers
             }
             return new UserAuthDto(identity);
         }
+
         #endregion
 
-        #region CREATE USER    
+        #region CREATE USER
+
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <param name="userCreateDto">User creation DTO object containing user information.</param>
+        /// <returns>Returns the user summary DTO object.</returns>
+        /// <exception cref="Exception">Thrown when there is an error in creating the user.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -84,10 +108,19 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+
         #endregion
 
         #region READ
+
+        /// <summary>
+        /// Retrieves a list of all user summary DTOs from the repository and returns them in an ActionResult.
+        /// </summary>
+        /// <returns>An ActionResult containing a List of UserSummaryDto objects.</returns>
+        /// <exception cref="Exception">Thrown when there is an error retrieving the list of users or when the current user is not authorized to retrieve the list.</exception> 
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsersAsync()
         {
             try
@@ -102,9 +135,17 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+        
         #endregion
 
         #region UPDATE USER
+
+        /// <summary>
+        /// Updates the user with the provided UserUpdateDto object.
+        /// </summary>
+        /// <param name="userUpdateDto">The UserUpdateDto object containing the new user information.</param>
+        /// <returns>An Ok ActionResult with a message indicating the updated user's full name, email, and obfuscated password.</returns>
+        /// <exception cref="Exception">Thrown if the user is not authorized or if the UserUpdateDto is invalid.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -117,7 +158,7 @@ namespace LootManagerApi.Controllers
                 await userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto);
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
                 string password = (userUpdateDto.NewPassword == null) ? userUpdateDto.CurrentPassword : userUpdateDto.NewPassword;
-                await updateUserIdentity(userSummaryDto.Email, password);
+                await updateUserIdentityAsync(userSummaryDto.Email, password);
 
                 return Ok($"The user is update : FullName = {userSummaryDto.FullName}, Email = {userSummaryDto.Email}, Password = {dotsLine(userUpdateDto)}");
             }
@@ -126,12 +167,25 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-        private async Task updateUserIdentity(string email, string password)
+
+        /// <summary>
+        /// Updates the user identity with the provided email and password.
+        /// </summary>
+        /// <param name="email">The email of the user.</param>
+        /// <param name="password">The password of the user.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="Exception">Thrown if the user cannot be authenticated.</exception>
+        private async Task updateUserIdentityAsync(string email, string password)
         {
-            var userLoginDto = new UserLoginDto { Email = email, Password = password };
-            var identity = await userRepository.GetClaimsIdentityAsync(userLoginDto);
+            var identity = await userRepository.GetClaimsIdentityAsync(new UserLoginDto { Email = email, Password = password });
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
+
+        /// <summary>
+        /// This method returns a string of dots ('●') that is the same length as the password that needs to be obfuscated.
+        /// </summary>
+        /// <param name="userUpdateDto">The UserUpdateDto object containing the passwords to be obfuscated.</param>
+        /// <returns>A string of dots ('●') of the same length as the password to be obfuscated.</returns>
         private string dotsLine(UserUpdateDto userUpdateDto)
         {
             int dotsLength;
@@ -141,6 +195,18 @@ namespace LootManagerApi.Controllers
                 dotsLength = userUpdateDto.NewPassword.Length;
             return new string('●', dotsLength);
         }
+
+        /// <summary>
+        /// This method updates the role of a user with the specified userId.
+        /// It checks if the authenticated user is an admin,
+        /// it verifies if the user with the specified userId exists,
+        /// it updates the user's role.
+        /// The method returns an ActionResult with an HTTP status code of 200 and a success message containing the user's full name, email and new role on success.
+        /// If an exception is caught, it returns an ActionResult with an HTTP status code of 500 and the error message.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose role is being updated.</param>
+        /// <param name="userRole">The new role to be assigned to the user.</param>
+        /// <returns>An ActionResult with an HTTP status code of 200 and a success message containing the user's full name, email and new role on success, or an ActionResult with an HTTP status code of 500 and the error message on failure.</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -165,6 +231,12 @@ namespace LootManagerApi.Controllers
 
         #region DELETE USER
 
+        /// <summary>
+        /// Deletes a user by ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user to delete.</param>
+        /// <returns>A string indicating the success or failure of the operation.</returns>
+        /// <exception cref="Exception">Thrown if the authenticated user is not an admin, if the user ID is invalid, or if there is an error deleting the user.</exception>
         [HttpDelete("{userId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -183,9 +255,7 @@ namespace LootManagerApi.Controllers
             {
                 return Problem(ex.Message);
             }
-
         }
-
 
         #endregion
 
