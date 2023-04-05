@@ -24,8 +24,4 @@
     <ProjectReference Include="..\LootManagerApi\LootManagerApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>
