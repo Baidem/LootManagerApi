@@ -93,5 +93,66 @@ namespace LootManagerApi.Repositories.Tests
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserLoginDtoAsync(userLoginDto));
             Assert.AreEqual("Invalid email address attribute : invalid-email-format", exception.Message);
         }
+
+        [TestMethod()]
+        public async Task CheckUserLoginDtoAsync_NotExistEmail_ThrowsException()
+        {
+            // Bdd Datas
+            var u5 = new User
+            {
+                Id = 5,
+                FullName = "user5",
+                Email = "user5@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.User
+            };
+
+            _context.Add(u5);
+
+            await _context.SaveChangesAsync();
+
+            // Act
+            var userLoginDto = new UserLoginDto
+            {
+                Email = "notexiste@loot.com",
+                Password = "test"
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserLoginDtoAsync(userLoginDto));
+            Assert.AreEqual("Email does not exist : notexiste@loot.com", exception.Message);
+        }
+
+        [TestMethod()]
+        public async Task CheckUserLoginDtoAsync_BadPassword_ThrowsException()
+        {
+            // Bdd Datas
+            var u5 = new User
+            {
+                Id = 5,
+                FullName = "user5",
+                Email = "user5@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.User
+            };
+
+            _context.Add(u5);
+
+            await _context.SaveChangesAsync();
+
+            // Act
+            var userLoginDto = new UserLoginDto
+            {
+                Email = "user5@loot.com",
+                Password = "badPassword"
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserLoginDtoAsync(userLoginDto));
+            Assert.AreEqual("The password is invalid.", exception.Message);
+        }
+
     }
 }
