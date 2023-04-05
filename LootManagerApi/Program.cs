@@ -2,8 +2,7 @@ using LootManagerApi;
 using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
-
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +13,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<LootManagerContext>();
+builder.Services.AddDbContext<LootManagerContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LootManagerDbCS"));
+});
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
