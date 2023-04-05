@@ -82,7 +82,7 @@ namespace LootManagerApi.Repositories.Tests
 
             await _context.SaveChangesAsync();
 
-            // Act
+            // Test datas
             var userLoginDto = new UserLoginDto
             {
                 Email = "invalid-email-format",
@@ -112,7 +112,7 @@ namespace LootManagerApi.Repositories.Tests
 
             await _context.SaveChangesAsync();
 
-            // Act
+            // Test datas
             var userLoginDto = new UserLoginDto
             {
                 Email = "notexiste@loot.com",
@@ -142,7 +142,7 @@ namespace LootManagerApi.Repositories.Tests
 
             await _context.SaveChangesAsync();
 
-            // Act
+            // test datas
             var userLoginDto = new UserLoginDto
             {
                 Email = "user5@loot.com",
