@@ -16,18 +16,27 @@ namespace LootManagerApi.Repositories.Tests
     [TestClass()]
     public class UserRepositoryTests
     {
+        private LootManagerContext _context;
+        private UserRepository _userRepository;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            var builder = new DbContextOptionsBuilder<LootManagerContext>().UseInMemoryDatabase("LootManagerTest");
+            _context = new LootManagerContext(builder.Options);
+            _userRepository = new UserRepository(_context, null);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _context.Database.EnsureDeleted();
+        }
+
         [TestMethod()]
         public async Task CheckUserLoginDtoAsync_ValidUserLoginDto_ReturnsTrue()
         {
-            // Bdd
-            var builder = new DbContextOptionsBuilder<LootManagerContext>().UseInMemoryDatabase("LootManagerTest");
-
-            // Context
-            var context = new LootManagerContext(builder.Options);
-            UserRepository userRepository = new UserRepository(context, null);
-
             // Bdd Datas
-
             var u5 = new User
             {
                 Id = 5,
@@ -38,9 +47,9 @@ namespace LootManagerApi.Repositories.Tests
                 Role = UserRole.User
             };
 
-            context.Add(u5);
+            _context.Add(u5);
 
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             // Act
             var test = new UserLoginDto
@@ -49,26 +58,16 @@ namespace LootManagerApi.Repositories.Tests
                 Password = "test"
             };
 
-            var result = await userRepository.CheckUserLoginDtoAsync(test);
+            var result = await _userRepository.CheckUserLoginDtoAsync(test);
 
             // Assert
             Assert.IsTrue(result);
-
-            // Bdd delete
-            context.Database.EnsureDeleted();
         }
+
         [TestMethod()]
         public async Task CheckUserLoginDtoAsync_InvalidEmailFormat_ThrowsException()
         {
-            // Bdd
-            var builder = new DbContextOptionsBuilder<LootManagerContext>().UseInMemoryDatabase("LootManagerTest");
-
-            // Context
-            var context = new LootManagerContext(builder.Options);
-            UserRepository userRepository = new UserRepository(context, null);
-
             // Bdd Datas
-
             var u5 = new User
             {
                 Id = 5,
@@ -79,9 +78,9 @@ namespace LootManagerApi.Repositories.Tests
                 Role = UserRole.User
             };
 
-            context.Add(u5);
+            _context.Add(u5);
 
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             // Act
             var userLoginDto = new UserLoginDto
@@ -91,12 +90,8 @@ namespace LootManagerApi.Repositories.Tests
             };
 
             // Act & Assert
-            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => userRepository.CheckUserLoginDtoAsync(userLoginDto));
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserLoginDtoAsync(userLoginDto));
             Assert.AreEqual("Invalid email address attribute : invalid-email-format", exception.Message);
-
-            // Bdd delete
-            context.Database.EnsureDeleted();
         }
-
     }
 }
