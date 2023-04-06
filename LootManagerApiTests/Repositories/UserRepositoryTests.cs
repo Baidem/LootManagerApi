@@ -200,5 +200,78 @@ namespace LootManagerApi.Repositories.Tests
             await Assert.ThrowsExceptionAsync<NullReferenceException>(() => _userRepository.GetClaimsIdentityAsync(userLoginDto));
         }
 
+        [TestMethod()]
+        public async Task GetAllUsersAsyncTest_ValidList_ReturnsTrue()
+        {
+            // Arrange
+            var u1 = new User
+            {
+                Id = 1,
+                FullName = "admin",
+                Email = "admin@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.Admin
+            };
+            var u2 = new User
+            {
+                Id = 2,
+                FullName = "user",
+                Email = "user@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.User
+            };
+            var u3 = new User
+            {
+                Id = 3,
+                FullName = "contributor",
+                Email = "contributor@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.Contributor
+            };
+            var u4 = new User
+            {
+                Id = 4,
+                FullName = "user4",
+                Email = "user4@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.User
+            };
+            var u5 = new User
+            {
+                Id = 5,
+                FullName = "user5",
+                Email = "user5@loot.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                CreatedAt = DateTime.UtcNow,
+                Role = UserRole.User
+            };
+
+            _context.Add(u1);
+            _context.Add(u2);
+            _context.Add(u3);
+            _context.Add(u4);
+            _context.Add(u5);
+
+            await _context.SaveChangesAsync();
+
+            // Act
+            List<UserSummaryDto> list = await _userRepository.GetAllUsersAsync();
+
+            // Assert
+            Assert.AreEqual(list.Count, 5);
+        }
+
+        [TestMethod()]
+        public async Task GetAllUsersAsyncTest_EmptyList_Returns()
+        {
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.GetAllUsersAsync());
+            Assert.AreEqual("Empty list, no users are registered.", exception.Message);
+        }
+
     }
 }

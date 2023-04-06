@@ -94,7 +94,11 @@ namespace LootManagerApi.Repositories
         /// <returns>A list of UserSummaryDto objects containing summary data for all users.</returns>
         public async Task<List<UserSummaryDto>> GetAllUsersAsync()
         {
-            return await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
+                var list = await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
+                if (list.Count == 0)
+                    throw new Exception("Empty list, no users are registered.");
+
+                return list;
         }
         #endregion
 
