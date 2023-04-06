@@ -291,7 +291,7 @@ namespace LootManagerApi.Repositories.Tests
             // Assert
             Assert.IsNotNull(userSummaryDto);
             Assert.AreEqual(userSummaryDto.FullName, userCreateDto.FullName);
-            Assert.AreEqual(userSummaryDto.Email, userCreateDto.Email );
+            Assert.AreEqual(userSummaryDto.Email, userCreateDto.Email);
             Assert.IsNotNull(userSummaryDto.CreatedAt);
             Assert.IsNotNull(user);
             Assert.IsNotNull(user.Id);
@@ -301,6 +301,93 @@ namespace LootManagerApi.Repositories.Tests
             Assert.AreEqual(user.CreatedAt, userSummaryDto.CreatedAt);
             Assert.IsNull(user.UpdateAt);
             Assert.AreEqual(user.Role, UserRole.User);
+        }
+
+        [TestMethod()]
+        public async Task IsValidUserCreateDtoAsyncTest_ValidUser_ReturnsTrue()
+        {
+            // Range
+            var userCreateDto = new UserCreateDto
+            {
+                FullName = "John Doe",
+                Email = "john.doe@example.com",
+                Password = "Thetest123$",
+            };
+
+            // Act
+            var result = await _userRepository.IsValidUserCreateDtoAsync(userCreateDto);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod()]
+        public async Task IsValidUserCreateDtoAsync_InvalidEmail_ThrowsException()
+        {
+            // Arrange
+            var userCreateDto = new UserCreateDto
+            {
+                FullName = "John Doe",
+                Email = "john.doeexample.com", // invalid email format
+                Password = "Thetest123$"
+            };
+
+            // Act & Assert
+            await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+        }
+
+        [TestMethod()]
+        public async Task IsValidUserCreateDtoAsync_EmailAlreadyExists_ThrowsException()
+        {
+            // Arrange
+            var userCreateDto = new UserCreateDto
+            {
+                FullName = "John Doe",
+                Email = "john.doe@example.com",
+                Password = "Thetest123$"
+            };
+
+            // Insert a user with the same email address in the database
+            var existingUser = new User(userCreateDto);
+            await _context.Users.AddAsync(existingUser);
+            await _context.SaveChangesAsync();
+
+            // Act & Assert
+            await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+        }
+
+        [TestMethod()]
+        public async Task IsValidUserCreateDtoAsync_InvalidPasswordLength_ThrowsException()
+        {
+            // Arrange
+            var userCreateDto = new UserCreateDto
+            {
+                FullName = "John Doe",
+                Email = "john.doe@example.com",
+                Password = "test" // password too short
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+            Assert.AreEqual($"The password must have at least {Utils.UtilsPassword.PASSWORD_MIN_LENGTH} characters.", exception.Message);
+
+
+        }
+
+        [TestMethod()]
+        public async Task IsValidUserCreateDtoAsync_InvalidPasswordComplexity_ThrowsException()
+        {
+            // Arrange
+            var userCreateDto = new UserCreateDto
+            {
+                FullName = "John Doe",
+                Email = "john.doe@example.com",
+                Password = "Thetest123" // password missing special character
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+            Assert.AreEqual("The password must contain at least one upper case letter, one lower case letter, one number and one special character.", exception.Message);
         }
     }
 }
