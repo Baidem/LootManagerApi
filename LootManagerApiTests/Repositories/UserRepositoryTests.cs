@@ -10,6 +10,9 @@ using LootManagerApi.Entities;
 using System.Reflection.Emit;
 using LootManagerApi.Dto;
 using LootManagerApi.Utils;
+using LootManagerApi.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace LootManagerApi.Repositories.Tests
 {
@@ -142,7 +145,7 @@ namespace LootManagerApi.Repositories.Tests
 
             await _context.SaveChangesAsync();
 
-            // test datas
+            // Test datas
             var userLoginDto = new UserLoginDto
             {
                 Email = "user5@loot.com",
@@ -152,6 +155,49 @@ namespace LootManagerApi.Repositories.Tests
             // Act & Assert
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserLoginDtoAsync(userLoginDto));
             Assert.AreEqual("The password is invalid.", exception.Message);
+        }
+
+        [TestMethod]
+        public async Task GetClaimsIdentityAsync_ValidUser_ReturnsClaimsIdentity()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = "testpasswordhash",
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var userLoginDto = new UserLoginDto
+            {
+                Email = "testuser@example.com",
+                Password = "testpassword"
+            };
+
+            // Act
+            var identity = await _userRepository.GetClaimsIdentityAsync(userLoginDto);
+
+            // Assert
+            Assert.IsNotNull(identity);
+            Assert.AreEqual(CookieAuthenticationDefaults.AuthenticationScheme, identity.AuthenticationType);
+            Assert.IsTrue(identity.Claims.Any(c => c.Type == ClaimTypes.NameIdentifier && c.Value == "1"));
+            Assert.IsTrue(identity.Claims.Any(c => c.Type == ClaimTypes.Name && c.Value == "Test User"));
+            Assert.IsTrue(identity.Claims.Any(c => c.Type == ClaimTypes.Email && c.Value == "testuser@example.com"));
+            Assert.IsTrue(identity.Claims.Any(c => c.Type == ClaimTypes.Role && c.Value == UserRole.User.ToString()));
+        }
+
+        [TestMethod]
+        public async Task GetClaimsIdentityAsync_InvalidUser_ThrowsException()
+        {
+            // Arrange
+            var userLoginDto = new UserLoginDto { Email = "invaliduser@example.com" };
+
+            // Act and Assert
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(() => _userRepository.GetClaimsIdentityAsync(userLoginDto));
         }
 
     }
