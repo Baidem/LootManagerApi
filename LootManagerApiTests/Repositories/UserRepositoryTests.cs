@@ -39,7 +39,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task CheckUserLoginDtoAsync_ValidUserLoginDto_ReturnsTrue()
         {
-            // Bdd Datas
+            // Arrange
             var u5 = new User
             {
                 Id = 5,
@@ -70,7 +70,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task CheckUserLoginDtoAsync_InvalidEmailFormat_ThrowsException()
         {
-            // Bdd Datas
+            // Arrange
             var u5 = new User
             {
                 Id = 5,
@@ -85,7 +85,6 @@ namespace LootManagerApi.Repositories.Tests
 
             await _context.SaveChangesAsync();
 
-            // Test datas
             var userLoginDto = new UserLoginDto
             {
                 Email = "invalid-email-format",
@@ -100,7 +99,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task CheckUserLoginDtoAsync_NotExistEmail_ThrowsException()
         {
-            // Bdd Datas
+            // Arrange
             var u5 = new User
             {
                 Id = 5,
@@ -115,7 +114,6 @@ namespace LootManagerApi.Repositories.Tests
 
             await _context.SaveChangesAsync();
 
-            // Test datas
             var userLoginDto = new UserLoginDto
             {
                 Email = "notexiste@loot.com",
@@ -130,7 +128,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task CheckUserLoginDtoAsync_BadPassword_ThrowsException()
         {
-            // Bdd Datas
+            // Arrange
             var u5 = new User
             {
                 Id = 5,
@@ -851,6 +849,46 @@ namespace LootManagerApi.Repositories.Tests
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.DeleteElementAsync(2));
 
             Assert.AreEqual("The user cannot be found.", exception.Message);
+        }
+
+        [TestMethod()]
+        public async Task IsUserExistByIdAsyncTest_ValidId_ReturnTrue()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Act and Assert
+            Assert.IsTrue(await _userRepository.IsUserExistByIdAsync(user.Id));
+        }
+
+        [TestMethod()]
+        public async Task IsUserExistByIdAsyncTest_UnvalidId_ThrowsException()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsUserExistByIdAsync(2));
+
+            Assert.AreEqual($"User with ID 2 does not exist in the database.", exception.Message);
         }
 
     }
