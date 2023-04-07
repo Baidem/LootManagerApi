@@ -58,7 +58,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <param name="userAuthDto">The UserAuthDto to compare with.</param>
         /// <returns>True if the data in UserUpdateDto matches the data in UserAuthDto, false otherwise.</returns>
         /// <exception cref="Exception">Throws an exception if the data does not correspond to the current user.</exception>
-        Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
+        Task<bool> ValidateUserUpdateDtoMatchesUserAuthDtoAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
 
         /// <summary>
         /// Validates user update DTO data.

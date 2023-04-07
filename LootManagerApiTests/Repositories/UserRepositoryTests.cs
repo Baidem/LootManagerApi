@@ -276,7 +276,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task CreateUserAsyncTest_ValidUserCreateDto_ReturnsUserSummaryDto()
         {
-            // Range
+            // Arange
             var userCreateDto = new UserCreateDto
             {
                 FullName = "user5",
@@ -306,7 +306,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task IsValidUserCreateDtoAsyncTest_ValidUser_ReturnsTrue()
         {
-            // Range
+            // Arrange
             var userCreateDto = new UserCreateDto
             {
                 FullName = "John Doe",
@@ -322,7 +322,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task IsValidUserCreateDtoAsync_InvalidEmail_ThrowsException()
+        public async Task IsValidUserCreateDtoAsyncTest_InvalidEmail_ThrowsException()
         {
             // Arrange
             var userCreateDto = new UserCreateDto
@@ -337,7 +337,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task IsValidUserCreateDtoAsync_EmailAlreadyExists_ThrowsException()
+        public async Task IsValidUserCreateDtoAsyncTest_EmailAlreadyExists_ThrowsException()
         {
             // Arrange
             var userCreateDto = new UserCreateDto
@@ -357,7 +357,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task IsValidUserCreateDtoAsync_InvalidPasswordLength_ThrowsException()
+        public async Task IsValidUserCreateDtoAsyncTest_InvalidPasswordLength_ThrowsException()
         {
             // Arrange
             var userCreateDto = new UserCreateDto
@@ -375,7 +375,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task IsValidUserCreateDtoAsync_InvalidPasswordComplexity_ThrowsException()
+        public async Task IsValidUserCreateDtoAsyncTest_InvalidPasswordComplexity_ThrowsException()
         {
             // Arrange
             var userCreateDto = new UserCreateDto
@@ -389,5 +389,191 @@ namespace LootManagerApi.Repositories.Tests
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
             Assert.AreEqual("The password must contain at least one upper case letter, one lower case letter, one number and one special character.", exception.Message);
         }
+
+        [TestMethod()]
+        public async Task UpdateUserAsyncTest_ValidUserUpdateDto_ReturnUserSummaryDto()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            UserUpdateDto userUpdateDto = new UserUpdateDto
+            {
+                CurrentFullName = user.FullName,
+                NewFullName = "Update User",
+                CurrentEmail = user.Email,
+                NewEmail = "update.user@example.com",
+                CurrentPassword = "PasswordTest@1",
+                NewPassword = "NewPassword@1",
+            };
+
+            // Act
+            var userSummaryDto = await _userRepository.UpdateUserAsync(userUpdateDto);
+            var userUpdated = await _context.Users.FirstOrDefaultAsync(u => u.Email == userUpdateDto.NewEmail);
+
+            // Assert
+            Assert.IsNotNull(userSummaryDto);
+            Assert.AreEqual(userSummaryDto.FullName, userUpdateDto.NewFullName);
+            Assert.AreEqual(userSummaryDto.Email, userUpdateDto.NewEmail);
+            Assert.IsNotNull(userSummaryDto.CreatedAt);
+            Assert.IsNotNull(userUpdated);
+            Assert.IsNotNull(userUpdated.Id);
+            Assert.AreEqual(userUpdated.FullName, userUpdateDto.NewFullName);
+            Assert.AreEqual(userUpdated.Email, userUpdateDto.NewEmail);
+            Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userUpdateDto.NewPassword, userUpdated.PasswordHash));
+            Assert.AreEqual(userUpdated.CreatedAt, userSummaryDto.CreatedAt);
+            Assert.IsNotNull(userUpdated.UpdateAt);
+        }
+
+        [TestMethod()]
+        public async Task UpdateUserAsyncTest_InvalidCurrentEmail_ThrowsException()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            UserUpdateDto userUpdateDto = new UserUpdateDto
+            {
+                CurrentFullName = user.FullName,
+                NewFullName = "Update User",
+                CurrentEmail = "notexist@example.com",
+                CurrentPassword = "PasswordTest@1",
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.UpdateUserAsync(userUpdateDto));
+            Assert.AreEqual("The user cannot be found.", exception.Message);
+        }
+
+        [TestMethod()]
+        public async Task ValidateUserUpdateDtoMatchesUserAuthDtoAsyncTest_ValidData_ReturnTrue()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            UserUpdateDto userUpdateDto = new UserUpdateDto
+            {
+                CurrentFullName = user.FullName,
+                NewFullName = "Update User",
+                CurrentEmail = user.Email,
+                NewEmail = "update.user@example.com",
+                CurrentPassword = "PasswordTest@1",
+                NewPassword = "NewPassword@1",
+            };
+
+            UserAuthDto userAuthDto = new UserAuthDto
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = "User"
+            };
+
+            // Act and Assert
+            Assert.IsTrue(await _userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto));
+        }
+
+        [TestMethod()]
+        public async Task ValidateUserUpdateDtoMatchesUserAuthDtoAsyncTest_DifferentEmail_ThrowsException()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            UserUpdateDto userUpdateDto = new UserUpdateDto
+            {
+                CurrentFullName = user.FullName,
+                NewFullName = "Update User",
+                CurrentEmail = "different@exemple.com",
+                NewEmail = "update.user@example.com",
+                CurrentPassword = "PasswordTest@1",
+                NewPassword = "NewPassword@1",
+            };
+
+            UserAuthDto userAuthDto = new UserAuthDto
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = "User"
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto));
+            Assert.AreEqual("Data does not correspond to the current user.", exception.Message);
+        }
+
+        [TestMethod()]
+        public async Task ValidateUserUpdateDtoMatchesUserAuthDtoAsyncTest_DifferentPassword_ThrowsException()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            UserUpdateDto userUpdateDto = new UserUpdateDto
+            {
+                CurrentFullName = user.FullName,
+                NewFullName = "Update User",
+                CurrentEmail = user.Email,
+                NewEmail = "update.user@example.com",
+                CurrentPassword = "Different@1",
+                NewPassword = "NewPassword@1",
+            };
+
+            UserAuthDto userAuthDto = new UserAuthDto
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = "User"
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto));
+            Assert.AreEqual("Data does not correspond to the current user.", exception.Message);
+        }
+
+
     }
 }

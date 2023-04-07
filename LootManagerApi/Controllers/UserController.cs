@@ -154,7 +154,7 @@ namespace LootManagerApi.Controllers
             try
             {
                 var userAuthDto = loadUserAuthentifiedDto();
-                await userRepository.ValidateUserUpdateDtoMatchesUserAuthDto(userUpdateDto, userAuthDto);
+                await userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto);
                 await userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto);
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
                 string password = (userUpdateDto.NewPassword == null) ? userUpdateDto.CurrentPassword : userUpdateDto.NewPassword;

@@ -94,11 +94,11 @@ namespace LootManagerApi.Repositories
         /// <returns>A list of UserSummaryDto objects containing summary data for all users.</returns>
         public async Task<List<UserSummaryDto>> GetAllUsersAsync()
         {
-                var list = await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
-                if (list.Count == 0)
-                    throw new Exception("Empty list, no users are registered.");
+            var list = await context.Users.Select(u => new UserSummaryDto(u)).ToListAsync();
+            if (list.Count == 0)
+                throw new Exception("Empty list, no users are registered.");
 
-                return list;
+            return list;
         }
         #endregion
 
@@ -167,14 +167,21 @@ namespace LootManagerApi.Repositories
             if (user != null)
             {
                 if (userUpdateDto.NewFullName == null && userUpdateDto.NewEmail == null && userUpdateDto.NewPassword == null)
-                {
                     throw new Exception("No changes needed.");
-                }
-                if (userUpdateDto.NewFullName != null) { user.FullName = userUpdateDto.NewFullName; }
-                if (userUpdateDto.NewEmail != null) { user.Email = userUpdateDto.NewEmail; }
-                if (userUpdateDto.NewPassword != null) { user.PasswordHash = Utils.UtilsPassword.GenerateHashedPassword(userUpdateDto.NewPassword); }
+
+                if (userUpdateDto.NewFullName != null)
+                    user.FullName = userUpdateDto.NewFullName;
+
+                if (userUpdateDto.NewEmail != null)
+                    user.Email = userUpdateDto.NewEmail;
+
+                if (userUpdateDto.NewPassword != null)
+                    user.PasswordHash = UtilsPassword.GenerateHashedPassword(userUpdateDto.NewPassword);
+
                 user.UpdateAt = DateTime.UtcNow;
+
                 await context.SaveChangesAsync();
+
                 return new UserSummaryDto(user);
             }
             throw new Exception("The user cannot be found.");
@@ -187,15 +194,14 @@ namespace LootManagerApi.Repositories
         /// <param name="userAuthDto">The UserAuthDto to compare with.</param>
         /// <returns>True if the data in UserUpdateDto matches the data in UserAuthDto, false otherwise.</returns>
         /// <exception cref="Exception">Throws an exception if the data does not correspond to the current user.</exception>
-        public async Task<bool> ValidateUserUpdateDtoMatchesUserAuthDto(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
+        public async Task<bool> ValidateUserUpdateDtoMatchesUserAuthDtoAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
         {
             if (userUpdateDto.CurrentFullName == userAuthDto.FullName && userUpdateDto.CurrentEmail == userAuthDto.Email)
             {
                 var passwordHash = await context.Users.Where(u => u.Email == userAuthDto.Email).Select(p => p.PasswordHash).FirstAsync();
+
                 if (Utils.UtilsPassword.CheckPasswordMatchesHash(userUpdateDto.CurrentPassword, passwordHash))
-                {
                     return true;
-                }
             }
             throw new Exception("Data does not correspond to the current user.");
         }
