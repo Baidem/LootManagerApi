@@ -9,6 +9,7 @@ namespace LootManagerApi.Repositories
         public DbSet<Element> Elements { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<InfoSheet> InfoSheets { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         public LootManagerContext(DbContextOptions<LootManagerContext> option) : base(option)
         {

@@ -16,6 +16,7 @@ namespace LootManagerApi.Entities
         public User User { get; set; }
         public int? LocationId { get; set; }
         public Location? Location { get; set; }
+        public List<Image>? Images { get; set; }
 
         public Element()
         {

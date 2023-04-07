@@ -9,7 +9,8 @@
         public string? WikiArticle { get; set; }
 
         // Navigation properties
-        public List<Element> Elements { get; set; }
+        public List<Element>? Elements { get; set; }
+        public List<Image>? Images { get; set; }
 
     }
 }
