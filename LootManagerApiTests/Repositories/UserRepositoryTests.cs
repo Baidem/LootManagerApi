@@ -777,7 +777,7 @@ namespace LootManagerApi.Repositories.Tests
 
             // Act
             UserSummaryDto userSummaryDto = await _userRepository.UpdateUserRoleAsync(1, UserRole.Admin);
-            
+
             // Assert
             Assert.IsNotNull(userSummaryDto);
             Assert.AreEqual(userSummaryDto.FullName, user.FullName);
@@ -802,6 +802,53 @@ namespace LootManagerApi.Repositories.Tests
 
             // Act & Assert
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.UpdateUserRoleAsync(1, UserRole.Admin));
+
+            Assert.AreEqual("The user cannot be found.", exception.Message);
+        }
+
+        [TestMethod()]
+        public async Task DeleteElementAsyncTest_ValidId_ReturnUserSummaryDto()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Act
+            UserSummaryDto userSummaryDto = await _userRepository.DeleteElementAsync(1);
+            var userNull = await _context.Users.FirstOrDefaultAsync(u => u.Id == 1);
+
+            // Assert
+            Assert.IsNotNull(userSummaryDto);
+            Assert.AreEqual(userSummaryDto.FullName, user.FullName);
+            Assert.AreEqual(userSummaryDto.Email, user.Email);
+            Assert.IsNull(userNull);
+        }
+
+        [TestMethod()]
+        public async Task DeleteElementAsyncTest_UnvalidId_ThrowsException()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.DeleteElementAsync(2));
 
             Assert.AreEqual("The user cannot be found.", exception.Message);
         }
