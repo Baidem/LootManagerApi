@@ -533,7 +533,7 @@ namespace LootManagerApi.Repositories.Tests
 
             // Act & Assert
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto));
-            
+
             Assert.AreEqual("Data does not correspond to the current user.", exception.Message);
         }
 
@@ -572,7 +572,7 @@ namespace LootManagerApi.Repositories.Tests
 
             // Act & Assert
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto));
-            
+
             Assert.AreEqual("Data does not correspond to the current user.", exception.Message);
         }
 
@@ -633,7 +633,7 @@ namespace LootManagerApi.Repositories.Tests
             // Act & Assert
             var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto));
 
-            Assert.AreEqual("Invalid email address format : Invalid Format!", exception.Message);            
+            Assert.AreEqual("Invalid email address format : Invalid Format!", exception.Message);
         }
 
         [TestMethod()]
@@ -760,8 +760,51 @@ namespace LootManagerApi.Repositories.Tests
             Assert.AreEqual("The password must contain at least one upper case letter, one lower case letter, one number and one special character.", exception.Message);
         }
 
+        [TestMethod()]
+        public async Task UpdateUserRoleAsyncTest_ValidId_ReturnUserSummaryDto()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
-        
+            // Act
+            UserSummaryDto userSummaryDto = await _userRepository.UpdateUserRoleAsync(1, UserRole.Admin);
+            
+            // Assert
+            Assert.IsNotNull(userSummaryDto);
+            Assert.AreEqual(userSummaryDto.FullName, user.FullName);
+            Assert.AreEqual(userSummaryDto.Email, user.Email);
+            Assert.AreEqual(user.Role, UserRole.Admin);
+        }
+
+        [TestMethod()]
+        public async Task UpdateUserRoleAsyncTest_UnvalidId_ThrowsException()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 2,
+                FullName = "Test User",
+                Email = "testuser@example.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("PasswordTest@1"),
+                Role = UserRole.User
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.UpdateUserRoleAsync(1, UserRole.Admin));
+
+            Assert.AreEqual("The user cannot be found.", exception.Message);
+        }
 
     }
 }
