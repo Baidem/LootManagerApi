@@ -15,6 +15,8 @@ namespace LootManagerApi.Entities
         // Navigation properties
         public List<Element> Elements { get; set; }
         public List<Location> Locations { get; set; }
+        public int? InfoSheetId { get; set; }
+        public InfoSheet? InfoSheet { get; set; }
 
         public User()
         {

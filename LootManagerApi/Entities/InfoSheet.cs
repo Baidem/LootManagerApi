@@ -9,6 +9,7 @@
         public string? WikiArticle { get; set; }
 
         // Navigation properties
+        public List<Element> Elements { get; set; }
 
     }
 }
