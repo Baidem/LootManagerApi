@@ -7,6 +7,10 @@
         public string? Reference { get; set; }
         public string? BarCode { get; set; }
         public string? WikiArticle { get; set; }
+        public string? Contributor { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
 
         // Navigation properties
         public List<Element>? Elements { get; set; }
