@@ -76,6 +76,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <returns>A UserSummaryDto object representing the updated user.</returns>
         /// <exception cref="Exception">Thrown if the user cannot be found.</exception>
         Task<UserSummaryDto> UpdateUserRoleAsync(int userId, UserRole userRole);
+        Task<UserSummaryDto> UpdateAuthorSignatureAsync(int userId, string authorSignature);
 
         /// <summary>
         /// Deletes the specified user from the database.

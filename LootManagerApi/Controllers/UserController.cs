@@ -197,16 +197,11 @@ namespace LootManagerApi.Controllers
         }
 
         /// <summary>
-        /// This method updates the role of a user with the specified userId.
-        /// It checks if the authenticated user is an admin,
-        /// it verifies if the user with the specified userId exists,
-        /// it updates the user's role.
-        /// The method returns an ActionResult with an HTTP status code of 200 and a success message containing the user's full name, email and new role on success.
-        /// If an exception is caught, it returns an ActionResult with an HTTP status code of 500 and the error message.
+        /// Updates the role of a user identified by their ID.
         /// </summary>
-        /// <param name="userId">The ID of the user whose role is being updated.</param>
-        /// <param name="userRole">The new role to be assigned to the user.</param>
-        /// <returns>An ActionResult with an HTTP status code of 200 and a success message containing the user's full name, email and new role on success, or an ActionResult with an HTTP status code of 500 and the error message on failure.</returns>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="userRole">The new role for the user.</param>
+        /// <returns>An ActionResult indicating success or failure.</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -226,6 +221,32 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Updates the author signature of a user.
+        /// </summary>
+        /// <param name="authorSignature">The new author signature to be set.</param>
+        /// <returns>An ActionResult object indicating the result of the operation.</returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> UpdateAuthorSignature(string authorSignature)
+        {
+            try
+            {
+                var userAuthDto = loadUserAuthentifiedDto();
+                UtilsRole.CheckOnlyContributor(userAuthDto);
+                await userRepository.IsUserExistByIdAsync(userAuthDto.Id.Value);
+                UserSummaryDto userSummaryDto = await userRepository.UpdateAuthorSignatureAsync(userAuthDto.Id.Value, authorSignature);
+
+                return Ok($"The author signature of {userSummaryDto.FullName} {userSummaryDto.Email} is : {authorSignature}");
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
 
         #endregion
 

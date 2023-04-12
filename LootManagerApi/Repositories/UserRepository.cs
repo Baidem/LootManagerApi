@@ -258,6 +258,17 @@ namespace LootManagerApi.Repositories
             throw new Exception("The user cannot be found.");
         }
 
+        public async Task<UserSummaryDto> UpdateAuthorSignatureAsync(int userId, string authorSignature)
+        {
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                user.AuthorSignature = authorSignature;
+                await context.SaveChangesAsync();
+                return new UserSummaryDto(user);
+            }
+            throw new Exception("The user cannot be found.");
+        }
         #endregion
 
         #region DELETE USER
