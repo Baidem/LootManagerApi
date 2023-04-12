@@ -1,6 +1,10 @@
-﻿namespace LootManagerApi.Repositories.Interfaces
+﻿using LootManagerApi.Dto;
+
+namespace LootManagerApi.Repositories.Interfaces
 {
-    public class IInfoSheetRepository
+    public interface IInfoSheetRepository
     {
+        Task<InfoSheetSummaryDto> CreateInfoSheetAsync(InfoSheetCreateDto infoSheetCreateDto, int userId);
+
     }
 }
