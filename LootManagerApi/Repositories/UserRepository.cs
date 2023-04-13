@@ -139,7 +139,7 @@ namespace LootManagerApi.Repositories
             }
             if (await UtilsEmail.IsEmailExistInContextAsync(userCreateDto.Email, context))
             {
-                throw new Exception(string.Format("Email is already used : {0}", userCreateDto.Email));
+                throw new Exception(string.Format($"Email is already used : {userCreateDto.Email}"));
             }
             if (UtilsPassword.CheckPasswordLength(userCreateDto.Password))
             {
@@ -222,7 +222,7 @@ namespace LootManagerApi.Repositories
                 }
                 if (await UtilsEmail.IsEmailExistInContextAsync(userUpdateDto.NewEmail, context))
                 {
-                    throw new Exception(string.Format("Email is already used : {0}", userUpdateDto.NewEmail));
+                    throw new Exception(string.Format($"Email is already used : {userUpdateDto.NewEmail}"));
                 }
             }
             if (userUpdateDto.NewPassword != null)

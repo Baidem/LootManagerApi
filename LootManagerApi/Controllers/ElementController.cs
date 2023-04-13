@@ -33,7 +33,6 @@ namespace LootManagerApi.Controllers
             }
             return new UserAuthDto(identity);
         }
-
         #endregion
 
         #region CREATE ELEMENT
@@ -46,16 +45,13 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
                 int n = userAuthDto.Id.Value;
-                var res = elementRepository.CreateElement(elementCreateDto, userAuthDto.Id.Value);
+                var res = elementRepository.CreateElement(elementCreateDto, n);
                 return Ok(res);
-
             }
             catch (Exception ex)
             {
-
                 return Problem(ex.Message);
             }
-
         }
 
 
@@ -64,46 +60,40 @@ namespace LootManagerApi.Controllers
         #region GET ELEMENTS
         [HttpGet()]
         [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<List<string>>> GetElements()
         {
-            var identity = User?.Identity as ClaimsIdentity;
-            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (idCurrentUser == null)
+            try
             {
-                return Problem("You must log in order to see your(s) element(s) !");
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                int n = userAuthDto.Id.Value;
+                var element = await elementRepository.GetElementsAsync(n);
+                return Ok(element);
             }
-            var currentUserId = Int32.Parse(idCurrentUser.Value);
-
-            var element = await elementRepository.GetElementsAsync(int.Parse(idCurrentUser.Value));
-            if (element == null)
+            catch (Exception ex)
             {
-                return NotFound("You have zero elements.");
+                return Problem(ex.Message);
             }
-            return Ok(element);
         }
         #endregion
 
         #region GET ELEMENT
         [HttpGet("{elementId}")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Element>> GetElement(int elementId)
         {
-            var identity = User?.Identity as ClaimsIdentity;
-            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (idCurrentUser == null)
+            try
             {
-                return Problem("You must log in order to see your(s) element(s) !");
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                int n = userAuthDto.Id.Value;
+                var element = await elementRepository.GetElementAsync(elementId,n);
+                return Ok(element);
             }
-            var currentUserId = Int32.Parse(idCurrentUser.Value);
-
-            var element = await elementRepository.GetElementAsync(elementId, int.Parse(idCurrentUser.Value));
-            if (element == null)
+            catch (Exception ex)
             {
-                return NotFound("Element wasnot found.");
+                return Problem(ex.Message);
             }
-            return Ok(element);
         }
         #endregion
 
@@ -113,46 +103,46 @@ namespace LootManagerApi.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<Element>> UpdateElement([FromForm] ElementUpdateDto elementUpdateDto)
         {
-            var identity = User?.Identity as ClaimsIdentity;
-            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (idCurrentUser == null)
-                return Problem("You must log in order to modify your element !");
-            int userId = Int32.Parse(idCurrentUser.Value);
-
-
-            var elementUpdate = new ElementUpdateDto()
+            try
             {
-                Id = elementUpdateDto.Id,
-                Name = elementUpdateDto.Name,
-                Description = elementUpdateDto.Description,
-                Type = elementUpdateDto.Type
-            };
-            var elementUpdated = await elementRepository.UpdateElementAsync(elementUpdate,userId);
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                int n = userAuthDto.Id.Value;
 
-            if (elementUpdated != null)
+                var elementUpdate = new ElementUpdateDto()
+                {
+                    Id = elementUpdateDto.Id,
+                    Name = elementUpdateDto.Name,
+                    Description = elementUpdateDto.Description,
+                    Type = elementUpdateDto.Type
+                };
+                var elementUpdated = await elementRepository.UpdateElementAsync(elementUpdate, n);
                 return Ok(elementUpdated);
-            else
-                return Problem("Element wasnot modified, look at the logs !");
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
+        
         #endregion
 
         #region DELETE ELEMENT
         [HttpDelete("{elementId}")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<string>> DeleteElement(int elementId)
         {
-            var identity = User?.Identity as ClaimsIdentity;
-            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (idCurrentUser == null)
-                return Problem("You must log in order to delete your(s) element(s) !");
-
-            var elementDeleted = await elementRepository.DeleteElementAsync(elementId, int.Parse(idCurrentUser.Value));
-
-            if (elementDeleted != null)
-                return Ok($"Element deleted: {elementDeleted.Id} {elementDeleted.Name} !");
-            else
-                return NotFound("Element wasnot found.");
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+                int n = userAuthDto.Id.Value;
+                var element = await elementRepository.DeleteElementAsync(elementId, n);
+                return Ok($"Element deleted: {element.Id} {element.Name} !");
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
         #endregion
     }

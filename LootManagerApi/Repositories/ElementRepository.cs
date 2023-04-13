@@ -10,8 +10,8 @@ namespace LootManagerApi.Repositories
         #region DECLARATION
         LootManagerContext context;
         ILogger<ElementRepository> logger;
-
         #endregion
+
         #region CONSTRUCTOR
         public ElementRepository(LootManagerContext context, ILogger<ElementRepository> logger)
         {
@@ -33,6 +33,7 @@ namespace LootManagerApi.Repositories
             return elementCreateDto;
         }
 
+
         /// <summary>
         /// Get all user's elements
         /// </summary>
@@ -40,7 +41,12 @@ namespace LootManagerApi.Repositories
         /// <returns></returns>
         public async Task<List<string>> GetElementsAsync(int userId)
         {
-            return await context.Elements.Where(e => e.UserId == userId).Select(e => e.Name).ToListAsync();
+            var element =  await context.Elements.Where(e => e.UserId == userId).Select(e => e.Name).ToListAsync();
+            if (!element.Any())
+            {
+                throw new Exception($"You have zero elements in your collection actually.");
+            }
+            return element;
         }
 
         /// <summary>
@@ -51,36 +57,40 @@ namespace LootManagerApi.Repositories
         /// <returns></returns>
         public async Task<Element> GetElementAsync(int elementId, int userId)
         {
-            return await context.Elements.Where(e => e.UserId == userId).FirstOrDefaultAsync(e => e.Id == elementId);
+            var element = await context.Elements.Where(e => e.UserId == userId).FirstOrDefaultAsync(e => e.Id == elementId);
+            if (element == null)
+            {
+                throw new Exception($"Element wasnot found.");
+            }
+            return element;
         }
 
+
+        /// <summary>
+        /// Update an user's element
+        /// </summary>
+        /// <param name="elementUpdateDto"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<Element> UpdateElementAsync(ElementUpdateDto elementUpdateDto, int userId)
         {
-            try
+            var element = await context.Elements.Where(e => e.UserId == userId).FirstOrDefaultAsync(e => e.Id == elementUpdateDto.Id);
+            if (element != null)
             {
-                var elementUpdate = await context.Elements.Where(e => e.UserId == userId).FirstOrDefaultAsync(e => e.Id == elementUpdateDto.Id);
-                if (elementUpdate != null)
+                if (elementUpdateDto.Name != null && elementUpdateDto.Description != null && elementUpdateDto.Type != null)
                 {
-                    if (elementUpdateDto.Name != null)
-                        elementUpdate.Name = elementUpdateDto.Name;
-                    if (elementUpdateDto.Description != null)
-                        elementUpdate.Description = elementUpdateDto.Description;
-                    if (elementUpdateDto.Type != null)
-                        elementUpdate.Type = elementUpdateDto.Type;
-                    await context.SaveChangesAsync();
-                    return elementUpdate;
-                }
-                else
-                {
-                    logger?.LogError("Update is not correct.");
-                    return null;
+                    element.Name = elementUpdateDto.Name;
+                    element.Description = elementUpdateDto.Description;
+                    element.Type = elementUpdateDto.Type;
                 }
             }
-            catch (Exception e)
+            else
             {
-                logger?.LogError(e?.InnerException?.ToString());
-                return null;
+                throw new Exception($"Error please fill all the blank spaces !");
             }
+            await context.SaveChangesAsync();
+            return element;
+
         }
 
         /// <summary>
@@ -91,23 +101,14 @@ namespace LootManagerApi.Repositories
         /// <returns></returns>
         public async Task<Element> DeleteElementAsync(int elementId, int userId)
         {
-            try
+            var element = await context.Elements.FirstOrDefaultAsync(e => e.Id == elementId && e.UserId == userId);
+            if (element == null)
             {
-                var element = await context.Elements.FirstOrDefaultAsync(e => e.Id == elementId && e.UserId == userId);
-                if (element == null)
-                {
-                    logger?.LogError("Element don't exist.");
-                    return null;
-                }
-                context.Elements.Remove(element);
-                await context.SaveChangesAsync();
-                return element;
+                throw new Exception($"Element wasnot found.");
             }
-            catch (Exception e)
-            {
-                logger?.LogError(e?.InnerException?.ToString());
-                return null;
-            }
+            context.Elements.Remove(element);
+            await context.SaveChangesAsync();
+            return element;
         }
         #endregion
 
