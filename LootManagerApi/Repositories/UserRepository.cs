@@ -88,6 +88,7 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region READ
+
         /// <summary>
         /// Retrieves a list of all user summary data asynchronously from the database.
         /// </summary>

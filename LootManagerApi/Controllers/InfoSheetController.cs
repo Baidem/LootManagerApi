@@ -73,6 +73,10 @@ namespace LootManagerApi.Controllers
 
         #region READ
 
+        /// <summary>
+        /// Returns a list of all Ids and designations belonging to the connected contributor.
+        /// </summary>
+        /// <returns>A list of Id and designation</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -94,6 +98,11 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtaining an information sheet by Id
+        /// </summary>
+        /// <param name="infoSheetId"></param>
+        /// <returns>InfoSheet</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -114,7 +123,6 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-
 
         #endregion
 
