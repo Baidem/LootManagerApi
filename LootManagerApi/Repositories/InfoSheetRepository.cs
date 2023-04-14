@@ -23,12 +23,17 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region CREATE USER
+
         public async Task<InfoSheetSummaryDto> CreateInfoSheetAsync(InfoSheetCreateDto infoSheetCreateDto, int userId)
         {
             try
             {
-                string? authorSignature = context.Users.Where(u => u.Id == userId).Select(a => a.AuthorSignature).FirstAsync().ToString();
-                var infoSheet = new InfoSheet(infoSheetCreateDto, authorSignature);
+                var authorSignature = context.Users.Where(u => u.Id == userId).Select(u => u.AuthorSignature).FirstOrDefault().ToString();
+                if (authorSignature == null)
+                {
+                    throw new Exception("AuthorSignature is not found.");
+                }
+                var infoSheet = new InfoSheet(infoSheetCreateDto, authorSignature, userId);
                 await context.InfoSheets.AddAsync(infoSheet);
                 await context.SaveChangesAsync();
                 return new InfoSheetSummaryDto(infoSheet);

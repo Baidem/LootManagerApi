@@ -22,7 +22,7 @@ namespace LootManagerApi.Entities
         {
         }
 
-        public InfoSheet(InfoSheetCreateDto infoSheetCreateDto, string? authorSignature)
+        public InfoSheet(InfoSheetCreateDto infoSheetCreateDto, string? authorSignature, int userId)
         {
             Designation = infoSheetCreateDto.Designation;
             Reference = infoSheetCreateDto.Reference;
@@ -30,6 +30,7 @@ namespace LootManagerApi.Entities
             WikiArticle = infoSheetCreateDto.WikiArticle;
             AuthorSignature = authorSignature;
             CreatedAt = DateTime.UtcNow;
+            UserId = userId;
         }
     }
 }
