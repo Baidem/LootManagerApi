@@ -16,6 +16,7 @@ namespace LootManagerApi.Entities
         // Navigation properties
         public List<Element>? Elements { get; set; }
         public List<Image>? Images { get; set; }
+        public int UserId { get; set; }
 
         public InfoSheet()
         {

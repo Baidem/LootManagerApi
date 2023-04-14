@@ -47,7 +47,7 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                var list = await context.InfoSheets.Where(i => i.Id == userId).Select(i => new InfosheetIdAndDesignation(i)).ToListAsync();
+                var list = await context.InfoSheets.Where(i => i.UserId == userId).Select(i => new InfosheetIdAndDesignation(i)).ToListAsync();
                 if (list.Count == 0)
                 {
                     throw new Exception("The list is empty.");
