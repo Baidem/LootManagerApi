@@ -1,6 +1,7 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LootManagerApi.Repositories
@@ -37,6 +38,54 @@ namespace LootManagerApi.Repositories
                 throw new Exception("An error occurred while creating the info sheet.", ex);
             }
         }
+
+        #endregion
+
+        #region READ
+
+        public async Task<List<InfosheetIdAndDesignation>> GetAllInfoSheetByUserIdAsync(int userId)
+        {
+            try
+            {
+                var list = await context.InfoSheets.Where(i => i.Id == userId).Select(i => new InfosheetIdAndDesignation(i)).ToListAsync();
+                if (list.Count == 0)
+                {
+                    throw new Exception("The list is empty.");
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred when creating the information sheet list.", ex);
+            }
+        }
+
+        public async Task<InfoSheet> GetInfoSheetByIdAsync(int infoSheetId)
+        {
+            try
+            {
+                var infoSheet = await context.InfoSheets.FirstAsync(i => i.Id == infoSheetId);
+                return infoSheet;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while searching for the information sheet.", ex);
+            }
+        }
+
+        #endregion
+
+        #region Utils
+
+        public async Task<bool> IsInfoSheetExistAsync(int infoSheetId)
+        {
+            if (await context.InfoSheets.AnyAsync(i => i.Id == infoSheetId))
+            {
+                return true;
+            }
+            throw new Exception("This information sheet does not exist in the database.");
+        }
+
         #endregion
     }
 }

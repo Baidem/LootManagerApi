@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Entities;
 using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Utils;
@@ -71,6 +72,49 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region READ
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<InfosheetIdAndDesignation>>> GetAllMyInfoSheets()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                UtilsRole.CheckOnlyContributor(userAuthDto);
+
+                var elements = await infoSheetRepository.GetAllInfoSheetByUserIdAsync(userAuthDto.Id.Value);
+
+                return Ok(elements);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<InfoSheet>> GetInfoSheetById(int infoSheetId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await infoSheetRepository.IsInfoSheetExistAsync(infoSheetId);
+
+                var element = await infoSheetRepository.GetInfoSheetByIdAsync(infoSheetId);
+
+                return Ok(element);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
 
         #endregion
 

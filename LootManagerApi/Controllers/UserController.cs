@@ -121,7 +121,7 @@ namespace LootManagerApi.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsersAsync()
+        public async Task<ActionResult<List<UserSummaryDto>>> GetAllUsers()
         {
             try
             {
