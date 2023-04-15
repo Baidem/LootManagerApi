@@ -271,8 +271,12 @@ namespace LootManagerApi.Controllers
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
                 UtilsRole.CheckOnlyAdmin(userAuthDto);
+
                 await userRepository.IsUserExistByIdAsync(userId);
+
+                // TODO Erreur de nommage de la méthode!!!!!
                 UserSummaryDto userSummaryDto = await userRepository.DeleteElementAsync(userId);
 
                 return Ok($"{userSummaryDto.FullName} was deleted.");

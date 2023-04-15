@@ -3,6 +3,7 @@ using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace LootManagerApi.Repositories
 {
@@ -120,6 +121,28 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region DELETE
+
+        public async Task<string> DeleteInfoSheetAsync(int infoSheetId)
+        {
+            try
+            {
+                var infoSheet = await context.InfoSheets.FirstAsync(i => i.Id == infoSheetId);
+
+                context.InfoSheets.Remove(infoSheet);
+
+                await context.SaveChangesAsync();
+
+                return infoSheet.Designation;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while deleting the information sheet. {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
         #region Utils
 
         public async Task<bool> IsInfoSheetExistAsync(int infoSheetId)
@@ -144,7 +167,6 @@ namespace LootManagerApi.Repositories
                 throw new Exception("An error occurred while searching for the owner of the information sheet.");
             }
         }
-
 
         #endregion
     }

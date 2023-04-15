@@ -164,6 +164,37 @@ namespace LootManagerApi.Controllers
 
         #region DELETE
 
+        /// <summary>
+        /// Deletes an info sheet by ID.
+        /// </summary>
+        /// <param name="infoSheetId">The ID of the info sheet to delete.</param>
+        /// <returns>An ActionResult indicating the result of the operation.</returns>
+        [HttpDelete("{infoSheetId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<string>> DeleteInfoSheetByIdAsync(int infoSheetId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                UtilsRole.CheckOnlyContributor(userAuthDto);
+
+                await infoSheetRepository.IsInfoSheetExistAsync(infoSheetId);
+
+                await infoSheetRepository.IsCurrentUserTheOwnerOfInfoSheetAsync(userAuthDto, infoSheetId);
+
+                var designation = await infoSheetRepository.DeleteInfoSheetAsync(infoSheetId);
+
+                return Ok($"{designation} was deleted.");
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+
         #endregion
 
 
