@@ -13,26 +13,34 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region CONSTRUCTOR
+
         public ElementRepository(LootManagerContext context, ILogger<ElementRepository> logger)
         {
             this.context = context;
             this.logger = logger;
         }
 
-        /// <summary>
-        /// Create an user's element
-        /// </summary>
-        /// <param name="elementCreateDto"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public ElementCreateDto CreateElement(ElementCreateDto elementCreateDto, int userId)
-        {
-            Element element = new Element(elementCreateDto, userId);
-            context.Elements.Add(element);
-            context.SaveChanges();
-            return elementCreateDto;
-        }
+        #endregion
 
+        #region CREATE
+
+        public async Task<ElementDto> CreateElementAsync(ElementCreateDto elementCreateDto, int userId)
+        {
+            try
+            {
+                Element element = new Element(elementCreateDto, userId);
+
+                await context.Elements.AddAsync(element);
+
+                await context.SaveChangesAsync();
+
+                return new ElementDto(element);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while creating the element : {ex.Message}");
+            }
+        }
 
         /// <summary>
         /// Get all user's elements
@@ -41,7 +49,7 @@ namespace LootManagerApi.Repositories
         /// <returns></returns>
         public async Task<List<string>> GetElementsAsync(int userId)
         {
-            var element =  await context.Elements.Where(e => e.UserId == userId).Select(e => e.Name).ToListAsync();
+            var element = await context.Elements.Where(e => e.UserId == userId).Select(e => e.Name).ToListAsync();
             if (!element.Any())
             {
                 throw new Exception($"You have zero elements in your collection actually.");

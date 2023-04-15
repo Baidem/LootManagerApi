@@ -7,9 +7,11 @@ namespace LootManagerApi.Entities
     public class Element
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Type { get; set; }
+        public string Name { get; set; } // The name given by the user
+        public string Description { get; set; } // The description given by the user
+        public string Type { get; set; } // The object type
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // Navigation properties
         public int UserId { get; set; }

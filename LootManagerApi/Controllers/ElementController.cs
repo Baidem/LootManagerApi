@@ -23,37 +23,32 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region LOG
-        private UserAuthDto loadUserAuthentifiedDto()
-        {
-            var identity = User?.Identity as ClaimsIdentity;
-            if (identity?.FindFirst(ClaimTypes.NameIdentifier) == null)
-            {
-                throw new Exception("You must log in.");
-            }
-            return new UserAuthDto(identity);
-        }
-        #endregion
+        #region CREATE
 
-        #region CREATE ELEMENT
+        /// <summary>
+        /// Create a new element
+        /// </summary>
+        /// <param name="elementCreateDto">Element creation DTO object containing element information</param>
+        /// <returns>Returns the info element DTO object.</returns>
+        /// <exception cref="Exception">Thrown when there is an error in creating the element.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public ActionResult<List<ElementCreateDto>> CreateElement([FromForm] ElementCreateDto elementCreateDto)
+        public async Task<ActionResult<List<ElementDto>>> CreateElement([FromForm] ElementCreateDto elementCreateDto)
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                int n = userAuthDto.Id.Value;
-                var res = elementRepository.CreateElement(elementCreateDto, n);
-                return Ok(res);
+
+                var elementDto = await elementRepository.CreateElementAsync(elementCreateDto, userAuthDto.Id.Value);
+
+                return Ok(elementDto);
             }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
         }
-
 
         #endregion
 
@@ -144,6 +139,20 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+        #endregion
+
+        #region LOG
+
+        private UserAuthDto loadUserAuthentifiedDto()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            if (identity?.FindFirst(ClaimTypes.NameIdentifier) == null)
+            {
+                throw new Exception("You must log in.");
+            }
+            return new UserAuthDto(identity);
+        }
+        
         #endregion
     }
 }
