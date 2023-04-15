@@ -128,6 +128,12 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region UPDATE
+
+        /// <summary>
+        /// Updates the specified info sheet.
+        /// </summary>
+        /// <param name="infoSheetUpdateDto">The DTO containing updated info sheet data.</param>
+        /// <returns>An ActionResult containing the updated info sheet.</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
