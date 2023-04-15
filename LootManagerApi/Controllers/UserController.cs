@@ -154,10 +154,15 @@ namespace LootManagerApi.Controllers
             try
             {
                 var userAuthDto = loadUserAuthentifiedDto();
+
                 await userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto);
+
                 await userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto);
+
                 var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
+
                 string password = (userUpdateDto.NewPassword == null) ? userUpdateDto.CurrentPassword : userUpdateDto.NewPassword;
+
                 await updateUserIdentityAsync(userSummaryDto.Email, password);
 
                 return Ok($"The user is update : FullName = {userSummaryDto.FullName}, Email = {userSummaryDto.Email}, Password = {dotsLine(userUpdateDto)}");

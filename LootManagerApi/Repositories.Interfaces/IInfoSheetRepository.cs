@@ -10,6 +10,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<List<InfosheetIdAndDesignation>> GetAllInfoSheetByUserIdAsync(int userId);
         Task<InfoSheet> GetInfoSheetByIdAsync(int infoSheetId);
         Task<bool> IsInfoSheetExistAsync(int infoSheetId);
-
+        Task<bool> IsCurrentUserTheOwnerOfInfoSheetAsync(UserAuthDto userAuthDto, int infoSheetId);
+        Task<InfoSheet> UpdateInfoSheetAsync(InfoSheetUpdateDto infoSheetUpdateDto);
     }
 }

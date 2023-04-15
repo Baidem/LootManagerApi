@@ -22,7 +22,7 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-        #region CREATE USER
+        #region CREATE
 
         public async Task<InfoSheetSummaryDto> CreateInfoSheetAsync(InfoSheetCreateDto infoSheetCreateDto, int userId)
         {
@@ -80,8 +80,43 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-        #region CREATE
+        #region UPDATE
 
+        public async Task<InfoSheet> UpdateInfoSheetAsync(InfoSheetUpdateDto infoSheetUpdateDto)
+        {
+            try
+            {
+                if (infoSheetUpdateDto.Designation == null && infoSheetUpdateDto.Reference == null && infoSheetUpdateDto.BarCode == null && infoSheetUpdateDto.WikiArticle == null && infoSheetUpdateDto.AuthorSignature == null)
+                    throw new Exception("No changes needed.");
+
+                var infoSheet = await context.InfoSheets.FirstAsync(i => i.Id == infoSheetUpdateDto.InfoSheetId);
+
+                if (infoSheetUpdateDto.Designation != null)
+                    infoSheet.Designation = infoSheetUpdateDto.Designation;
+
+                if (infoSheetUpdateDto.Reference != null)
+                    infoSheet.Reference = infoSheetUpdateDto.Reference;
+
+                if (infoSheetUpdateDto.BarCode != null)
+                    infoSheet.BarCode = infoSheetUpdateDto.BarCode;
+
+                if (infoSheetUpdateDto.WikiArticle != null)
+                    infoSheet.WikiArticle = infoSheetUpdateDto.WikiArticle;
+
+                if (infoSheetUpdateDto.AuthorSignature != null)
+                    infoSheet.AuthorSignature = infoSheetUpdateDto.AuthorSignature;
+
+                infoSheet.UpdatedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                return infoSheet;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the information sheet. {ex.Message}", ex);
+            }
+        }
 
         #endregion
 
@@ -95,6 +130,21 @@ namespace LootManagerApi.Repositories
             }
             throw new Exception("This information sheet does not exist in the database.");
         }
+
+        public async Task<bool> IsCurrentUserTheOwnerOfInfoSheetAsync(UserAuthDto userAuthDto, int infoSheetId)
+        {
+            try
+            {
+                if (await context.InfoSheets.AnyAsync(i => i.UserId == userAuthDto.Id.Value && i.Id == infoSheetId))
+                    return true;
+                throw new Exception("The user does not own this information sheet.");
+            }
+            catch (Exception)
+            {
+                throw new Exception("An error occurred while searching for the owner of the information sheet.");
+            }
+        }
+
 
         #endregion
     }

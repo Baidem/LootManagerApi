@@ -1,5 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Entities;
+using LootManagerApi.Migrations;
 using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Utils;
@@ -127,6 +128,31 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region UPDATE
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<InfoSheet>> UpdateInfoSheet([FromForm] InfoSheetUpdateDto infoSheetUpdateDto)
+        {
+
+            try
+            {
+                var userAuthDto = loadUserAuthentifiedDto();
+
+                UtilsRole.CheckOnlyContributor(userAuthDto);
+
+                await infoSheetRepository.IsInfoSheetExistAsync(infoSheetUpdateDto.InfoSheetId);
+
+                await infoSheetRepository.IsCurrentUserTheOwnerOfInfoSheetAsync(userAuthDto, infoSheetUpdateDto.InfoSheetId);
+
+                var infoSheet = await infoSheetRepository.UpdateInfoSheetAsync(infoSheetUpdateDto);
+
+                return Ok(infoSheet);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
         #endregion
 
