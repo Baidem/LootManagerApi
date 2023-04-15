@@ -52,27 +52,27 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        #region GET ELEMENTS
+        #region READ
+
         [HttpGet()]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<List<string>>> GetElements()
+        public async Task<ActionResult<List<ElementDto>>> GetElements()
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                int n = userAuthDto.Id.Value;
-                var element = await elementRepository.GetElementsAsync(n);
-                return Ok(element);
+
+                var elementDtos = await elementRepository.GetElementsAsync(userAuthDto.Id.Value);
+
+                return Ok(elementDtos);
             }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
         }
-        #endregion
 
-        #region GET ELEMENT
         [HttpGet("{elementId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -82,7 +82,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
                 int n = userAuthDto.Id.Value;
-                var element = await elementRepository.GetElementAsync(elementId,n);
+                var element = await elementRepository.GetElementAsync(elementId, n);
                 return Ok(element);
             }
             catch (Exception ex)
@@ -90,6 +90,7 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+
         #endregion
 
         #region PUT ELEMENT
@@ -118,7 +119,7 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-        
+
         #endregion
 
         #region DELETE ELEMENT
@@ -152,7 +153,7 @@ namespace LootManagerApi.Controllers
             }
             return new UserAuthDto(identity);
         }
-        
+
         #endregion
     }
 }

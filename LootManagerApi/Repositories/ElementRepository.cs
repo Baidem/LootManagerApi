@@ -44,21 +44,17 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-        #region ???
+        #region READ
 
-        /// <summary>
-        /// Get all user's elements
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<List<string>> GetElementsAsync(int userId)
+        public async Task<List<ElementDto>> GetElementsAsync(int userId)
         {
-            var element = await context.Elements.Where(e => e.UserId == userId).Select(e => e.Name).ToListAsync();
-            if (!element.Any())
+            var elementDtos = await context.Elements.Where(e => e.UserId == userId).Select(e => new ElementDto(e)).ToListAsync();
+            if (!elementDtos.Any())
             {
                 throw new Exception($"You have zero elements in your collection actually.");
             }
-            return element;
+            return elementDtos;
+
         }
 
         /// <summary>
@@ -77,6 +73,9 @@ namespace LootManagerApi.Repositories
             return element;
         }
 
+        #endregion
+
+        #region ???
 
         /// <summary>
         /// Update an user's element
