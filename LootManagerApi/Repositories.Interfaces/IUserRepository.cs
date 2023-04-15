@@ -84,7 +84,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <param name="userId">The ID of the user to delete.</param>
         /// <returns>A UserSummaryDto object representing the deleted user.</returns>
         /// <exception cref="Exception">Thrown if the specified user cannot be found.</exception>
-        Task<UserSummaryDto> DeleteElementAsync(int userId);
+        Task<UserSummaryDto> DeleteUserAsync(int userId);
 
         /// <summary>
         /// Check if user with given userId exists in the database

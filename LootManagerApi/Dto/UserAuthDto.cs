@@ -1,5 +1,4 @@
-﻿using LootManagerApi.Entities;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace LootManagerApi.Dto
 {

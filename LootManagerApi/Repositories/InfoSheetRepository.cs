@@ -1,9 +1,7 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
 
 namespace LootManagerApi.Repositories
 {

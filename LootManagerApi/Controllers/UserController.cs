@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using LootManagerApi;
-using LootManagerApi.Repositories;
+﻿using LootManagerApi.Dto;
+using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
-using LootManagerApi.Dto;
-using System.Security.Claims;
+using LootManagerApi.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using LootManagerApi.Utils;
-using LootManagerApi.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LootManagerApi.Controllers
 {
@@ -135,7 +130,7 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-        
+
         #endregion
 
         #region UPDATE USER
@@ -276,8 +271,7 @@ namespace LootManagerApi.Controllers
 
                 await userRepository.IsUserExistByIdAsync(userId);
 
-                // TODO Erreur de nommage de la méthode!!!!!
-                UserSummaryDto userSummaryDto = await userRepository.DeleteElementAsync(userId);
+                UserSummaryDto userSummaryDto = await userRepository.DeleteUserAsync(userId);
 
                 return Ok($"{userSummaryDto.FullName} was deleted.");
             }
