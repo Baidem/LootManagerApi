@@ -1,13 +1,10 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Utils;
-using LootManagerApi.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Security.Claims;
-using System.Reflection.Metadata.Ecma335;
-using System.Xml.Linq;
 
 namespace LootManagerApi.Repositories
 {
@@ -88,6 +85,7 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region READ
+
         /// <summary>
         /// Retrieves a list of all user summary data asynchronously from the database.
         /// </summary>
@@ -258,6 +256,18 @@ namespace LootManagerApi.Repositories
             throw new Exception("The user cannot be found.");
         }
 
+        public async Task<UserSummaryDto> UpdateAuthorSignatureAsync(int userId, string authorSignature)
+        {
+            User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                user.AuthorSignature = authorSignature;
+                await context.SaveChangesAsync();
+                return new UserSummaryDto(user);
+            }
+            throw new Exception("The user cannot be found.");
+        }
+
         #endregion
 
         #region DELETE USER
@@ -268,7 +278,7 @@ namespace LootManagerApi.Repositories
         /// <param name="userId">The ID of the user to delete.</param>
         /// <returns>A UserSummaryDto object representing the deleted user.</returns>
         /// <exception cref="Exception">Thrown if the specified user cannot be found.</exception>
-        public async Task<UserSummaryDto> DeleteElementAsync(int userId)
+        public async Task<UserSummaryDto> DeleteUserAsync(int userId)
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user != null)

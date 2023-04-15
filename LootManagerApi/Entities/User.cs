@@ -11,6 +11,7 @@ namespace LootManagerApi.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public UserRole Role { get; set; }
+        public string? AuthorSignature { get; set; }
 
         // Navigation properties
         public List<Element> Elements { get; set; }

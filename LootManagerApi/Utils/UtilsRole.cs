@@ -12,5 +12,15 @@ namespace LootManagerApi.Utils
             }
             return true;
         }
+
+        public static bool CheckOnlyContributor(UserAuthDto userAuthDto)
+        {
+            if (!userAuthDto.Role.Equals("Contributor"))
+            {
+                throw new Exception("This function is only available to users with the contributor role.");
+            }
+            return true;
+        }
+
     }
 }

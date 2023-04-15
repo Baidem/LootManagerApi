@@ -805,7 +805,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task DeleteElementAsyncTest_ValidId_ReturnUserSummaryDto()
+        public async Task DeleteUserAsyncTest_ValidId_ReturnUserSummaryDto()
         {
             // Arrange
             var user = new User
@@ -820,7 +820,7 @@ namespace LootManagerApi.Repositories.Tests
             await _context.SaveChangesAsync();
 
             // Act
-            UserSummaryDto userSummaryDto = await _userRepository.DeleteElementAsync(1);
+            UserSummaryDto userSummaryDto = await _userRepository.DeleteUserAsync(1);
             var userNull = await _context.Users.FirstOrDefaultAsync(u => u.Id == 1);
 
             // Assert
@@ -831,7 +831,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task DeleteElementAsyncTest_UnvalidId_ThrowsException()
+        public async Task DeleteUserAsyncTest_UnvalidId_ThrowsException()
         {
             // Arrange
             var user = new User
@@ -846,7 +846,7 @@ namespace LootManagerApi.Repositories.Tests
             await _context.SaveChangesAsync();
 
             // Act & Assert
-            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.DeleteElementAsync(2));
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.DeleteUserAsync(2));
 
             Assert.AreEqual("The user cannot be found.", exception.Message);
         }

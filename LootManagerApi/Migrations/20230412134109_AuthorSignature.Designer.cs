@@ -4,6 +4,7 @@ using LootManagerApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LootManagerApi.Migrations
 {
     [DbContext(typeof(LootManagerContext))]
-    partial class LootManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20230412134109_AuthorSignature")]
+    partial class AuthorSignature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,9 +262,6 @@ namespace LootManagerApi.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("WikiArticle")
                         .HasColumnType("nvarchar(max)");
 
@@ -480,9 +480,6 @@ namespace LootManagerApi.Migrations
                     b.Property<int?>("InfoSheetId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InfoSheetId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -495,7 +492,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InfoSheetId1");
+                    b.HasIndex("InfoSheetId");
 
                     b.ToTable("Users");
 
@@ -503,46 +500,46 @@ namespace LootManagerApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 4, 14, 18, 36, 23, 690, DateTimeKind.Utc).AddTicks(4166),
+                            CreatedAt = new DateTime(2023, 4, 12, 13, 41, 8, 877, DateTimeKind.Utc).AddTicks(9649),
                             Email = "admin@loot.com",
                             FullName = "admin",
-                            PasswordHash = "$2a$11$JqReHOoefJS/lnoqyW2LB.U2qerSJ3De8WkKJN8ytASEsP7A8hWxW",
+                            PasswordHash = "$2a$11$z0NVRJKZnLPfmzptMzrkb.B7n1tSfI23XOu89cgGdLhVocesieMfq",
                             Role = 0
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 4, 14, 18, 36, 23, 861, DateTimeKind.Utc).AddTicks(331),
+                            CreatedAt = new DateTime(2023, 4, 12, 13, 41, 9, 38, DateTimeKind.Utc).AddTicks(363),
                             Email = "user@loot.com",
                             FullName = "user",
-                            PasswordHash = "$2a$11$pZB.ndraDFEk6EDhOVBSKO8BSgHK0M4LJhQOyIso7anBE.XV/seK6",
+                            PasswordHash = "$2a$11$u5gaD8Ud/B4/C29lc61hBeVGDGx3nOQxnnN49wIBu5wNuugDJx78u",
                             Role = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 4, 14, 18, 36, 24, 33, DateTimeKind.Utc).AddTicks(71),
+                            CreatedAt = new DateTime(2023, 4, 12, 13, 41, 9, 199, DateTimeKind.Utc).AddTicks(4330),
                             Email = "contributor@loot.com",
                             FullName = "contributor",
-                            PasswordHash = "$2a$11$XETr0pY0faU1fib02jINZOKTu3poa9W/GGFxa3FsejKLHPD5XydEG",
+                            PasswordHash = "$2a$11$bYZ0l5JOsx.qnvxhlpcLo.FlM7M7COp1GxgUS5Z2wrXPHNANAZGxO",
                             Role = 2
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2023, 4, 14, 18, 36, 24, 200, DateTimeKind.Utc).AddTicks(2709),
+                            CreatedAt = new DateTime(2023, 4, 12, 13, 41, 9, 374, DateTimeKind.Utc).AddTicks(5931),
                             Email = "user4@loot.com",
                             FullName = "user4",
-                            PasswordHash = "$2a$11$yOUJ9HufMp/yN1nrB1xnj.2ML8MbJwRJJzIMZeZwoUd9YiYm05N0G",
+                            PasswordHash = "$2a$11$ODU410tAR1ZoEio1CsRDb.pzKoHt31UhhBpiXOEx17bdgtyqwOaIq",
                             Role = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2023, 4, 14, 18, 36, 24, 367, DateTimeKind.Utc).AddTicks(5297),
+                            CreatedAt = new DateTime(2023, 4, 12, 13, 41, 9, 531, DateTimeKind.Utc).AddTicks(8937),
                             Email = "user5@loot.com",
                             FullName = "user5",
-                            PasswordHash = "$2a$11$2ayQnaiRxXCWfEVPee6zrObEhsR/L91hXlLiFVx14ptOsYKLleMvm",
+                            PasswordHash = "$2a$11$Prvzzkmc6uD34AmI.nLELuqRMVJmgjaBIdRb2DomQiOQxO0kAFjD.",
                             Role = 1
                         });
                 });
@@ -611,7 +608,7 @@ namespace LootManagerApi.Migrations
                 {
                     b.HasOne("LootManagerApi.Entities.InfoSheet", "InfoSheet")
                         .WithMany()
-                        .HasForeignKey("InfoSheetId1");
+                        .HasForeignKey("InfoSheetId");
 
                     b.Navigation("InfoSheet");
                 });
