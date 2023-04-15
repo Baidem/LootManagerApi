@@ -76,14 +76,17 @@ namespace LootManagerApi.Controllers
         [HttpGet("{elementId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Element>> GetElement(int elementId)
+        public async Task<ActionResult<ElementDto>> GetElement(int elementId)
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                int n = userAuthDto.Id.Value;
-                var element = await elementRepository.GetElementAsync(elementId, n);
-                return Ok(element);
+
+                await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id.Value, elementId);
+
+                var elementDto = await elementRepository.GetElementAsync(elementId);
+
+                return Ok(elementDto);
             }
             catch (Exception ex)
             {
