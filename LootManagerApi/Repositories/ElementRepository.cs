@@ -42,6 +42,10 @@ namespace LootManagerApi.Repositories
             }
         }
 
+        #endregion
+
+        #region ???
+
         /// <summary>
         /// Get all user's elements
         /// </summary>

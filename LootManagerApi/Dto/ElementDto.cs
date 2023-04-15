@@ -17,8 +17,8 @@ namespace LootManagerApi.Dto
             Name = element.Name;
             Description = element.Description;
             Type = element.Type;
-            CreatedAt = DateTime.UtcNow;
-            UpdatedAt = null;
+            CreatedAt = element.CreatedAt;
+            UpdatedAt = element?.UpdatedAt;
         }
     }
 }
