@@ -54,6 +54,11 @@ namespace LootManagerApi.Controllers
 
         #region READ
 
+        /// <summary>
+        /// Get the current user's list of elements.
+        /// </summary>
+        /// <returns>Returns list of element DTO object.</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for elements.</exception>
         [HttpGet()]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -73,6 +78,11 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get user's element by Id.
+        /// </summary>
+        /// <returns>Returns element DTO object.</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the element.</exception>
         [HttpGet("{elementId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
