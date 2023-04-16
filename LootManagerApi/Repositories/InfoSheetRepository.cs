@@ -156,7 +156,7 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                if (await context.InfoSheets.AnyAsync(i => i.UserId == userAuthDto.Id.Value && i.Id == infoSheetId))
+                if (await context.InfoSheets.AnyAsync(i => i.UserId == userAuthDto.Id && i.Id == infoSheetId))
                     return true;
                 throw new Exception("The user does not own this information sheet.");
             }

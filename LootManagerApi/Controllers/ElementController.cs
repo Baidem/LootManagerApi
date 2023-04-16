@@ -40,7 +40,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var elementDto = await elementRepository.CreateElementAsync(elementCreateDto, userAuthDto.Id.Value);
+                var elementDto = await elementRepository.CreateElementAsync(elementCreateDto, userAuthDto.Id);
 
                 return Ok(elementDto);
             }
@@ -68,7 +68,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var elementDtos = await elementRepository.GetElementsAsync(userAuthDto.Id.Value);
+                var elementDtos = await elementRepository.GetElementsAsync(userAuthDto.Id);
 
                 return Ok(elementDtos);
             }
@@ -92,7 +92,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id.Value, elementId);
+                await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementId);
 
                 var elementDto = await elementRepository.GetElementAsync(elementId);
 
@@ -106,7 +106,8 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        #region PUT ELEMENT
+        #region UPDATE
+
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -115,7 +116,10 @@ namespace LootManagerApi.Controllers
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                int n = userAuthDto.Id.Value;
+
+                await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementUpdateDto.Id);
+
+                int n = userAuthDto.Id;
 
                 var elementUpdate = new ElementUpdateDto()
                 {
@@ -144,7 +148,7 @@ namespace LootManagerApi.Controllers
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                int n = userAuthDto.Id.Value;
+                int n = userAuthDto.Id;
                 var element = await elementRepository.DeleteElementAsync(elementId, n);
                 return Ok($"Element deleted: {element.Id} {element.Name} !");
             }

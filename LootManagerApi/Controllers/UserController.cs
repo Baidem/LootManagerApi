@@ -236,8 +236,8 @@ namespace LootManagerApi.Controllers
             {
                 var userAuthDto = loadUserAuthentifiedDto();
                 UtilsRole.CheckOnlyContributor(userAuthDto);
-                await userRepository.IsUserExistByIdAsync(userAuthDto.Id.Value);
-                UserSummaryDto userSummaryDto = await userRepository.UpdateAuthorSignatureAsync(userAuthDto.Id.Value, authorSignature);
+                await userRepository.IsUserExistByIdAsync(userAuthDto.Id);
+                UserSummaryDto userSummaryDto = await userRepository.UpdateAuthorSignatureAsync(userAuthDto.Id, authorSignature);
 
                 return Ok($"The author signature of {userSummaryDto.FullName} {userSummaryDto.Email} is : {authorSignature}");
             }

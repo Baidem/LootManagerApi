@@ -58,7 +58,7 @@ namespace LootManagerApi.Controllers
 
                 UtilsRole.CheckOnlyContributor(userAuthDto);
 
-                var infoSheetSummaryDto = await infoSheetRepository.CreateInfoSheetAsync(infoSheetCreateDto, userAuthDto.Id.Value);
+                var infoSheetSummaryDto = await infoSheetRepository.CreateInfoSheetAsync(infoSheetCreateDto, userAuthDto.Id);
 
                 return Ok(infoSheetSummaryDto);
             }
@@ -86,7 +86,7 @@ namespace LootManagerApi.Controllers
 
                 UtilsRole.CheckOnlyContributor(userAuthDto);
 
-                var elements = await infoSheetRepository.GetAllInfoSheetByUserIdAsync(userAuthDto.Id.Value);
+                var elements = await infoSheetRepository.GetAllInfoSheetByUserIdAsync(userAuthDto.Id);
 
                 return Ok(elements);
             }
