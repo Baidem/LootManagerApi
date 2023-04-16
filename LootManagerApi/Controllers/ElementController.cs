@@ -108,6 +108,12 @@ namespace LootManagerApi.Controllers
 
         #region UPDATE
 
+        /// <summary>
+        /// Updates the specified element.
+        /// </summary>
+        /// <param name="infoSheetUpdateDto">The DTO containing updated element data.</param>
+        /// <returns>An ActionResult containing the updated element DTO.</returns>
+        /// <exception cref="Exception">Throw if there is an error when updating the element.</exception>
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
