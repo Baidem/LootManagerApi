@@ -41,6 +41,7 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region CREATE
+
         /// <summary>
         /// Creates a new info sheet.
         /// </summary>
@@ -162,10 +163,11 @@ namespace LootManagerApi.Controllers
         #region DELETE
 
         /// <summary>
-        /// Deletes an info sheet by ID.
+        /// Delete an info sheet by its ID.
         /// </summary>
         /// <param name="infoSheetId">The ID of the info sheet to delete.</param>
         /// <returns>An ActionResult indicating the result of the operation.</returns>
+        /// <exception cref="Exception">Throw if there is an error when deleting the info sheet.</exception>
         [HttpDelete("{infoSheetId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -190,7 +192,6 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-
 
         #endregion
     }

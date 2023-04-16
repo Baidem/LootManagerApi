@@ -104,22 +104,22 @@ namespace LootManagerApi.Repositories
 
         #region DELETE
 
-        /// <summary>
-        /// Delete a User's element.
-        /// </summary>
-        /// <param name="elementId"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<Element> DeleteElementAsync(int elementId, int userId)
+        public async Task<ElementDto> DeleteElementAsync(int elementId)
         {
-            var element = await context.Elements.FirstOrDefaultAsync(e => e.Id == elementId && e.UserId == userId);
-            if (element == null)
+            try
             {
-                throw new Exception($"Element wasnot found.");
+                var element = await context.Elements.FirstAsync(e => e.Id == elementId);
+
+                context.Elements.Remove(element);
+
+                await context.SaveChangesAsync();
+
+                return new ElementDto(element);
             }
-            context.Elements.Remove(element);
-            await context.SaveChangesAsync();
-            return element;
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while deleting the element. {ex.Message}", ex);
+            }
         }
 
         #endregion
@@ -132,6 +132,14 @@ namespace LootManagerApi.Repositories
                 return true;
 
             throw new Exception("This user cannot access this element.");
+        }
+
+        public async Task<bool> IsElementExistAsync(int elementId)
+        {
+            if (await context.Elements.AnyAsync(e => e.Id == elementId))
+                return true;
+
+            throw new Exception("This item does not exist in the database.");
         }
 
         #endregion

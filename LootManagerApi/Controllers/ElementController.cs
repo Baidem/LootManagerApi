@@ -92,6 +92,8 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
+                await elementRepository.IsElementExistAsync(elementId);
+
                 await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementId);
 
                 var elementDto = await elementRepository.GetElementAsync(elementId);
@@ -112,7 +114,7 @@ namespace LootManagerApi.Controllers
         /// Updates the specified element.
         /// </summary>
         /// <param name="infoSheetUpdateDto">The DTO containing updated element data.</param>
-        /// <returns>An ActionResult containing the updated element DTO.</returns>
+        /// <returns>Returns the ElementDto of the updated element.</returns>
         /// <exception cref="Exception">Throw if there is an error when updating the element.</exception>
         [HttpPut]
         [ProducesResponseType(200)]
@@ -122,6 +124,8 @@ namespace LootManagerApi.Controllers
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await elementRepository.IsElementExistAsync(elementUpdateDto.Id);
 
                 await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementUpdateDto.Id);
 
@@ -138,17 +142,29 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region DELETE ELEMENT
+
+        /// <summary>
+        /// Delete an item by its ID.
+        /// </summary>
+        /// <param name="infoSheetId">The ID of the info sheet to delete.</param>
+        /// <returns>Returns the ElementDto of the deleted element.</returns>
+        /// <exception cref="Exception">Throw if there is an error when deleting the element.</exception>
         [HttpDelete("{elementId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<string>> DeleteElement(int elementId)
+        public async Task<ActionResult<ElementDto>> DeleteElement(int elementId)
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-                int n = userAuthDto.Id;
-                var element = await elementRepository.DeleteElementAsync(elementId, n);
-                return Ok($"Element deleted: {element.Id} {element.Name} !");
+
+                await elementRepository.IsElementExistAsync(elementId);
+
+                await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementId);
+
+                ElementDto elementDto = await elementRepository.DeleteElementAsync(elementId);
+
+                return Ok(elementDto);
             }
             catch (Exception ex)
             {
@@ -157,7 +173,7 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region LOG
+        #region UTILS
 
         private UserAuthDto loadUserAuthentifiedDto()
         {
