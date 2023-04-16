@@ -143,6 +143,5 @@ namespace LootManagerApi.Repositories
         }
 
         #endregion
-
     }
 }

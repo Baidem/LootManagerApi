@@ -1,8 +1,5 @@
 ﻿using LootManagerApi.Dto;
-using LootManagerApi.Entities;
-using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
