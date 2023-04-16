@@ -9,7 +9,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<ElementDto> CreateElementAsync(ElementCreateDto elementCreateDto, int userId);
         Task<List<ElementDto>> GetElementsAsync(int userId);
         Task<ElementDto> GetElementAsync(int elementId);
-        Task<Element> UpdateElementAsync(ElementUpdateDto elementUpdateDto, int userId);
+        Task<ElementDto> UpdateElementAsync(ElementUpdateDto elementUpdateDto);
         Task<Element> DeleteElementAsync(int elementId, int userId);
         Task<bool> IsOwnerOfTheElementAsync(int userId, int elementId);
     }

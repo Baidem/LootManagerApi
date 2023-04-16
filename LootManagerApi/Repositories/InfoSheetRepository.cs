@@ -141,7 +141,7 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-        #region Utils
+        #region UTILS
 
         public async Task<bool> IsInfoSheetExistAsync(int infoSheetId)
         {

@@ -111,7 +111,7 @@ namespace LootManagerApi.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Element>> UpdateElement([FromForm] ElementUpdateDto elementUpdateDto)
+        public async Task<ActionResult<ElementDto>> UpdateElement([FromForm] ElementUpdateDto elementUpdateDto)
         {
             try
             {
@@ -119,16 +119,8 @@ namespace LootManagerApi.Controllers
 
                 await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementUpdateDto.Id);
 
-                int n = userAuthDto.Id;
+                var elementUpdated = await elementRepository.UpdateElementAsync(elementUpdateDto);
 
-                var elementUpdate = new ElementUpdateDto()
-                {
-                    Id = elementUpdateDto.Id,
-                    Name = elementUpdateDto.Name,
-                    Description = elementUpdateDto.Description,
-                    Type = elementUpdateDto.Type
-                };
-                var elementUpdated = await elementRepository.UpdateElementAsync(elementUpdate, n);
                 return Ok(elementUpdated);
             }
             catch (Exception ex)

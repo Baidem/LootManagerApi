@@ -68,34 +68,41 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-        #region ???
+        #region UPDATE
 
-        /// <summary>
-        /// Update an user's element
-        /// </summary>
-        /// <param name="elementUpdateDto"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<Element> UpdateElementAsync(ElementUpdateDto elementUpdateDto, int userId)
+        public async Task<ElementDto> UpdateElementAsync(ElementUpdateDto elementUpdateDto)
         {
-            var element = await context.Elements.Where(e => e.UserId == userId).FirstOrDefaultAsync(e => e.Id == elementUpdateDto.Id);
-            if (element != null)
+            try
             {
-                if (elementUpdateDto.Name != null && elementUpdateDto.Description != null && elementUpdateDto.Type != null)
-                {
-                    element.Name = elementUpdateDto.Name;
-                    element.Description = elementUpdateDto.Description;
-                    element.Type = elementUpdateDto.Type;
-                }
-            }
-            else
-            {
-                throw new Exception($"Error please fill all the blank spaces !");
-            }
-            await context.SaveChangesAsync();
-            return element;
+                if (elementUpdateDto.Name == null && elementUpdateDto.Description == null && elementUpdateDto.Type == null)
+                    throw new Exception("No changes needed.");
 
+                Element element = await context.Elements.FirstAsync(e => e.Id == elementUpdateDto.Id);
+
+                if (elementUpdateDto.Name != null)
+                    element.Name = elementUpdateDto.Name;
+
+                if (elementUpdateDto.Description != null)
+                    element.Description = elementUpdateDto.Description;
+
+                if (elementUpdateDto.Type != null)
+                    element.Type = elementUpdateDto.Type;
+
+                element.UpdatedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                return new ElementDto(element);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the element. {ex.Message}", ex);
+            }
         }
+
+        #endregion
+
+        #region DELETE
 
         /// <summary>
         /// Delete a User's element.
