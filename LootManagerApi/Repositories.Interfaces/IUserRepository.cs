@@ -6,14 +6,16 @@ namespace LootManagerApi.Repositories.Interfaces
 {
     public interface IUserRepository
     {
+        // CREATE
         /// <summary>
-        /// Checks if the provided user login DTO is valid.
+        /// Creates a new user asynchronously and returns a summary of the created user.
         /// </summary>
-        /// <param name="userLoginDto">The user login DTO to check.</param>
-        /// <returns>True if the user login DTO is valid, false otherwise.</returns>
-        /// <exception cref="Exception">Thrown if the email address attribute is invalid, the email does not exist, the password hash search was unsuccessful, or the password is invalid.</exception>
-        Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto);
+        /// <param name="userCreateDto">The DTO containing the user's information.</param>
+        /// <returns>A UserSummaryDto representing the created user.</returns>
+        /// <exception cref="Exception">Throws an exception if there is an error while saving the changes to the database.</exception>
+        Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto);
 
+        // READ
         /// <summary>
         /// Gets the claims identity for a user based on their login information.
         /// </summary>
@@ -28,21 +30,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <returns>A list of UserSummaryDto objects containing summary data for all users.</returns>
         Task<List<UserSummaryDto>> GetAllUsersAsync();
 
-        /// <summary>
-        /// Creates a new user asynchronously and returns a summary of the created user.
-        /// </summary>
-        /// <param name="userCreateDto">The DTO containing the user's information.</param>
-        /// <returns>A UserSummaryDto representing the created user.</returns>
-        /// <exception cref="Exception">Throws an exception if there is an error while saving the changes to the database.</exception>
-        Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto);
-
-        /// <summary>
-        /// Validates a user creation DTO by checking if the email address is valid and not already used, and if the password meets certain complexity requirements.
-        /// </summary>
-        /// <param name="userCreateDto">The user creation DTO to validate.</param>
-        /// <returns>A boolean indicating whether the validation was successful or not.</returns>
-        Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreatedDto);
-
+        // UPDATE
         /// <summary>
         /// Updates an existing user's information in the database.
         /// </summary>
@@ -50,6 +38,49 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <returns>A UserSummaryDto object containing the updated user information.</returns>
         /// <exception cref="Exception">Thrown if the user cannot be found or if no changes were made.</exception>
         Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto);
+
+        /// <summary>
+        /// Updates the role of a user with the specified user ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user to update.</param>
+        /// <param name="userRole">The new role for the user.</param>
+        /// <returns>A UserSummaryDto object representing the updated user.</returns>
+        /// <exception cref="Exception">Thrown if the user cannot be found.</exception>
+        Task<UserSummaryDto> UpdateUserRoleAsync(int userId, UserRole userRole);
+        Task<UserSummaryDto> UpdateAuthorSignatureAsync(int userId, string authorSignature);
+
+        // DELETE
+        /// <summary>
+        /// Deletes the specified user from the database.
+        /// </summary>
+        /// <param name="userId">The ID of the user to delete.</param>
+        /// <returns>A UserSummaryDto object representing the deleted user.</returns>
+        /// <exception cref="Exception">Thrown if the specified user cannot be found.</exception>
+        Task<UserSummaryDto> DeleteUserAsync(int userId);
+
+        // UTILS
+        /// <summary>
+        /// Check if user with given userId exists in the database
+        /// </summary>
+        /// <param name="userId">The ID of the user to check for.</param>
+        /// <returns>Returns true if the user with given userId exists in the database, otherwise throws an exception.</returns>
+        /// <exception cref="Exception">Throws exception if user with given userId doesn't exist in the database.</exception>
+        Task<bool> IsUserExistByIdAsync(int userId);
+
+        /// <summary>
+        /// Checks if the provided user login DTO is valid.
+        /// </summary>
+        /// <param name="userLoginDto">The user login DTO to check.</param>
+        /// <returns>True if the user login DTO is valid, false otherwise.</returns>
+        /// <exception cref="Exception">Thrown if the email address attribute is invalid, the email does not exist, the password hash search was unsuccessful, or the password is invalid.</exception>
+        Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto);
+
+        /// <summary>
+        /// Validates a user creation DTO by checking if the email address is valid and not already used, and if the password meets certain complexity requirements.
+        /// </summary>
+        /// <param name="userCreateDto">The user creation DTO to validate.</param>
+        /// <returns>A boolean indicating whether the validation was successful or not.</returns>
+        Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreatedDto);
 
         /// <summary>
         /// Validates if the data in the UserUpdateDto matches the data in the UserAuthDto.
@@ -67,32 +98,6 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <returns>True if the DTO data is valid.</returns>
         /// <exception cref="Exception">Thrown if the DTO data is invalid.</exception>
         Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto);
-
-        /// <summary>
-        /// Updates the role of a user with the specified user ID.
-        /// </summary>
-        /// <param name="userId">The ID of the user to update.</param>
-        /// <param name="userRole">The new role for the user.</param>
-        /// <returns>A UserSummaryDto object representing the updated user.</returns>
-        /// <exception cref="Exception">Thrown if the user cannot be found.</exception>
-        Task<UserSummaryDto> UpdateUserRoleAsync(int userId, UserRole userRole);
-        Task<UserSummaryDto> UpdateAuthorSignatureAsync(int userId, string authorSignature);
-
-        /// <summary>
-        /// Deletes the specified user from the database.
-        /// </summary>
-        /// <param name="userId">The ID of the user to delete.</param>
-        /// <returns>A UserSummaryDto object representing the deleted user.</returns>
-        /// <exception cref="Exception">Thrown if the specified user cannot be found.</exception>
-        Task<UserSummaryDto> DeleteUserAsync(int userId);
-
-        /// <summary>
-        /// Check if user with given userId exists in the database
-        /// </summary>
-        /// <param name="userId">The ID of the user to check for.</param>
-        /// <returns>Returns true if the user with given userId exists in the database, otherwise throws an exception.</returns>
-        /// <exception cref="Exception">Throws exception if user with given userId doesn't exist in the database.</exception>
-        Task<bool> IsUserExistByIdAsync(int userId);
 
     }
 }
