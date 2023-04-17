@@ -76,7 +76,7 @@ namespace LootManagerApi.Controllers
         /// Returns a list of all Ids and designations belonging to the connected contributor.
         /// </summary>
         /// <returns>A list of Id and designation</returns>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<List<InfosheetIdAndDesignation>>> GetAllMyInfoSheets()
@@ -102,7 +102,7 @@ namespace LootManagerApi.Controllers
         /// </summary>
         /// <param name="infoSheetId"></param>
         /// <returns>InfoSheet</returns>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<InfoSheet>> GetInfoSheetById(int infoSheetId)
@@ -132,7 +132,7 @@ namespace LootManagerApi.Controllers
         /// </summary>
         /// <param name="infoSheetUpdateDto">The DTO containing updated info sheet data.</param>
         /// <returns>An ActionResult containing the updated info sheet.</returns>
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<InfoSheet>> UpdateInfoSheet([FromForm] InfoSheetUpdateDto infoSheetUpdateDto)

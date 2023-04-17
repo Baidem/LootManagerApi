@@ -141,7 +141,7 @@ namespace LootManagerApi.Controllers
         /// <param name="userUpdateDto">The UserUpdateDto object containing the new user information.</param>
         /// <returns>An Ok ActionResult with a message indicating the updated user's full name, email, and obfuscated password.</returns>
         /// <exception cref="Exception">Thrown if the user is not authorized or if the UserUpdateDto is invalid.</exception>
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateUser([FromForm] UserUpdateDto userUpdateDto)
@@ -202,7 +202,7 @@ namespace LootManagerApi.Controllers
         /// <param name="userId">The ID of the user.</param>
         /// <param name="userRole">The new role for the user.</param>
         /// <returns>An ActionResult indicating success or failure.</returns>
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateUserRole(int userId, UserRole userRole)
@@ -227,7 +227,7 @@ namespace LootManagerApi.Controllers
         /// </summary>
         /// <param name="authorSignature">The new author signature to be set.</param>
         /// <returns>An ActionResult object indicating the result of the operation.</returns>
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateAuthorSignature(string authorSignature)
