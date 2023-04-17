@@ -805,7 +805,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task DeleteUserAsyncTest_ValidId_ReturnUserSummaryDto()
+        public async Task DeleteAsyncTest_ValidId_ReturnUserSummaryDto()
         {
             // Arrange
             var user = new User
@@ -831,7 +831,7 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task DeleteUserAsyncTest_UnvalidId_ThrowsException()
+        public async Task DeleteAsyncTest_UnvalidId_ThrowsException()
         {
             // Arrange
             var user = new User

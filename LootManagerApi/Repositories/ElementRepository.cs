@@ -70,6 +70,14 @@ namespace LootManagerApi.Repositories
 
         #region UPDATE
 
+        /// <summary>
+        /// Asynchronous method of updating an Element by an ElementUpdateDto.
+        /// Id required to find the element to be updated.
+        /// Only non-null data will be modified.
+        /// </summary>
+        /// <param name="elementUpdateDto"></param>
+        /// <returns>ElementDto</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ElementDto> UpdateElementAsync(ElementUpdateDto elementUpdateDto)
         {
             try
