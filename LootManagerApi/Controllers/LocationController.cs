@@ -107,6 +107,41 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
+        #region UPDATE
+
+        /// <summary>
+        /// Updates the specified location.
+        /// </summary>
+        /// <param name="infoSheetUpdateDto">The DTO containing updated location data.</param>
+        /// <returns>Returns the LocationDto of the updated location.</returns>
+        /// <exception cref="Exception">Throw if there is an error when updating the location.</exception>
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<LocationDto>> UpdateLocation([FromForm] LocationUpdateDto locationUpdateDto)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await locationRepository.IsLocationExistAsync(locationUpdateDto.Id);
+
+                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationUpdateDto.Id);
+
+                var locationUpdated = await locationRepository.UpdateLocationAsync(locationUpdateDto);
+
+                return Ok(locationUpdated);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
+
+        // delete
+
         #region UTILS
 
         private UserAuthDto loadUserAuthentifiedDto()

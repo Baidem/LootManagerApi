@@ -71,6 +71,49 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region UPDATE
+
+        /// <summary>
+        /// Asynchronous method of updating an Location by an LocationUpdateDto.
+        /// Id required to find the location to be updated.
+        /// Only non-null data will be modified.
+        /// </summary>
+        /// <param name="locationUpdateDto"></param>
+        /// <returns>LocationDto</returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<LocationDto> UpdateLocationAsync(LocationUpdateDto locationUpdateDto)
+        {
+            try
+            {
+                if (locationUpdateDto.House == null && locationUpdateDto.Room == null && locationUpdateDto.Furniture == null && locationUpdateDto.Shelf == null && locationUpdateDto.Position == null)
+                    throw new Exception("No changes needed.");
+
+                Location location = await context.Locations.FirstAsync(e => e.Id == locationUpdateDto.Id);
+
+                if (locationUpdateDto.House != null)
+                    location.House = locationUpdateDto.House;
+
+                if (locationUpdateDto.Room != null)
+                    location.Room = locationUpdateDto.Room;
+
+                if (locationUpdateDto.Shelf != null)
+                    location.Shelf = locationUpdateDto.Shelf;
+
+                if (locationUpdateDto.Position != null)
+                    location.Position = locationUpdateDto.Position;
+
+                await context.SaveChangesAsync();
+
+                return new LocationDto(location);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the location. {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
         #region UTILS
 
         public async Task<bool> IsLocationExistAsync(int locationId)

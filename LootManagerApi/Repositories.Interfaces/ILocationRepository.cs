@@ -9,5 +9,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<LocationDto> GetLocationAsync(int locationId);
         Task<bool> IsLocationExistAsync(int locationId);
         Task<bool> IsOwnerOfTheLocationAsync(int userId, int locationId);
+        Task<LocationDto> UpdateLocationAsync(LocationUpdateDto locationUpdateDto);
+
     }
 }
