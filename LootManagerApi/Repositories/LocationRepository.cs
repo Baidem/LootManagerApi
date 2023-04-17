@@ -1,6 +1,7 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LootManagerApi.Repositories
 {
@@ -23,7 +24,7 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-        #region _
+        #region CREATE
 
         public async Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto, int userId)
         {
@@ -43,6 +44,21 @@ namespace LootManagerApi.Repositories
             }
 
         }
+
+        #endregion
+
+        #region READ
+
+        public async Task<List<LocationDto>> GetLocationsAsync(int userId)
+        {
+            var locationDtos = await context.Locations.Where(l => l.UserId == userId).Select(l => new LocationDto(l)).ToListAsync();
+
+            if (locationDtos.Any())
+                return locationDtos;
+
+            throw new Exception($"You have zero locations in your collection actually.");
+        }
+
 
         #endregion
     }

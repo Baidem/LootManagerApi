@@ -51,6 +51,36 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
+        #region READ
+
+        /// <summary>
+        /// Get the current user's list of locations.
+        /// </summary>
+        /// <returns>Returns list of location DTO object.</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for locations.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<LocationDto>>> GetLocations()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var locationDtos = await locationRepository.GetLocationsAsync(userAuthDto.Id);
+
+                return Ok(locationDtos);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+
+
+        #endregion
+
         #region UTILS
 
         private UserAuthDto loadUserAuthentifiedDto()
