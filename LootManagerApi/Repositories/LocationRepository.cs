@@ -114,6 +114,28 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region DELETE
+
+        public async Task<LocationDto> DeleteLocationAsync(int locationId)
+        {
+            try
+            {
+                var location = await context.Locations.FirstAsync(l => l.Id == locationId);
+
+                context.Locations.Remove(location);
+
+                await context.SaveChangesAsync();
+
+                return new LocationDto(location);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while deleting the location. {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
         #region UTILS
 
         public async Task<bool> IsLocationExistAsync(int locationId)

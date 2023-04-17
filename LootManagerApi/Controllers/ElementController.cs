@@ -138,12 +138,12 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        #region DELETE ELEMENT
+        #region DELETE
 
         /// <summary>
-        /// Delete an item by its ID.
+        /// Delete an element by its Id.
         /// </summary>
-        /// <param name="infoSheetId">The ID of the info sheet to delete.</param>
+        /// <param name="infoSheetId">The Id of the element to delete.</param>
         /// <returns>Returns the ElementDto of the deleted element.</returns>
         /// <exception cref="Exception">Throw if there is an error when deleting the element.</exception>
         [HttpDelete("{elementId}")]
@@ -168,6 +168,7 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
+        
         #endregion
 
         #region UTILS

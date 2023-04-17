@@ -140,7 +140,38 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        // delete
+        #region DELETE
+
+        /// <summary>
+        /// Delete a location by its Id.
+        /// </summary>
+        /// <param name="infoSheetId">The Id of the info sheet to delete.</param>
+        /// <returns>Returns the LocationDto of the deleted location.</returns>
+        /// <exception cref="Exception">Throw if there is an error when deleting the location.</exception>
+        [HttpDelete("{locationId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<LocationDto>> DeleteLocation(int locationId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await locationRepository.IsLocationExistAsync(locationId);
+
+                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationId);
+
+                LocationDto locationDto = await locationRepository.DeleteLocationAsync(locationId);
+
+                return Ok(locationDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
 
         #region UTILS
 
