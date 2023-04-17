@@ -77,7 +77,33 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get user's location by Id.
+        /// </summary>
+        /// <returns>Returns location DTO object.</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the location.</exception>
+        [HttpGet("{locationId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<LocationDto>> GetLocation(int locationId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
+                await locationRepository.IsLocationExistAsync(locationId);
+
+                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationId);
+
+                var locationDto = await locationRepository.GetLocationAsync(locationId);
+
+                return Ok(locationDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
         #endregion
 
@@ -92,6 +118,8 @@ namespace LootManagerApi.Controllers
             }
             return new UserAuthDto(identity);
         }
+
+
 
         #endregion
 

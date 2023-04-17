@@ -59,6 +59,35 @@ namespace LootManagerApi.Repositories
             throw new Exception($"You have zero locations in your collection actually.");
         }
 
+        public async Task<LocationDto> GetLocationAsync(int locationId)
+        {
+            var locationDtos = await context.Locations.Where(e => e.Id == locationId).Select(e => new LocationDto(e)).FirstOrDefaultAsync();
+
+            if (locationDtos != null)
+                return locationDtos;
+
+            throw new Exception($"Location was not found.");
+        }
+
+        #endregion
+
+        #region UTILS
+
+        public async Task<bool> IsLocationExistAsync(int locationId)
+        {
+            if (await context.Locations.AnyAsync(e => e.Id == locationId))
+                return true;
+
+            throw new Exception("This item does not exist in the database.");
+        }
+
+        public async Task<bool> IsOwnerOfTheLocationAsync(int userId, int locationId)
+        {
+            if (await context.Locations.AnyAsync(e => e.UserId == userId && e.Id == locationId))
+                return true;
+
+            throw new Exception("This user cannot access this location.");
+        }
 
         #endregion
     }
