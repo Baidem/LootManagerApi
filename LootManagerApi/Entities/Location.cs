@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using LootManagerApi.Dto;
+using System.Reflection;
+using System.Text;
 
 namespace LootManagerApi.Entities
 {
@@ -17,10 +20,28 @@ namespace LootManagerApi.Entities
         public User? User { get; set; }
         public List<Element> Elements { get; set; }
 
+        public Location()
+        {
+        }
+
+        public Location(LocationCreateDto locationCreateDto, int userId)
+        {
+            House = locationCreateDto.House;
+            Room = locationCreateDto.Room;
+            Furniture = locationCreateDto.Furniture;
+            Shelf = locationCreateDto.Shelf;
+            Position = locationCreateDto.Position;
+            UserId = userId;
+        }
 
         public override string? ToString()
         {
-            return base.ToString();
+            StringBuilder sb = new StringBuilder();
+            foreach (PropertyInfo prop in this.GetType().GetProperties())
+            {
+                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
+            }
+            return sb.ToString();
         }
 
         public string GetLocationAddress()
