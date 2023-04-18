@@ -10,6 +10,7 @@ namespace LootManagerApi.Dto
         public string? Type { get; set; } // The object type
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public int? LocationId { get; set; }
 
         public ElementDto(Element element)
         {
@@ -19,6 +20,7 @@ namespace LootManagerApi.Dto
             Type = element.Type;
             CreatedAt = element.CreatedAt;
             UpdatedAt = element?.UpdatedAt;
+            LocationId = element?.LocationId;
         }
     }
 }

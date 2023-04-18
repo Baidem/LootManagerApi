@@ -13,12 +13,14 @@ namespace LootManagerApi.Repositories.Interfaces
         
         // UPDATE
         Task<ElementDto> UpdateElementAsync(ElementUpdateDto elementUpdateDto);
-        
+        Task<ElementDto> AddLocationToElementAsync(int locationId, int elementId);
+
         // DELETE
         Task<ElementDto> DeleteElementAsync(int elementId);
         
         // UTILS
         Task<bool> IsOwnerOfTheElementAsync(int userId, int elementId);
         Task<bool> IsElementExistAsync(int elementId);
+
     }
 }

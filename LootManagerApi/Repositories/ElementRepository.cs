@@ -2,6 +2,7 @@
 using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace LootManagerApi.Repositories
 {
@@ -95,6 +96,33 @@ namespace LootManagerApi.Repositories
 
                 if (elementUpdateDto.Type != null)
                     element.Type = elementUpdateDto.Type;
+
+                element.UpdatedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                return new ElementDto(element);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the element. {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Asynchronous method of updating the element location.
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <param name="elementId"></param>
+        /// <returns>ElementDto</returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<ElementDto> AddLocationToElementAsync(int locationId, int elementId)
+        {
+            try
+            {
+                Element element = await context.Elements.FirstAsync(e => e.Id == elementId);
+
+                element.LocationId = locationId;
 
                 element.UpdatedAt = DateTime.UtcNow;
 

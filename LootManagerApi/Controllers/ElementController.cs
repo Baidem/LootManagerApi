@@ -1,6 +1,7 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace LootManagerApi.Controllers
@@ -10,14 +11,20 @@ namespace LootManagerApi.Controllers
     public class ElementController : ControllerBase
     {
         #region DECLARATIONS
+
         IElementRepository elementRepository;
+        ILocationRepository locationRepository;
+
         #endregion
 
         #region CONSTRUCTOR
-        public ElementController(IElementRepository elementRepository)
+
+        public ElementController(IElementRepository elementRepository, ILocationRepository locationRepository)
         {
             this.elementRepository = elementRepository;
+            this.locationRepository = locationRepository;
         }
+
         #endregion
 
         #region CREATE
@@ -129,6 +136,40 @@ namespace LootManagerApi.Controllers
                 var elementUpdated = await elementRepository.UpdateElementAsync(elementUpdateDto);
 
                 return Ok(elementUpdated);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Updates the location of the element.
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <param name="elementId"></param>
+        /// <returns>Returns the ElementDto of the updated element.</returns>
+        /// <exception cref="Exception">Throw if there is an error when updating the element.</exception>
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<ElementDto>> AddLocationToElement([Required] int locationId, [Required] int elementId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await locationRepository.IsLocationExistAsync(locationId);
+
+                await elementRepository.IsElementExistAsync(elementId);
+
+                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationId);
+
+                await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementId);
+
+                var elementDto = await elementRepository.AddLocationToElementAsync(locationId, elementId);
+
+                return Ok(elementDto);
             }
             catch (Exception ex)
             {

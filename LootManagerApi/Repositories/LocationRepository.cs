@@ -140,18 +140,18 @@ namespace LootManagerApi.Repositories
 
         public async Task<bool> IsLocationExistAsync(int locationId)
         {
-            if (await context.Locations.AnyAsync(e => e.Id == locationId))
+            if (await context.Locations.AnyAsync(l => l.Id == locationId))
                 return true;
 
-            throw new Exception("This item does not exist in the database.");
+            throw new Exception($"This location does not exist in the database. Location Id  : {locationId}");
         }
 
         public async Task<bool> IsOwnerOfTheLocationAsync(int userId, int locationId)
         {
-            if (await context.Locations.AnyAsync(e => e.UserId == userId && e.Id == locationId))
+            if (await context.Locations.AnyAsync(l => l.UserId == userId && l.Id == locationId))
                 return true;
 
-            throw new Exception("This user cannot access this location.");
+            throw new Exception($"This user cannot access this location. User Id : {userId}. Location Id : {locationId}");
         }
 
         #endregion
