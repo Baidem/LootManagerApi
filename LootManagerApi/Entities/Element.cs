@@ -13,7 +13,7 @@ namespace LootManagerApi.Entities
         public string Name { get; set; } // The name given by the user
         public string? Description { get; set; } // The description given by the user
         public string? Type { get; set; } // The object type
-        public string Grade { get; set; } // The state of preservation of the object
+        public string? Grade { get; set; } // The state of preservation of the object
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
