@@ -4,6 +4,8 @@ namespace LootManagerApi.Entities
 {
     public class InfoSheet
     {
+        #region PROPERTIES
+
         public int Id { get; set; }
         public string? Designation { get; set; }
         public string? Reference { get; set; }
@@ -13,14 +15,23 @@ namespace LootManagerApi.Entities
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // Navigation properties
+        #endregion
+
+        #region NAVIGATION PROPERTIES (3)
 
         // One User To Many InfoSheet?
         public int UserId { get; set; }
         public User User { get; set; }
 
+        // One InfoSheet? To Many Element?
         public List<Element>? Elements { get; set; }
+
+        // Many InfoSheet? To Many Image?
         public List<Image>? Images { get; set; }
+
+        #endregion
+
+        #region CONSTRUCTOR
 
         public InfoSheet()
         {
@@ -36,5 +47,7 @@ namespace LootManagerApi.Entities
             CreatedAt = DateTime.UtcNow;
             UserId = userId;
         }
+
+        #endregion
     }
 }

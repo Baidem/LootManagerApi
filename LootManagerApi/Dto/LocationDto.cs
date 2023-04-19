@@ -19,12 +19,13 @@ namespace LootManagerApi.Dto
 
         public LocationDto(Location location)
         {
-            Id = location.Id;
-            House = location.House;
-            Room = location.Room;
-            Furniture = location.Furniture;
-            Shelf = location.Shelf;
-            Position = location.Position;
+            throw new NotImplementedException();
+            //Id = location.Id;
+            //House = location.House;
+            //Room = location.Room;
+            //Furniture = location.Furniture;
+            //Shelf = location.Shelf;
+            //Position = location.Position;
         }
 
         public override string? ToString()

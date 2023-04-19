@@ -13,7 +13,7 @@ namespace LootManagerApi.Entities.logistics
         // NAVIGATION PROPERTIES (6)
 
         // One Location? To Many Element?
-        public List<Element> Elements { get; set; }
+        public List<Element>? Elements { get; set; }
 
         // One House To Many Location
         public int HouseId { get; set; }
@@ -33,7 +33,7 @@ namespace LootManagerApi.Entities.logistics
 
         // One Position? To One Location
         public int? PositionId { get; set; }
-        public Position Position { get; set; }
+        public Position? Position { get; set; }
 
 
         public Location()

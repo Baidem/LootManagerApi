@@ -7,14 +7,19 @@ namespace LootManagerApi.Entities
 {
     public class Element
     {
+        #region PROPERTIES
+
         public int Id { get; set; }
         public string Name { get; set; } // The name given by the user
         public string? Description { get; set; } // The description given by the user
         public string? Type { get; set; } // The object type
+        public string Grade { get; set; } // The state of preservation of the object
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // NAVIGATION PROPERTIES (4)
+        #endregion
+
+        #region NAVIGATION PROPERTIES (4)
 
         // One User To Many Element?
         public int UserId { get; set; }
@@ -26,6 +31,14 @@ namespace LootManagerApi.Entities
 
         // Many Element? To Many Images?
         public List<Image>? Images { get; set; }
+
+        // One InfoSheet? To Many Element?
+        public int? InfoSheetId { get; set; }
+        public InfoSheet? InfoSheet { get; set; }
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         public Element()
         {
@@ -41,6 +54,10 @@ namespace LootManagerApi.Entities
             UpdatedAt = null;
         }
 
+        #endregion
+
+        #region METHODS
+
         public override string? ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -50,5 +67,7 @@ namespace LootManagerApi.Entities
             }
             return sb.ToString();
         }
+
+        #endregion
     }
 }

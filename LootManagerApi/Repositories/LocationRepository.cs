@@ -52,12 +52,14 @@ namespace LootManagerApi.Repositories
 
         public async Task<List<LocationDto>> GetLocationsAsync(int userId)
         {
-            var locationDtos = await context.Locations.Where(l => l.UserId == userId).Select(l => new LocationDto(l)).ToListAsync();
+            //var locationDtos = await context.Locations.Where(l => l.UserId == userId).Select(l => new LocationDto(l)).ToListAsync();
 
-            if (locationDtos.Any())
-                return locationDtos;
+            //if (locationDtos.Any())
+            //    return locationDtos;
 
-            throw new Exception($"You have zero locations in your collection actually.");
+            //throw new Exception($"You have zero locations in your collection actually.");
+
+            throw new NotImplementedException();
         }
 
         public async Task<LocationDto> GetLocationAsync(int locationId)
@@ -151,10 +153,12 @@ namespace LootManagerApi.Repositories
 
         public async Task<bool> IsOwnerOfTheLocationAsync(int userId, int locationId)
         {
-            if (await context.Locations.AnyAsync(l => l.UserId == userId && l.Id == locationId))
-                return true;
+            //if (await context.Locations.AnyAsync(l => l.UserId == userId && l.Id == locationId))
+            //    return true;
 
-            throw new Exception($"This user cannot access this location. User Id : {userId}. Location Id : {locationId}");
+            //throw new Exception($"This user cannot access this location. User Id : {userId}. Location Id : {locationId}");
+
+            throw new NotImplementedException();
         }
 
         #endregion
