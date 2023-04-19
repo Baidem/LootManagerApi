@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Entities;
+using LootManagerApi.Entities.logistics;
 using Microsoft.EntityFrameworkCore;
 
 namespace LootManagerApi.Repositories

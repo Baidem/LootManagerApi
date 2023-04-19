@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Entities.logistics;
 
 namespace LootManagerApi.Entities
 {
@@ -13,11 +14,16 @@ namespace LootManagerApi.Entities
         public UserRole Role { get; set; }
         public string? AuthorSignature { get; set; }
 
-        // Navigation properties
+        // NAVIGATION PROPERTIES (3)
+
+        // One User To Many Element?
         public List<Element> Elements { get; set; }
-        public List<Location> Locations { get; set; }
-        public int? InfoSheetId { get; set; }
-        public InfoSheet? InfoSheet { get; set; }
+
+        // One User To Many InfoSheet?
+        public List<InfoSheet>? InfoSheets { get; set; }
+
+        //One User To Many House
+        public List<House> Houses { get; set; }
 
         public User()
         {

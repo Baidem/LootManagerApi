@@ -1,5 +1,5 @@
 ﻿using LootManagerApi.Dto;
-using LootManagerApi.Entities;
+using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,20 +28,21 @@ namespace LootManagerApi.Repositories
 
         public async Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto, int userId)
         {
-            try
-            {
-                Location location = new(locationCreateDto, userId);
+            //try
+            //{
+            //    Location location = new(locationCreateDto, userId);
 
-                await context.Locations.AddAsync(location);
+            //    await context.Locations.AddAsync(location);
 
-                await context.SaveChangesAsync();
+            //    await context.SaveChangesAsync();
 
-                return new LocationDto(location);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"An error occurred while creating the location : {ex.Message}");
-            }
+            //    return new LocationDto(location);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception($"An error occurred while creating the location : {ex.Message}");
+            //}
+            throw new NotImplementedException();
 
         }
 
@@ -83,33 +84,35 @@ namespace LootManagerApi.Repositories
         /// <exception cref="Exception"></exception>
         public async Task<LocationDto> UpdateLocationAsync(LocationUpdateDto locationUpdateDto)
         {
-            try
-            {
-                if (locationUpdateDto.House == null && locationUpdateDto.Room == null && locationUpdateDto.Furniture == null && locationUpdateDto.Shelf == null && locationUpdateDto.Position == null)
-                    throw new Exception("No changes needed.");
+            //try
+            //{
+            //    if (locationUpdateDto.House == null && locationUpdateDto.Room == null && locationUpdateDto.Furniture == null && locationUpdateDto.Shelf == null && locationUpdateDto.Position == null)
+            //        throw new Exception("No changes needed.");
 
-                Location location = await context.Locations.FirstAsync(e => e.Id == locationUpdateDto.Id);
+            //    Location location = await context.Locations.FirstAsync(e => e.Id == locationUpdateDto.Id);
 
-                if (locationUpdateDto.House != null)
-                    location.House = locationUpdateDto.House;
+            //    if (locationUpdateDto.House != null)
+            //        location.House = locationUpdateDto.House;
 
-                if (locationUpdateDto.Room != null)
-                    location.Room = locationUpdateDto.Room;
+            //    if (locationUpdateDto.Room != null)
+            //        location.Room = locationUpdateDto.Room;
 
-                if (locationUpdateDto.Shelf != null)
-                    location.Shelf = locationUpdateDto.Shelf;
+            //    if (locationUpdateDto.Shelf != null)
+            //        location.Shelf = locationUpdateDto.Shelf;
 
-                if (locationUpdateDto.Position != null)
-                    location.Position = locationUpdateDto.Position;
+            //    if (locationUpdateDto.Position != null)
+            //        location.Position = locationUpdateDto.Position;
 
-                await context.SaveChangesAsync();
+            //    await context.SaveChangesAsync();
 
-                return new LocationDto(location);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"An error occurred while updating the location. {ex.Message}", ex);
-            }
+            //    return new LocationDto(location);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception($"An error occurred while updating the location. {ex.Message}", ex);
+            //}
+
+            throw new NotImplementedException();
         }
 
         #endregion

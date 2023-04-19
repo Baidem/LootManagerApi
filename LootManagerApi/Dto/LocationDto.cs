@@ -1,4 +1,4 @@
-﻿using LootManagerApi.Entities;
+﻿using LootManagerApi.Entities.logistics;
 using System.Reflection;
 using System.Text;
 

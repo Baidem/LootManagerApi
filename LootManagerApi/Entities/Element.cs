@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Entities.logistics;
 using System.Reflection;
 using System.Text;
 
@@ -13,11 +14,17 @@ namespace LootManagerApi.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // Navigation properties
+        // NAVIGATION PROPERTIES (4)
+
+        // One User To Many Element?
         public int UserId { get; set; }
         public User User { get; set; }
+
+        // One Location? To Many Element?
         public int? LocationId { get; set; }
         public Location? Location { get; set; }
+
+        // Many Element? To Many Images?
         public List<Image>? Images { get; set; }
 
         public Element()

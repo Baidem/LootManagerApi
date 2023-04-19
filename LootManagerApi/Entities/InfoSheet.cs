@@ -14,9 +14,13 @@ namespace LootManagerApi.Entities
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation properties
+
+        // One User To Many InfoSheet?
+        public int UserId { get; set; }
+        public User User { get; set; }
+
         public List<Element>? Elements { get; set; }
         public List<Image>? Images { get; set; }
-        public int UserId { get; set; }
 
         public InfoSheet()
         {
