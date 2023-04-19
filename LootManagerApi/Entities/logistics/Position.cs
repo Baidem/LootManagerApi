@@ -9,7 +9,6 @@
         // NAVIGATION PROPERTIES
 
         // One Position? To One Location
-        public int LocationId { get; set; }
         public Location Location { get; set; }
 
         // One Shelf To Many Position?
