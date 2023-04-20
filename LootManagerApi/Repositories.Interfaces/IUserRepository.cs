@@ -13,7 +13,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <param name="userCreateDto">The DTO containing the user's information.</param>
         /// <returns>A UserSummaryDto representing the created user.</returns>
         /// <exception cref="Exception">Throws an exception if there is an error while saving the changes to the database.</exception>
-        Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto);
+        Task<UserDto> CreateUserAsync(UserCreateDto userCreateDto);
 
         // READ
         /// <summary>

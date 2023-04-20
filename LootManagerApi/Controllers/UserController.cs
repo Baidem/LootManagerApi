@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Utils;
@@ -16,14 +17,16 @@ namespace LootManagerApi.Controllers
         #region DECLARATIONS
 
         IUserRepository userRepository;
+        IHouseRepository houseRepository;
 
         #endregion
 
         #region CONSTRUCTOR
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IHouseRepository houseRepository)
         {
             this.userRepository = userRepository;
+            this.houseRepository = houseRepository;
         }
 
         #endregion
@@ -94,17 +97,17 @@ namespace LootManagerApi.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<UserSummaryDto>> CreateUser([FromForm] UserCreateDto userCreateDto)
+        public async Task<ActionResult<UserDto>> CreateUser([FromForm] UserCreateDto userCreateDto)
         {
             try
             {
                 await userRepository.IsValidUserCreateDtoAsync(userCreateDto);
 
-                var userSummaryDto = await userRepository.CreateUserAsync(userCreateDto);
+                var userDto = await userRepository.CreateUserAsync(userCreateDto);
 
-                // TODO create default House
+                HouseDto housedto = await houseRepository.CreateTheDefaultHouseAsync(userDto.Id);
 
-                return Ok(userSummaryDto);
+                return Ok(userDto);
             }
             catch (Exception ex)
             {

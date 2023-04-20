@@ -111,14 +111,17 @@ namespace LootManagerApi.Repositories
         /// <param name="userCreateDto">The DTO containing the user's information.</param>
         /// <returns>A UserSummaryDto representing the created user.</returns>
         /// <exception cref="Exception">Throws an exception if there is an error while saving the changes to the database.</exception>
-        public async Task<UserSummaryDto?> CreateUserAsync(UserCreateDto userCreateDto)
+        public async Task<UserDto> CreateUserAsync(UserCreateDto userCreateDto)
         {
             try
             {
                 var user = new User(userCreateDto);
+
                 await context.Users.AddAsync(user);
+
                 await context.SaveChangesAsync();
-                return new UserSummaryDto(user);
+                
+                return new UserDto(user);
             }
             catch (Exception ex)
             {

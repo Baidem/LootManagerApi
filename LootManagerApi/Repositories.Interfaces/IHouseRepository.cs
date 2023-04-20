@@ -4,6 +4,7 @@ namespace LootManagerApi.Repositories.Interfaces
 {
     public interface IHouseRepository
     {
-        Task<HouseDto> CreateHouseAsync(HouseCreateDto houseCreateDto, int UserId); 
+        Task<HouseDto> CreateHouseAsync(HouseCreateDto houseCreateDto, int UserId);
+        Task<HouseDto> CreateTheDefaultHouseAsync(int userId);
     }
 }

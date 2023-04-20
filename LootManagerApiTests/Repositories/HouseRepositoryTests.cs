@@ -93,5 +93,24 @@ namespace LootManagerApi.Repositories.Tests
             Assert.AreEqual(house.ToString(), expected_house.ToString());
         }
 
+        [TestMethod()]
+        public async Task CreateHouseAsyncTest_IndiceNull_ThrowException()
+        {
+            // Arrange
+            var name = "Test";
+            var userId = 1;
+
+            var houseCreateDto = new HouseCreateDto
+            {
+                Name = name,
+                Indice = null
+            };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _houseRepository.CreateHouseAsync(houseCreateDto, userId));
+            Assert.AreEqual("An error occurred while creating the House : Value cannot be null. (Parameter 'houseCreateDto.Indice is null')", exception.Message);
+        }
+
+
     }
 }
