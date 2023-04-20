@@ -297,7 +297,7 @@ namespace LootManagerApi.Repositories.Tests
             Assert.AreEqual(user.Email, userCreateDto.Email);
             Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userCreateDto.Password, user.PasswordHash));
             Assert.AreEqual(user.CreatedAt, userSummaryDto.CreatedAt);
-            Assert.IsNull(user.UpdateAt);
+            Assert.IsNull(user.UpdatedAt);
             Assert.AreEqual(user.Role, UserRole.User);
         }
 
@@ -428,7 +428,7 @@ namespace LootManagerApi.Repositories.Tests
             Assert.AreEqual(userUpdated.Email, userUpdateDto.NewEmail);
             Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userUpdateDto.NewPassword, userUpdated.PasswordHash));
             Assert.AreEqual(userUpdated.CreatedAt, userSummaryDto.CreatedAt);
-            Assert.IsNotNull(userUpdated.UpdateAt);
+            Assert.IsNotNull(userUpdated.UpdatedAt);
         }
 
         [TestMethod()]

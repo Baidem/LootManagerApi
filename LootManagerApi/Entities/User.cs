@@ -10,7 +10,7 @@ namespace LootManagerApi.Entities
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? UpdateAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         public UserRole Role { get; set; }
         public string? AuthorSignature { get; set; }
 

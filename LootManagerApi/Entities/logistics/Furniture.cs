@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Index { get; set; }
-        public int NumberOfLevels { get; set; }
+        public int Indice { get; set; }
+        public int NumberOfShelves { get; set; }
 
         // NAVIGATION PROPERTIES (3)
 
@@ -13,8 +13,8 @@
         public List<Location> Locations { get; set; }
 
         // One Room To Many Furniture?
-        public Room Room { get; set; }
         public int RoomId { get; set; }
+        public Room Room { get; set; }
 
         // One Furniture To Many Shelf?
         public List<Shelf>? Shelves { get; set; }

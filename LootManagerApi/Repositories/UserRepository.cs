@@ -176,7 +176,7 @@ namespace LootManagerApi.Repositories
                 if (userUpdateDto.NewPassword != null)
                     user.PasswordHash = UtilsPassword.GenerateHashedPassword(userUpdateDto.NewPassword);
 
-                user.UpdateAt = DateTime.UtcNow;
+                user.UpdatedAt = DateTime.UtcNow;
 
                 await context.SaveChangesAsync();
 

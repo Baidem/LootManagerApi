@@ -23,8 +23,9 @@ namespace LootManagerApi.Repositories
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Default data
-            #region Data Users
-            var u1 = new User
+            #region USERS DATA
+
+            var admin = new User
             {
                 Id = 1,
                 FullName = "admin",
@@ -33,7 +34,7 @@ namespace LootManagerApi.Repositories
                 CreatedAt = DateTime.UtcNow,
                 Role = UserRole.Admin
             };
-            var u2 = new User
+            var user = new User
             {
                 Id = 2,
                 FullName = "user",
@@ -42,7 +43,7 @@ namespace LootManagerApi.Repositories
                 CreatedAt = DateTime.UtcNow,
                 Role = UserRole.User
             };
-            var u3 = new User
+            var cont = new User
             {
                 Id = 3,
                 FullName = "contributor",
@@ -51,74 +52,253 @@ namespace LootManagerApi.Repositories
                 CreatedAt = DateTime.UtcNow,
                 Role = UserRole.Contributor
             };
-            var u4 = new User
+            modelBuilder.Entity<User>().HasData(new List<User> { admin, user, cont });
+            #endregion
+
+            #region HOUSES DATA
+
+            var h1 = new House { Id = 1, Name = "Admin House", Indice = 1, UserId = 1 };
+            var h2 = new House { Id = 2, Name = "User House", Indice = 1, UserId = 2 };
+            var h3 = new House { Id = 3, Name = "Cont House", Indice = 1, UserId = 3 };
+
+            modelBuilder.Entity<House>().HasData(new List<House> { h1, h2, h3 });
+
+            #endregion
+
+            #region ROOMS DATA
+
+            var r1 = new Room { Id = 1, Name = "Admin Room", Indice = 1, HouseId = 1 };
+            var r2 = new Room { Id = 2, Name = "User Room", Indice = 1, HouseId = 2 };
+            var r3 = new Room { Id = 3, Name = "Cont Room", Indice = 1, HouseId = 3 };
+
+            modelBuilder.Entity<Room>().HasData(new List<Room> { r1, r2, r3 });
+
+            #endregion
+
+            #region FURNITURES DATA
+
+            var f1 = new Furniture { Id = 1, Name = "Admin Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 1 };
+            var f2 = new Furniture { Id = 2, Name = "User Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 2 };
+            var f3 = new Furniture { Id = 3, Name = "Cont Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 3 };
+
+            modelBuilder.Entity<Furniture>().HasData(new List<Furniture> { f1, f2, f3 });
+
+            #endregion
+
+            #region SHELVES DATA
+
+            var s1 = new Shelf { Id = 1, Name = "Admin Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 1 };
+            var s2 = new Shelf { Id = 2, Name = "User Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 2 };
+            var s3 = new Shelf { Id = 3, Name = "Cont Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 3 };
+
+            modelBuilder.Entity<Shelf>().HasData(new List<Shelf> { s1, s2, s3 });
+
+            #endregion
+
+            #region POSITIONS DATA
+
+            var p1 = new Position { Id = 1, Name = "Admin Position", Indice = 1, ShelfId = 1 };
+            var p2 = new Position { Id = 2, Name = "User Position", Indice = 1, ShelfId = 2 };
+            var p3 = new Position { Id = 3, Name = "Cont Position", Indice = 1, ShelfId = 3 };
+
+            modelBuilder.Entity<Position>().HasData(new List<Position> { p1, p2, p3 });
+
+            #endregion
+
+            #region LOCATION DATA
+
+            var lh1 = new Location { Id = 1, HouseId = 1 };
+            var lh2 = new Location { Id = 2, HouseId = 2 };
+            var lh3 = new Location { Id = 3, HouseId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lh1, lh2, lh3 });
+
+            var lr1 = new Location { Id = 4, HouseId = 1, RoomId = 1 };
+            var lr2 = new Location { Id = 5, HouseId = 2, RoomId = 2 };
+            var lr3 = new Location { Id = 6, HouseId = 3, RoomId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lr1, lr2, lr3 });
+
+            var lf1 = new Location { Id = 7, HouseId = 1, RoomId = 1, FurnitureId = 1 };
+            var lf2 = new Location { Id = 8, HouseId = 2, RoomId = 2, FurnitureId = 2 };
+            var lf3 = new Location { Id = 9, HouseId = 3, RoomId = 3, FurnitureId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lf1, lf2, lf3 });
+
+            var ls1 = new Location { Id = 10, HouseId = 1, RoomId = 1, FurnitureId = 1, ShelfId = 1 };
+            var ls2 = new Location { Id = 11, HouseId = 2, RoomId = 2, FurnitureId = 2, ShelfId = 2 };
+            var ls3 = new Location { Id = 12, HouseId = 3, RoomId = 3, FurnitureId = 3, ShelfId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { ls1, ls2, ls3 });
+
+            var lp1 = new Location { Id = 13, HouseId = 1, RoomId = 1, FurnitureId = 1, ShelfId = 1, PositionId = 1 };
+            var lp2 = new Location { Id = 14, HouseId = 2, RoomId = 2, FurnitureId = 2, ShelfId = 2, PositionId = 2 };
+            var lp3 = new Location { Id = 15, HouseId = 3, RoomId = 3, FurnitureId = 3, ShelfId = 3, PositionId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lp1, lp2, lp3 });
+
+            #endregion
+
+            #region INFOSHEETS DATA
+
+            var is1 = new InfoSheet
+            {
+                Id = 1,
+                Designation = "Figurine",
+                Reference = "Fig-ref_01",
+                BarCode = "3 037920 02133 1",
+                WikiArticle = "Small statue depicting a popular culture character.",
+                AuthorSignature = "The Contributor",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 3
+            };
+
+            var is2 = new InfoSheet
+            {
+                Id = 2,
+                Designation = "Manga",
+                Reference = "Man-ref_01",
+                BarCode = "3 037920 02133 1",
+                WikiArticle = "Japanese comic book.",
+                AuthorSignature = "The Contributor",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 3
+            };
+
+            var is3 = new InfoSheet
+            {
+                Id = 3,
+                Designation = "Comic",
+                Reference = "Com-ref_01",
+                BarCode = "3 037920 02133 1",
+                WikiArticle = "Illustrated story in a book or magazine format, often featuring superheroes or humor.",
+                AuthorSignature = "The Contributor",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 3
+            };
+
+            modelBuilder.Entity<InfoSheet>().HasData(new List<InfoSheet> { is1, is2, is3 });
+
+            #endregion
+
+            #region ELEMENTS DATA
+
+            // Fig
+            var e1 = new Element
+            {
+                Id = 1,
+                Name = "Admin Fig",
+                Description = "Description of the element",
+                Type = "Figurine",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 1,
+                LocationId = 1,
+                InfoSheetId = 1
+            };
+            var e2 = new Element
+            {
+                Id = 2,
+                Name = "User Fig",
+                Description = "Description of the element",
+                Type = "Figurine",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 2,
+                LocationId = 2,
+                InfoSheetId = 1
+            };
+            var e3 = new Element
+            {
+                Id = 3,
+                Name = "Cont Fig",
+                Description = "Description of the element",
+                Type = "Figurine",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 3,
+                LocationId = 3,
+                InfoSheetId = 1
+            };
+
+            // Manga
+            var e4 = new Element
             {
                 Id = 4,
-                FullName = "user4",
-                Email = "user4@loot.com",
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                Name = "Admin Manga",
+                Description = "Description of the element",
+                Type = "Manga",
+                Grade = "An excellent condition.",
                 CreatedAt = DateTime.UtcNow,
-                Role = UserRole.User
+                UserId = 1,
+                LocationId = 1,
+                InfoSheetId = 2
             };
-            var u5 = new User
+            var e5 = new Element
             {
                 Id = 5,
-                FullName = "user5",
-                Email = "user5@loot.com",
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("test"),
+                Name = "User Manga",
+                Description = "Description of the element",
+                Type = "Manga",
+                Grade = "An excellent condition.",
                 CreatedAt = DateTime.UtcNow,
-                Role = UserRole.User
+                UserId = 2,
+                LocationId = 2,
+                InfoSheetId = 2
+            };
+            var e6 = new Element
+            {
+                Id = 6,
+                Name = "Cont Manga3",
+                Description = "Description of the element",
+                Type = "Manga",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 3,
+                LocationId = 3,
+                InfoSheetId = 2
             };
 
-            modelBuilder.Entity<User>().HasData(new List<User> { u1, u2, u3, u4, u5 });
-            #endregion
+            // Comic
+            var e7 = new Element
+            {
+                Id = 7,
+                Name = "Admin Comic",
+                Description = "Description of the element",
+                Type = "Comic",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 1,
+                LocationId = 1,
+                InfoSheetId = 3
+            };
+            var e8 = new Element
+            {
+                Id = 8,
+                Name = "User Comic",
+                Description = "Description of the element",
+                Type = "Comic",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 2,
+                LocationId = 2,
+                InfoSheetId = 3
+            };
+            var e9 = new Element
+            {
+                Id = 9,
+                Name = "Cont Comic",
+                Description = "Description of the element",
+                Type = "Comic",
+                Grade = "An excellent condition.",
+                CreatedAt = DateTime.UtcNow,
+                UserId = 3,
+                LocationId = 3,
+                InfoSheetId = 3
+            };
 
-            #region Data Elements
-            var e1 = new Element { Id = 1, Name = "figurine1", Type = "Figurine ", Description = "Description of the element", UserId = 1 };
-            var e2 = new Element { Id = 2, Name = "figurine2", Type = "Figurine ", Description = "Description of the element", UserId = 2 };
-            var e3 = new Element { Id = 3, Name = "figurine3", Type = "Figurine ", Description = "Description of the element", UserId = 3 };
-            var e4 = new Element { Id = 4, Name = "figurine4", Type = "Figurine ", Description = "Description of the element", UserId = 4 };
-            var e5 = new Element { Id = 5, Name = "figurine5", Type = "Figurine ", Description = "Description of the element", UserId = 5 };
 
-            var e6 = new Element { Id = 6, Name = "manga1", Type = "Manga", Description = "Description of the element", UserId = 1 };
-            var e7 = new Element { Id = 7, Name = "manga2", Type = "Manga", Description = "Description of the element", UserId = 2 };
-            var e8 = new Element { Id = 8, Name = "manga3", Type = "Manga", Description = "Description of the element", UserId = 3 };
-            var e9 = new Element { Id = 9, Name = "manga4", Type = "Manga", Description = "Description of the element", UserId = 4 };
-            var e10 = new Element { Id = 10, Name = "manga5", Type = "Manga", Description = "Description of the element", UserId = 5 };
-
-            var e11 = new Element { Id = 11, Name = "comic1", Type = "Comic", Description = "Description of the element", UserId = 1 };
-            var e12 = new Element { Id = 12, Name = "comic2", Type = "Comic", Description = "Description of the element", UserId = 2 };
-            var e13 = new Element { Id = 13, Name = "comic3", Type = "Comic", Description = "Description of the element", UserId = 3 };
-            var e14 = new Element { Id = 14, Name = "comic4", Type = "Comic", Description = "Description of the element", UserId = 4 };
-            var e15 = new Element { Id = 15, Name = "comic5", Type = "Comic", Description = "Description of the element", UserId = 5 };
-
-
-            modelBuilder.Entity<Element>().HasData(new List<Element> { e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 });
-            #endregion
-
-            #region Data Locations
-
-            //var l1 = new Location { Id = 1, House = "House1", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
-            //var l2 = new Location { Id = 2, House = "House1", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
-            //var l3 = new Location { Id = 3, House = "House1", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 1 };
-
-            //var l4 = new Location { Id = 4, House = "House2", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
-            //var l5 = new Location { Id = 5, House = "House2", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
-            //var l6 = new Location { Id = 6, House = "House2", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 2 };
-
-            //var l7 = new Location { Id = 7, House = "House3", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
-            //var l8 = new Location { Id = 8, House = "House3", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
-            //var l9 = new Location { Id = 9, House = "House3", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 3 };
-
-            //var l10 = new Location { Id = 10, House = "House4", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
-            //var l11 = new Location { Id = 11, House = "House4", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
-            //var l12 = new Location { Id = 12, House = "House4", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 4 };
-
-            //var l13 = new Location { Id = 13, House = "House5", Room = "Room1", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
-            //var l14 = new Location { Id = 14, House = "House5", Room = "Room2", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
-            //var l15 = new Location { Id = 15, House = "House5", Room = "Room3", Furniture = "Furniture1", Shelf = "First Shelf", Position = 1, UserId = 5 };
-
-            //modelBuilder.Entity<Location>().HasData(new List<Location> { l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15 });
+            modelBuilder.Entity<Element>().HasData(new List<Element> { e1, e2, e3, e4, e5, e6, e7, e8, e9 });
 
             #endregion
 

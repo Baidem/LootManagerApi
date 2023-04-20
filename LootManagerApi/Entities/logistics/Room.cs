@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Index { get; set; }
+        public int Indice { get; set; }
 
         // NAVIGATION PROPERTIES (3)
 
@@ -13,6 +13,7 @@
 
         // One House To Many Room?
         public int HouseId { get; set; }
+        public House House { get; set; }
 
         // One Room To Many Furniture?
         public List<Furniture>? Furnitures { get; set; }
