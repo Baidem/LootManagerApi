@@ -6,5 +6,7 @@ namespace LootManagerApi.Repositories.Interfaces
     {
         Task<HouseDto> CreateHouseAsync(HouseCreateDto houseCreateDto, int UserId);
         Task<HouseDto> CreateTheDefaultHouseAsync(int userId);
+        Task<int> AutoIndice(int userId);
+        Task<bool> ThisIndexIsFreeAsync(int indice, int userId);
     }
 }

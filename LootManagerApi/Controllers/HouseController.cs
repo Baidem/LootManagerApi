@@ -46,7 +46,10 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                // TODO Gestion de l'indice
+                if (houseCreateDto.Indice == null)
+                    houseCreateDto.Indice = await houseRepository.AutoIndice(userAuthDto.Id);
+                else
+                    await houseRepository.ThisIndexIsFreeAsync(houseCreateDto.Indice.Value, userAuthDto.Id);
 
                 var houseDto = await houseRepository.CreateHouseAsync(houseCreateDto, userAuthDto.Id);
 
