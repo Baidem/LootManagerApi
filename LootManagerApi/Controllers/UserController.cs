@@ -14,14 +14,18 @@ namespace LootManagerApi.Controllers
     public class UserController : ControllerBase
     {
         #region DECLARATIONS
+
         IUserRepository userRepository;
+
         #endregion
 
         #region CONSTRUCTOR
+
         public UserController(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
+
         #endregion
 
         #region LOG
@@ -95,7 +99,11 @@ namespace LootManagerApi.Controllers
             try
             {
                 await userRepository.IsValidUserCreateDtoAsync(userCreateDto);
+
                 var userSummaryDto = await userRepository.CreateUserAsync(userCreateDto);
+
+                // TODO create default House
+
                 return Ok(userSummaryDto);
             }
             catch (Exception ex)

@@ -11,9 +11,12 @@ namespace LootManagerApi.Repositories
     public class UserRepository : IUserRepository
     {
         #region DECLARATIONS
+
         LootManagerContext context;
         ILogger<UserRepository> logger;
+
         #endregion
+
 
         #region CONSTRUCTOR
         public UserRepository(LootManagerContext context, ILogger<UserRepository> logger)

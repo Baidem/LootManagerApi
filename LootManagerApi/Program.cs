@@ -26,6 +26,8 @@ builder.Services.AddScoped<IInfoSheetRepository, InfoSheetRepository>();
 
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 
+builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 var app = builder.Build();

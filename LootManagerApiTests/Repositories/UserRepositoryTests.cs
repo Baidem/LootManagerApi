@@ -1,17 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LootManagerApi.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using LootManagerApi.Dto;
 using LootManagerApi.Entities;
-using System.Reflection.Emit;
-using LootManagerApi.Dto;
-using LootManagerApi.Utils;
-using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Security.Claims;
 
 namespace LootManagerApi.Repositories.Tests
@@ -274,7 +265,7 @@ namespace LootManagerApi.Repositories.Tests
         [TestMethod()]
         public async Task CreateUserAsyncTest_ValidUserCreateDto_ReturnsUserSummaryDto()
         {
-            // Arange
+            // Arrange
             var userCreateDto = new UserCreateDto
             {
                 FullName = "user5",
