@@ -64,61 +64,86 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        //#region READ
+        #region READ
 
-        ///// <summary>
-        ///// Get the list of rooms of the current user.
-        ///// </summary>
-        ///// <returns>List of RoomDto</returns>
-        ///// <exception cref="Exception">Throw if there is an error when searching for rooms.</exception>
-        //[HttpGet()]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(500)]
-        //public async Task<ActionResult<List<RoomDto>>> GetRooms()
-        //{
-        //    try
-        //    {
-        //        UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+        /// <summary>
+        /// Get the list of rooms of the current user among all his houses.
+        /// </summary>
+        /// <returns>List of RoomDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for rooms.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<RoomDto>>> GetRoomsByUserId()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-        //        var roomDtos = await roomRepository.GetRoomsAsync(userAuthDto.Id);
+                var roomDtos = await roomRepository.GetRoomsByUserIdAsync(userAuthDto.Id);
 
-        //        return Ok(roomDtos);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Problem(ex.Message);
-        //    }
-        //}
+                return Ok(roomDtos);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
-        ///// <summary>
-        ///// Get user's room by Id.
-        ///// </summary>
-        ///// <returns>RoomDto</returns>
-        ///// <exception cref="Exception">Throw if there is an error when searching for the room.</exception>
-        //[HttpGet("{roomId}")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(500)]
-        //public async Task<ActionResult<RoomDto>> GetRoom(int roomId)
-        //{
-        //    try
-        //    {
-        //        UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+        /// <summary>
+        /// Get the list of rooms of a house from the current user.
+        /// </summary>
+        /// <returns>List of RoomDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for rooms.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<RoomDto>>> GetRoomsByHouseId(int houseId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-        //        await roomRepository.IsRoomExistAsync(roomId);
+                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
 
-        //        await roomRepository.IsOwnerOfTheRoomAsync(userAuthDto.Id, roomId);
+                var roomDtos = await roomRepository.GetRoomsByUserIdAsync(userAuthDto.Id);
 
-        //        var roomDto = await roomRepository.GetRoomAsync(roomId);
+                return Ok(roomDtos);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
-        //        return Ok(roomDto);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Problem(ex.Message);
-        //    }
-        //}
 
-        //#endregion
+        /// <summary>
+        /// Get user's room by Id.
+        /// </summary>
+        /// <returns>RoomDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the room.</exception>
+        [HttpGet("{roomId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<RoomDto>> GetRoom(int roomId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await roomRepository.IsOwnerOfTheRoomAsync(userAuthDto.Id, roomId);
+
+                var roomDto = await roomRepository.GetRoomAsync(roomId);
+
+                return Ok(roomDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
 
         //#region UPDATE
 

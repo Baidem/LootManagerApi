@@ -24,7 +24,7 @@ namespace LootManagerApi.Entities.logistics
         public List<Location> Locations { get; set; }
 
         // One House To Many Rooms?
-        public List<Room>? Room { get; set; }
+        public List<Room>? Rooms { get; set; }
 
         #endregion
 

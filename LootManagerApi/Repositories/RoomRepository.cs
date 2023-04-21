@@ -66,6 +66,47 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region READ
+
+        public async Task<List<RoomDto>> GetRoomsByUserIdAsync(int userId)
+        {
+            var roomList = await context.Houses
+                    .Include(h => h.Rooms)
+                    .Where(h => h.UserId == userId)
+                    .SelectMany(h => h.Rooms)
+                    .ToListAsync();
+
+            var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
+
+            if (roomDtoList.Any())
+                return roomDtoList;
+
+            throw new Exception($"You have no room in your houses.");
+        }
+
+        public async Task<List<RoomDto>> GetRoomsByHouseIdAsync(int houseId)
+        {
+
+            var roomList = await context.Houses
+                    .Include(h => h.Rooms)
+                    .Where(h => h.Id == houseId)
+                    .SelectMany(h => h.Rooms)
+                    .ToListAsync();
+
+            var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
+
+            if (roomDtoList.Any())
+                return roomDtoList;
+
+            throw new Exception($"You have no room in your house.");
+        }
+
+        public async Task<RoomDto> GetRoomAsync(int roomId)
+        {
+            return await context.Rooms.Where(r => r.Id == roomId).Select(r => new RoomDto(r)).FirstAsync();
+        }
+
+        #endregion
 
         #region UTILS
 
@@ -123,8 +164,22 @@ namespace LootManagerApi.Repositories
             throw new Exception("This room is not part of the house.");
         }
 
+        public async Task<bool> IsOwnerOfTheRoomAsync(int userId, int roomId)
+        {
+            var roomList = await context.Houses
+                    .Include(h => h.Rooms)
+                    .Where(h => h.UserId == userId)
+                    .SelectMany(h => h.Rooms)
+                    .ToListAsync();
+
+            var roomIdList = roomList.Select(r => r.Id).ToList();
+
+            if (roomIdList.Any(i => i == roomId))
+                return true;
+
+            throw new Exception("This user cannot access this house.");
+        }
+
         #endregion
-
-
     }
 }
