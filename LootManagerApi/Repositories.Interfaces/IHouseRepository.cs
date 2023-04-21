@@ -13,13 +13,14 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<List<HouseDto>> GetHousesAsync(int userId);
         Task<HouseDto> GetHouseAsync(int houseId);
 
+        // UPDATE
+        Task<HouseDto> UpdateHouseAsync(HouseUpdateDto houseUpdateDto);
+
         // UTILS
         Task<int> AutoIndice(int userId);
         Task<bool> ThisIndexIsFreeAsync(int indice, int userId);
 
         Task<bool> IsOwnerOfTheHouseAsync(int userId, int houseId);
         Task<bool> IsHouseExistAsync(int houseId);
-
-
     }
 }

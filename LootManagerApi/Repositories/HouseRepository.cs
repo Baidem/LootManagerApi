@@ -91,6 +91,46 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region UPDATE
+
+        /// <summary>
+        /// Asynchronous method of updating an House by an HouseUpdateDto.
+        /// Id required to find the house to be updated.
+        /// Only non-null data will be modified.
+        /// </summary>
+        /// <param name="houseUpdateDto"></param>
+        /// <returns>HouseDto</returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<HouseDto> UpdateHouseAsync(HouseUpdateDto houseUpdateDto)
+        {
+            try
+            {
+                if (houseUpdateDto.Name == null && houseUpdateDto.Indice == null)
+                    throw new Exception("No changes needed.");
+
+                House house = await context.Houses.FirstAsync(e => e.Id == houseUpdateDto.Id);
+
+                if (houseUpdateDto.Name != null)
+                    house.Name = houseUpdateDto.Name;
+
+                if (houseUpdateDto.Indice != null)
+                    house.Indice = houseUpdateDto.Indice.Value;
+
+                //house.UpdatedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                return new HouseDto(house);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the house. {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
+
         #region UTILS
 
         public async Task<int> AutoIndice(int userId)

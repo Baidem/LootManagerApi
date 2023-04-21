@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Repositories;
+using System.ComponentModel.DataAnnotations;
 
 namespace LootManagerApi.Controllers
 {
@@ -35,7 +36,7 @@ namespace LootManagerApi.Controllers
         /// Create a new House
         /// </summary>
         /// <param name="houseCreateDto">House creation DTO object containing House information</param>
-        /// <returns>Returns the info House DTO object.</returns>
+        /// <returns>HouseDto</returns>
         /// <exception cref="Exception">Thrown when there is an error in creating the House.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
@@ -66,9 +67,9 @@ namespace LootManagerApi.Controllers
         #region READ
 
         /// <summary>
-        /// Get the current user's list of houses.
+        /// Get the list of houses of the current user.
         /// </summary>
-        /// <returns>Returns list of house DTO object.</returns>
+        /// <returns>List of HouseDto</returns>
         /// <exception cref="Exception">Throw if there is an error when searching for houses.</exception>
         [HttpGet()]
         [ProducesResponseType(200)]
@@ -92,7 +93,7 @@ namespace LootManagerApi.Controllers
         /// <summary>
         /// Get user's house by Id.
         /// </summary>
-        /// <returns>Returns house DTO object.</returns>
+        /// <returns>HouseDto</returns>
         /// <exception cref="Exception">Throw if there is an error when searching for the house.</exception>
         [HttpGet("{houseId}")]
         [ProducesResponseType(200)]
@@ -119,6 +120,38 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
+        #region UPDATE
+
+        /// <summary>
+        /// Updates the specified house.
+        /// </summary>
+        /// <param name="HouseUpdateDto">The DTO containing updated house data.</param>
+        /// <returns>HouseDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when updating the house.</exception>
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<HouseDto>> UpdateHouse([FromForm] HouseUpdateDto houseUpdateDto)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await houseRepository.IsHouseExistAsync(houseUpdateDto.Id);
+
+                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
+
+                var houseUpdated = await houseRepository.UpdateHouseAsync(houseUpdateDto);
+
+                return Ok(houseUpdated);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
 
         #region LOG
 
