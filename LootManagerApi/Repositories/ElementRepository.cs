@@ -175,7 +175,7 @@ namespace LootManagerApi.Repositories
             if (await context.Elements.AnyAsync(e => e.Id == elementId))
                 return true;
 
-            throw new Exception("This item does not exist in the database.");
+            throw new Exception("This element does not exist in the database.");
         }
 
         #endregion

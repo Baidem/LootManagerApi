@@ -67,6 +67,30 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region READ
+
+        public async Task<List<HouseDto>> GetHousesAsync(int userId)
+        {
+            var houseDtos = await context.Houses.Where(e => e.UserId == userId).Select(e => new HouseDto(e)).ToListAsync();
+
+            if (houseDtos.Any())
+                return houseDtos;
+
+            throw new Exception($"You have zero houses in your collection actually.");
+        }
+
+        public async Task<HouseDto> GetHouseAsync(int houseId)
+        {
+            var houseDtos = await context.Houses.Where(e => e.Id == houseId).Select(e => new HouseDto(e)).FirstOrDefaultAsync();
+
+            if (houseDtos != null)
+                return houseDtos;
+
+            throw new Exception($"House was not found.");
+        }
+
+        #endregion
+
         #region UTILS
 
         public async Task<int> AutoIndice(int userId)
@@ -113,6 +137,22 @@ namespace LootManagerApi.Repositories
             }
 
             return true;
+        }
+
+        public async Task<bool> IsOwnerOfTheHouseAsync(int userId, int houseId)
+        {
+            if (await context.Houses.AnyAsync(e => e.UserId == userId && e.Id == houseId))
+                return true;
+
+            throw new Exception("This user cannot access this house.");
+        }
+
+        public async Task<bool> IsHouseExistAsync(int houseId)
+        {
+            if (await context.Houses.AnyAsync(e => e.Id == houseId))
+                return true;
+
+            throw new Exception("This house does not exist in the database.");
         }
 
         #endregion

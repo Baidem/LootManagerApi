@@ -63,6 +63,61 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
+        #region READ
+
+        /// <summary>
+        /// Get the current user's list of houses.
+        /// </summary>
+        /// <returns>Returns list of house DTO object.</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for houses.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<HouseDto>>> GetHouses()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var houseDtos = await houseRepository.GetHousesAsync(userAuthDto.Id);
+
+                return Ok(houseDtos);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get user's house by Id.
+        /// </summary>
+        /// <returns>Returns house DTO object.</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the house.</exception>
+        [HttpGet("{houseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<HouseDto>> GetHouse(int houseId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await houseRepository.IsHouseExistAsync(houseId);
+
+                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+
+                var houseDto = await houseRepository.GetHouseAsync(houseId);
+
+                return Ok(houseDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
 
 
         #region LOG
