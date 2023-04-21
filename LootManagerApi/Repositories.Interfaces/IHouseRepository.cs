@@ -24,6 +24,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<bool> ThisIndexIsFreeAsync(int indice, int userId);
 
         Task<bool> IsOwnerOfTheHouseAsync(int userId, int houseId);
+        // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
         Task<bool> IsHouseExistAsync(int houseId);
     }
 }

@@ -137,6 +137,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
+                // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
                 await houseRepository.IsHouseExistAsync(houseUpdateDto.Id);
 
                 await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
@@ -207,7 +208,5 @@ namespace LootManagerApi.Controllers
         }
 
         #endregion
-
-
     }
 }

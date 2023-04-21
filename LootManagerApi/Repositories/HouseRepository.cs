@@ -207,7 +207,7 @@ namespace LootManagerApi.Repositories
 
             throw new Exception("This user cannot access this house.");
         }
-
+        // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
         public async Task<bool> IsHouseExistAsync(int houseId)
         {
             if (await context.Houses.AnyAsync(e => e.Id == houseId))
