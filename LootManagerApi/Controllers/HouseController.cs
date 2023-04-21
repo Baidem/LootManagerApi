@@ -141,6 +141,9 @@ namespace LootManagerApi.Controllers
 
                 await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
 
+                if (houseUpdateDto.Indice != null)
+                    await houseRepository.ThisIndexIsFreeAsync(houseUpdateDto.Indice.Value, userAuthDto.Id);
+
                 var houseUpdated = await houseRepository.UpdateHouseAsync(houseUpdateDto);
 
                 return Ok(houseUpdated);
