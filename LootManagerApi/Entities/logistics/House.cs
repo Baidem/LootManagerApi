@@ -42,6 +42,7 @@ namespace LootManagerApi.Entities.logistics
             Name = houseCreateDto.Name;
             Indice = houseCreateDto.Indice.Value;
             UserId = userId;
+            CreatedAt = DateTime.UtcNow;
         }
 
         #endregion

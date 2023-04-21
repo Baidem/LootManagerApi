@@ -6,10 +6,18 @@ namespace LootManagerApi.Dto.LogisticsDto
 {
     public class HouseDto
     {
+        #region PROPERTIES
+
         public int Id { get; set; }
         public string Name { get; set; }
         public int Indice { get; set; }
         public int UserId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        #endregion
+
+        #region CONSTRUCTOR
 
         public HouseDto()
         {
@@ -19,9 +27,13 @@ namespace LootManagerApi.Dto.LogisticsDto
         {
             Id = house.Id;
             Name = house.Name;
-            Indice = house.Indice ;
+            Indice = house.Indice;
             UserId = house.UserId;
+            CreatedAt = house.CreatedAt;
+            UpdatedAt = house.UpdatedAt;
         }
+
+        #endregion
 
         #region METHODS
 
@@ -36,6 +48,5 @@ namespace LootManagerApi.Dto.LogisticsDto
         }
 
         #endregion
-
     }
 }

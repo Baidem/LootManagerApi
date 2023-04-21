@@ -116,7 +116,7 @@ namespace LootManagerApi.Repositories
                 if (houseUpdateDto.Indice != null)
                     house.Indice = houseUpdateDto.Indice.Value;
 
-                //house.UpdatedAt = DateTime.UtcNow;
+                house.UpdatedAt = DateTime.UtcNow;
 
                 await context.SaveChangesAsync();
 
