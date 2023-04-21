@@ -9,6 +9,8 @@ namespace LootManagerApi.Entities.logistics
     public class Location
     {
         public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         // NAVIGATION PROPERTIES (6)
 
