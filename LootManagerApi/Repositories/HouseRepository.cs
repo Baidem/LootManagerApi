@@ -130,6 +130,27 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region DELETE
+
+        public async Task<HouseDto> DeleteHouseAsync(int houseId)
+        {
+            try
+            {
+                var house = await context.Houses.FirstAsync(e => e.Id == houseId);
+
+                context.Houses.Remove(house);
+
+                await context.SaveChangesAsync();
+
+                return new HouseDto(house);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while deleting the house. {ex.Message}", ex);
+            }
+        }
+
+        #endregion
 
         #region UTILS
 

@@ -153,6 +153,39 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
+        #region DELETE
+
+        /// <summary>
+        /// Delete an house by its Id.
+        /// </summary>
+        /// <param name="houseId">The Id of the house to delete.</param>
+        /// <returns>HouseDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when deleting the house.</exception>
+        [HttpDelete("{houseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<HouseDto>> DeleteHouse(int houseId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await houseRepository.IsHouseExistAsync(houseId);
+
+                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+
+                HouseDto houseDto = await houseRepository.DeleteHouseAsync(houseId);
+
+                return Ok(houseDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
+
         #region LOG
 
         /// <summary>
