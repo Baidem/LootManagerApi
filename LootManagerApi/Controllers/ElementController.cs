@@ -163,7 +163,7 @@ namespace LootManagerApi.Controllers
 
                 await elementRepository.IsElementExistAsync(elementId);
 
-                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationId);
+                await locationRepository.CheckOwnerOfLocationAsync(userAuthDto.Id, locationId);
 
                 await elementRepository.IsOwnerOfTheElementAsync(userAuthDto.Id, elementId);
 

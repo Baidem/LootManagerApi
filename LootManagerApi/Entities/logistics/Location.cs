@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using LootManagerApi.Dto;
 using System.Reflection;
 using System.Text;
+using LootManagerApi.Dto.LogisticsDto;
 
 namespace LootManagerApi.Entities.logistics
 {
@@ -45,15 +46,16 @@ namespace LootManagerApi.Entities.logistics
         {
         }
 
-        //public Location(LocationCreateDto locationCreateDto, int userId)
-        //{
-        //    House = locationCreateDto.House;
-        //    Room = locationCreateDto.Room;
-        //    Furniture = locationCreateDto.Furniture;
-        //    Shelf = locationCreateDto.Shelf;
-        //    Position = locationCreateDto.Position;
-        //    UserId = userId;
-        //}
+        public Location(LocationCreateDto locationCreateDto)
+        {
+            UserId = locationCreateDto.UserId;
+            HouseId = locationCreateDto.HouseId;
+            RoomId = locationCreateDto.RoomId;
+            FurnitureId = locationCreateDto.FurnitureId;
+            ShelfId = locationCreateDto.ShelfId;
+            PositionId = locationCreateDto.PositionId;
+            CreatedAt = DateTime.UtcNow;
+        }
 
         public override string? ToString()
         {

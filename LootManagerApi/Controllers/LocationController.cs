@@ -26,21 +26,26 @@ namespace LootManagerApi.Controllers
         #region CREATE
 
         /// <summary>
+        /// -Admin Fonction-
         /// Create a new location
         /// </summary>
         /// <param name="locationCreateDto">Location creation DTO object containing location information</param>
-        /// <returns>Returns the location DTO object.</returns>
+        /// <returns>LocationDto</returns>
         /// <exception cref="Exception">Thrown when there is an error in creating the location.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<List<LocationDto>>> CreateLocation([FromForm] LocationCreateDto locationCreateDto)
+        public async Task<ActionResult<LocationDto>> CreateLocation([FromForm] LocationCreateDto locationCreateDto)
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var locationDto = await locationRepository.CreateLocationAsync(locationCreateDto, userAuthDto.Id);
+                Utils.UtilsRole.CheckOnlyAdmin(userAuthDto);
+
+                await locationRepository.CheckLocationCreateDto(locationCreateDto);
+
+                var locationDto = await locationRepository.CreateLocationAsync(locationCreateDto);
 
                 return Ok(locationDto);
             }
@@ -55,7 +60,7 @@ namespace LootManagerApi.Controllers
         #region READ
 
         /// <summary>
-        /// Get the location address in DTO Object.
+        /// Get the location address.
         /// </summary>
         /// <param name="locationId"></param>
         /// <returns>LocationAddressDto</returns>
@@ -69,7 +74,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                // TODO check owner
+                await locationRepository.CheckOwnerOfLocationAsync(locationId, userAuthDto.Id);
 
                 var locationAddressDto = await locationRepository.GetLocationAddressAsync(locationId);
 
@@ -109,7 +114,8 @@ namespace LootManagerApi.Controllers
         /// <summary>
         /// Get user's location by Id.
         /// </summary>
-        /// <returns>Returns location DTO object.</returns>
+        /// <param name="locationId"></param>
+        /// <returns>LocationDto</returns>
         /// <exception cref="Exception">Throw if there is an error when searching for the location.</exception>
         [HttpGet("{locationId}")]
         [ProducesResponseType(200)]
@@ -120,9 +126,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await locationRepository.IsLocationExistAsync(locationId);
-
-                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationId);
+                await locationRepository.CheckOwnerOfLocationAsync(userAuthDto.Id, locationId);
 
                 var locationDto = await locationRepository.GetLocationAsync(locationId);
 
@@ -139,10 +143,12 @@ namespace LootManagerApi.Controllers
         #region UPDATE
 
         /// <summary>
+        /// -Admin Fonction-
         /// Updates the specified location.
+        /// Only for the administrator
         /// </summary>
-        /// <param name="infoSheetUpdateDto">The DTO containing updated location data.</param>
-        /// <returns>Returns the LocationDto of the updated location.</returns>
+        /// <param name="locationUpdateDto">The DTO containing updated location data.</param>
+        /// <returns>LocationDto</returns>
         /// <exception cref="Exception">Throw if there is an error when updating the location.</exception>
         [HttpPut]
         [ProducesResponseType(200)]
@@ -153,9 +159,9 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await locationRepository.IsLocationExistAsync(locationUpdateDto.Id);
+                Utils.UtilsRole.CheckOnlyAdmin(userAuthDto);
 
-                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationUpdateDto.Id);
+                await locationRepository.CheckLocationUpdateDtoAsync(locationUpdateDto);
 
                 var locationUpdated = await locationRepository.UpdateLocationAsync(locationUpdateDto);
 
@@ -172,6 +178,7 @@ namespace LootManagerApi.Controllers
         #region DELETE
 
         /// <summary>
+        /// -Admin Fonction-
         /// Delete a location by its Id.
         /// </summary>
         /// <param name="infoSheetId">The Id of the info sheet to delete.</param>
@@ -186,9 +193,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await locationRepository.IsLocationExistAsync(locationId);
-
-                await locationRepository.IsOwnerOfTheLocationAsync(userAuthDto.Id, locationId);
+                Utils.UtilsRole.CheckOnlyAdmin(userAuthDto);
 
                 LocationDto locationDto = await locationRepository.DeleteLocationAsync(locationId);
 
@@ -213,8 +218,6 @@ namespace LootManagerApi.Controllers
             }
             return new UserAuthDto(identity);
         }
-
-
 
         #endregion
 

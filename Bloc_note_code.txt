@@ -84,9 +84,9 @@ var innerJoin = studentList.Join(// outer sequence
 Wine manager Linq 
 
 var userList = await context.Users.AsNoTracking().
-Include(u => u.Caves).Include(u => u.Drawers).
-Include(u => u.Bottles).
-Where(c => c.UserId == id).FirstOrDefaultAsync();
+	Include(u => u.Caves).Include(u => u.Drawers).
+	Include(u => u.Bottles).
+	Where(c => c.UserId == id).FirstOrDefaultAsync();
 
 //////////////////////////////////////////
 

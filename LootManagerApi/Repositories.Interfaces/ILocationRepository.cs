@@ -1,12 +1,11 @@
-﻿using LootManagerApi.Dto;
-using LootManagerApi.Dto.LogisticsDto;
+﻿using LootManagerApi.Dto.LogisticsDto;
 
 namespace LootManagerApi.Repositories.Interfaces
 {
     public interface ILocationRepository
     {
         // CREATE
-        Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto, int userId);
+        Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto);
 
         // READ
         Task<LocationAddressDto> GetLocationAddressAsync(int locationId);
@@ -22,6 +21,8 @@ namespace LootManagerApi.Repositories.Interfaces
 
         // UTILS
         Task<bool> IsLocationExistAsync(int locationId);
-        Task<bool> IsOwnerOfTheLocationAsync(int userId, int locationId);
+        Task<bool> CheckOwnerOfLocationAsync(int userId, int locationId);
+        Task<bool> CheckLocationCreateDto(LocationCreateDto locationCreateDto);
+        Task<bool> CheckLocationUpdateDtoAsync(LocationUpdateDto locationUpdateDto);
     }
 }
