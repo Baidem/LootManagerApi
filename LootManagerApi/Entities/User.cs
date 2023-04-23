@@ -32,19 +32,19 @@ namespace LootManagerApi.Entities
         public List<House> Houses { get; set; }
 
         // One User To Many Room
-        public List<Room> Rooms { get; set; }
+        public List<Room>? Rooms { get; set; }
 
         // One User To Many Furniture
-        public List<Furniture> Furnitures { get; set; }
+        public List<Furniture>? Furnitures { get; set; }
 
         // One User To Many Shelf
-        public List<Shelf> Shelves { get; set; }
+        public List<Shelf>? Shelves { get; set; }
 
         // One User To Many Position
-        public List<Position> Positions { get; set; }
+        public List<Position>? Positions { get; set; }
 
         // One User To Many Location
-        public List<Location> Locations { get; set; }
+        public List<Location>? Locations { get; set; }
 
         #endregion
 

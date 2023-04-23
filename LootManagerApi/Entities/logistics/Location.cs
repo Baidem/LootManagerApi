@@ -38,8 +38,8 @@ namespace LootManagerApi.Entities.logistics
         public Position? Position { get; set; }
 
         // One User To Many Location
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
         public Location()
         {

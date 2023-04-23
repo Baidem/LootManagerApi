@@ -17,8 +17,8 @@
         public int ShelfId { get; set; }
 
         // One User To Many Position
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
     }
 }

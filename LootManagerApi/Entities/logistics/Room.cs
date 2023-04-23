@@ -27,8 +27,8 @@ namespace LootManagerApi.Entities.logistics
         public List<Furniture>? Furnitures { get; set; }
 
         // One User To Many Room
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
         #endregion
 
