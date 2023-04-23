@@ -1,0 +1,152 @@
+public async Task<List<RoomDto>> GetRoomsByUserIdAsync(int userId)
+{
+    // Utiliser Include() pour charger les salles associées aux maisons de l'utilisateur
+    var roomList = await context.Houses
+        .Include(h => h.Rooms)
+        .Where(h => h.UserId == userId)
+        .SelectMany(h => h.Rooms)
+        .ToListAsync();
+
+    // Utiliser Select() pour projeter les salles en RoomDto
+    var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
+
+    // Vérifier si la liste de RoomDto est vide avec Any()
+    if (roomDtoList.Any())
+        return roomDtoList;
+
+    // Utiliser ArgumentNullException à la place de Exception
+    throw new ArgumentNullException(nameof(roomDtoList), $"You have zero rooms in your collection actually.");
+}
+
+
+///////////////////
+
+public async Task<List<RoomDto>> GetRoomsByUserIdAsync(int userId)
+{
+    var roomList = await context.Houses
+        .Include(h => h.Rooms)
+        .Where(h => h.UserId == userId)
+        .SelectMany(h => h.Rooms)
+        .ToListAsync();
+
+    var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
+
+    if (roomDtoList.Any())
+        return roomDtoList;
+
+    throw new Exception($"You have no room in your houses.");
+}
+
+public async Task<List<RoomDto>> GetRoomsByHouseIdAsync(int houseId)
+{
+    var roomList = await context.Houses
+        .Include(h => h.Rooms)
+        .Where(h => h.Id == houseId) // Correction ici : utiliser h.Id == houseId
+        .SelectMany(h => h.Rooms)
+        .ToListAsync();
+
+    var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
+
+    if (roomDtoList.Any())
+        return roomDtoList;
+
+    throw new Exception($"The house with ID {houseId} has no room.");
+}
+
+//////////////////////////////////////////////////////////
+The following example demonstrates LINQ Join query.
+
+IList<Student> studentList = new List<Student>() { 
+    new Student() { StudentID = 1, StudentName = "John", StandardID =1 },
+    new Student() { StudentID = 2, StudentName = "Moin", StandardID =1 },
+    new Student() { StudentID = 3, StudentName = "Bill", StandardID =2 },
+    new Student() { StudentID = 4, StudentName = "Ram" , StandardID =2 },
+    new Student() { StudentID = 5, StudentName = "Ron"  } 
+};
+
+IList<Standard> standardList = new List<Standard>() { 
+    new Standard(){ StandardID = 1, StandardName="Standard 1"},
+    new Standard(){ StandardID = 2, StandardName="Standard 2"},
+    new Standard(){ StandardID = 3, StandardName="Standard 3"}
+};
+
+var innerJoin = studentList.Join(// outer sequence 
+                      standardList,  // inner sequence 
+                      student => student.StandardID,    // outerKeySelector
+                      standard => standard.StandardID,  // innerKeySelector
+                      (student, standard) => new  // result selector
+                                    {
+                                        StudentName = student.StudentName,
+                                        StandardName = standard.StandardName
+                                    });
+
+////////////////////////////////////////////
+Wine manager Linq 
+
+var userList = await context.Users.AsNoTracking().
+Include(u => u.Caves).Include(u => u.Drawers).
+Include(u => u.Bottles).
+Where(c => c.UserId == id).FirstOrDefaultAsync();
+
+//////////////////////////////////////////
+
+            //var userList = await context.Users.AsNoTracking().Include(u => u.Caves).Include(u => u.Drawers).Include(u => u.Bottles).Where(c => c.UserId == id).FirstOrDefaultAsync();
+
+
+            //var join = context.Users.Join(
+            //    context.Houses,
+            //    User => User.Id,
+            //    House => House.UserId,
+            var userId = 1;
+
+            var userList = context.Users.AsNoTracking().Include(u => u.Houses).Where(c => c.Id == userId).FirstOrDefault();
+
+            var locationList = context.Locations.AsNoTracking().Include(l => l.Elements).ToList();
+
+            var location = context.Locations.AsNoTracking().Include(l => l.Elements).ToList();
+
+
+///////////////////////////////////////////////////+
+
+
+using (var context = new MaBaseDeDonneesEntities()) // Remplacez MaBaseDeDonneesEntities par le nom de votre contexte de base de données
+{
+    var query = from t1 in context.Table1
+                join t2 in context.Table2 on t1.Id equals t2.Table1Id
+                join t3 in context.Table3 on t2.Id equals t3.Table2Id
+                join t4 in context.Table4 on t3.Id equals t4.Table3Id
+                join t5 in context.Table5 on t4.Id equals t5.Table4Id
+                select new 
+                {
+                    Table1Field1 = t1.Field1,
+                    Table2Field2 = t2.Field2,
+                    Table3Field3 = t3.Field3,
+                    Table4Field4 = t4.Field4,
+                    Table5Field5 = t5.Field5
+                };
+
+    foreach (var result in query)
+    {
+        Console.WriteLine("Table1Field1 = {0}, Table2Field2 = {1}, Table3Field3 = {2}, Table4Field4 = {3}, Table5Field5 = {4}", result.Table1Field1, result.Table2Field2, result.Table3Field3, result.Table4Field4, result.Table5Field5);
+    }
+}
+
+
+ --------------------------------------------------------
+
+using (var context = new MaBaseDeDonneesEntities()) // Remplacez MaBaseDeDonneesEntities par le nom de votre contexte de base de données
+{
+    var linq = context.Users
+        .Join(context.Houses, user => user.Id, house => house.UserId, (user, house) => new { User = user, House = house })
+        .Join(context.Rooms, uh => uh.House.Id, room => room.HouseId, (uh, room) => new { uh.User, uh.House, Room = room })
+        .Join(context.Furnitures, uhr => uhr.Room.Id, furniture => furniture.RoomId, (uhr, furniture) => new { uhr.User, uhr.House, uhr.Room, Furniture = furniture })
+        .Join(context.Shelves, uhrf => uhrf.Furniture.Id, shelf => shelf.FurnitureId, (uhrf, shelf) => new { uhrf.User, uhrf.House, uhrf.Room, uhrf.Furniture, Shelf = shelf })
+        .Join(context.Positions, uhrfs => uhrfs.Shelf.Id, position => position.ShelfId, (uhrfs, position) => new { uhrfs.User, uhrfs.House, uhrfs.Room, uhrfs.Furniture, uhrfs.Shelf, Position = position });
+
+    foreach (var item in linq)
+    {
+        Console.WriteLine("User: {0}, House: {1}, Room: {2}, Furniture: {3}, Shelf: {4}, Position: {5}",
+            item.User.Name, item.House.Name, item.Room.Name, item.Furniture.Name, item.Shelf.Number, item.Position.Name);
+    }
+}
+

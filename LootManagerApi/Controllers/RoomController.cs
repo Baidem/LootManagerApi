@@ -145,40 +145,55 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        //#region UPDATE
+        #region UPDATE
 
-        ///// <summary>
-        ///// Updates the specified room.
-        ///// </summary>
-        ///// <param name="RoomUpdateDto">The DTO containing updated room data.</param>
-        ///// <returns>RoomDto</returns>
-        ///// <exception cref="Exception">Throw if there is an error when updating the room.</exception>
-        //[HttpPut]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(500)]
-        //public async Task<ActionResult<RoomDto>> UpdateRoom([FromForm] RoomUpdateDto roomUpdateDto)
-        //{
-        //    try
-        //    {
-        //        UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+        /// <summary>
+        /// Updates the specified room.
+        /// </summary>
+        /// <param name="RoomUpdateDto">The DTO containing updated room data.</param>
+        /// <returns>RoomDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when updating the room.</exception>
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<RoomDto>> UpdateRoom([FromForm] RoomUpdateDto roomUpdateDto)
+        {
+            try
+            {
+                int houseId;
 
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-        //        await roomRepository.IsARoomInTheHouseAsync(userAuthDto.Id, roomUpdateDto.Id);
+                await roomRepository.CheckRoomUpdateDtoAsync(roomUpdateDto, userAuthDto.Id);
 
-        //        if (roomUpdateDto.Indice != null)
-        //            await roomRepository.ThisIndexIsFreeAsync(roomUpdateDto.Indice.Value, userAuthDto.Id);
+                await roomRepository.IsOwnerOfTheRoomAsync(userAuthDto.Id, roomUpdateDto.Id);
 
-        //        var roomUpdated = await roomRepository.UpdateRoomAsync(roomUpdateDto);
+                if (roomUpdateDto.HouseId != null)
+                {
+                    houseId = roomUpdateDto.HouseId.Value;
+                    await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+                }
+                else
+                {
+                    houseId = await roomRepository.GetHouseIdOfTheRoomAsync(roomUpdateDto.Id);
+                }
 
-        //        return Ok(roomUpdated);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Problem(ex.Message);
-        //    }
-        //}
+                if (roomUpdateDto.Indice != null)
+                {
+                    await roomRepository.ThisIndexIsFreeAsync(roomUpdateDto.Indice.Value, houseId);
+                }
 
-        //#endregion
+                var roomUpdated = await roomRepository.UpdateRoomAsync(roomUpdateDto);
+
+                return Ok(roomUpdated);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
 
         //#region DELETE
 

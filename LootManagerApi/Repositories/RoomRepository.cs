@@ -1,4 +1,5 @@
-﻿using LootManagerApi.Dto.LogisticsDto;
+﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -76,10 +77,8 @@ namespace LootManagerApi.Repositories
                     .SelectMany(h => h.Rooms)
                     .ToListAsync();
 
-            var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
-
-            if (roomDtoList.Any())
-                return roomDtoList;
+            if (roomList.Any())
+                return roomList.Select(r => new RoomDto(r)).ToList();
 
             throw new Exception($"You have no room in your houses.");
         }
@@ -93,10 +92,8 @@ namespace LootManagerApi.Repositories
                     .SelectMany(h => h.Rooms)
                     .ToListAsync();
 
-            var roomDtoList = roomList.Select(r => new RoomDto(r)).ToList();
-
-            if (roomDtoList.Any())
-                return roomDtoList;
+            if (roomList.Any())
+                return roomList.Select(r => new RoomDto(r)).ToList();
 
             throw new Exception($"You have no room in your house.");
         }
@@ -106,7 +103,65 @@ namespace LootManagerApi.Repositories
             return await context.Rooms.Where(r => r.Id == roomId).Select(r => new RoomDto(r)).FirstAsync();
         }
 
+        public async Task<int> GetHouseIdOfTheRoomAsync(int roomId)
+        {
+            return await context.Rooms.Where(r => r.Id == roomId).Select(r =>  r.HouseId).FirstAsync();
+        }
+
+        private async Task<int> GetOwnerIdOfTheRoomAsync(int roomId)
+        {
+            var userId = await context.Rooms
+                .Where(r => r.Id == roomId)
+                .Join(context.Houses, r => r.HouseId, h => h.Id, (r, h) => h.UserId)
+                .FirstOrDefaultAsync();
+
+            return userId;
+        }
+
         #endregion
+
+        #region UPDATE
+
+        /// <summary>
+        /// Updating an Room by an RoomUpdateDto.
+        /// Id required to find the room to be updated.
+        /// Only non-null data will be modified.
+        /// </summary>
+        /// <param name="roomUpdateDto"></param>
+        /// <returns>RoomDto</returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<RoomDto> UpdateRoomAsync(RoomUpdateDto roomUpdateDto)
+        {
+            try
+            {
+                if (roomUpdateDto.Name == null && roomUpdateDto.Indice == null && roomUpdateDto.HouseId == null)
+                    throw new Exception("No changes needed.");
+
+                Room room = await context.Rooms.FirstAsync(e => e.Id == roomUpdateDto.Id);
+
+                if (roomUpdateDto.Name != null)
+                    room.Name = roomUpdateDto.Name;
+
+                if (roomUpdateDto.Indice != null)
+                    room.Indice = roomUpdateDto.Indice.Value;
+
+                if (roomUpdateDto.HouseId != null)
+                    room.HouseId = roomUpdateDto.HouseId.Value;
+
+                room.UpdatedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                return new RoomDto(room);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the room. {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
 
         #region UTILS
 
@@ -178,6 +233,23 @@ namespace LootManagerApi.Repositories
                 return true;
 
             throw new Exception("This user cannot access this house.");
+        }
+
+        public async Task<bool>CheckRoomUpdateDtoAsync(RoomUpdateDto roomUpdateDto, int userId)
+        {
+            // Pour résoudre la méthode il faut passer par la Location //
+
+            // Tableau gén : Un seul appel à la db doit pouvoir résoudre toutes les étapes de la méthode
+
+            // Check User => Room
+
+            // Check User => House
+
+            // Check Id House Si nul Id current House
+
+            // Check Indice Room; Si le même que le current c'est OK; Si Déjà utilisé : Erreur ; Si Nul : Auto Indice 
+
+            throw new NotImplementedException();
         }
 
         #endregion

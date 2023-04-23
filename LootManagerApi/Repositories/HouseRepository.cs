@@ -79,7 +79,7 @@ namespace LootManagerApi.Repositories
             throw new Exception($"You have zero houses in your collection actually.");
         }
 
-        public async Task<HouseDto> GetHouseAsync(int houseId)
+        public async Task<HouseDto> GetHouseByIdAsync(int houseId)
         {
             var houseDtos = await context.Houses.Where(e => e.Id == houseId).Select(e => new HouseDto(e)).FirstOrDefaultAsync();
 

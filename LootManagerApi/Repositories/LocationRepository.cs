@@ -1,7 +1,10 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using System.Text;
 
 namespace LootManagerApi.Repositories
 {
@@ -49,6 +52,20 @@ namespace LootManagerApi.Repositories
         #endregion
 
         #region READ
+
+
+        public async Task<LocationAddressDto> GetLocationAddressAsync(int locationId)
+        {
+            Location location = await context.Locations
+                .Include(x => x.House)
+                .Include(x => x.Room)
+                .Include(x => x.Furniture)
+                .Include(x => x.Shelf)
+                .Include(x => x.Position)
+                .FirstAsync(x => x.Id == locationId);
+
+            return new LocationAddressDto(location);
+        }
 
         public async Task<List<LocationDto>> GetLocationsAsync(int userId)
         {

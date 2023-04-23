@@ -14,8 +14,10 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<List<RoomDto>> GetRoomsByUserIdAsync(int userId);
         Task<List<RoomDto>> GetRoomsByHouseIdAsync(int houseId);
         Task<RoomDto> GetRoomAsync(int roomId);
+        Task<int> GetHouseIdOfTheRoomAsync(int roomId);
 
-        
+        // UPDATE
+        Task<RoomDto> UpdateRoomAsync(RoomUpdateDto roomUpdateDto);
 
 
         // UTILS
@@ -23,6 +25,9 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<bool> ThisIndexIsFreeAsync(int indice, int houseId);
         Task<bool> IsARoomInTheHouseAsync(int roomId, int houseId);
         Task<bool> IsOwnerOfTheRoomAsync(int userId, int roomId);
+        Task<bool> CheckRoomUpdateDtoAsync(RoomUpdateDto roomUpdateDto, int userId);
+
+
 
 
 

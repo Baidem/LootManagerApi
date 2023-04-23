@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -52,6 +53,34 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region READ
+
+        /// <summary>
+        /// Get the location address in DTO Object.
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <returns>LocationAddressDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching address.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<LocationAddressDto>> GetLocationAddress(int locationId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                // TODO check owner
+
+                var locationAddressDto = await locationRepository.GetLocationAddressAsync(locationId);
+
+                return Ok(locationAddressDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// Get the current user's list of locations.

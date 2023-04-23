@@ -108,7 +108,7 @@ namespace LootManagerApi.Controllers
 
                 await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
 
-                var houseDto = await houseRepository.GetHouseAsync(houseId);
+                var houseDto = await houseRepository.GetHouseByIdAsync(houseId);
 
                 return Ok(houseDto);
             }
