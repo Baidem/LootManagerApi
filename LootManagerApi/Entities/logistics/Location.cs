@@ -12,7 +12,7 @@ namespace LootManagerApi.Entities.logistics
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // NAVIGATION PROPERTIES (6)
+        // NAVIGATION PROPERTIES (7)
 
         // One Location? To Many Element?
         public List<Element>? Elements { get; set; }
@@ -37,6 +37,9 @@ namespace LootManagerApi.Entities.logistics
         public int? PositionId { get; set; }
         public Position? Position { get; set; }
 
+        // One User To Many Location
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         public Location()
         {

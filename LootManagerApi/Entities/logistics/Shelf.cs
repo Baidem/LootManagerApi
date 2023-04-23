@@ -20,5 +20,10 @@
 
         // One Shelf To Many Position?
         public List<Position>? Positions { get; set; }
+
+        // One User To Many Shelf
+        public int UserId { get; set; }
+        public User User { get; set; }
+
     }
 }

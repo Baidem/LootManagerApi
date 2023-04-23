@@ -21,8 +21,8 @@
         // One Furniture To Many Shelf?
         public List<Shelf>? Shelves { get; set; }
 
-        //// One User To Many Furniture
-        //public int UserId { get; set; }
-        //public User User { get; set; }
+        // One User To Many Furniture
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

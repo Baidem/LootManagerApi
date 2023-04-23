@@ -14,7 +14,7 @@ namespace LootManagerApi.Entities.logistics
 
         #endregion
 
-        #region NAVIGATION PROPERTIES (3)
+        #region NAVIGATION PROPERTIES (4)
 
         // One Room? To Many Location
         public List<Location> Locations { get; set; }
@@ -25,6 +25,10 @@ namespace LootManagerApi.Entities.logistics
 
         // One Room To Many Furniture?
         public List<Furniture>? Furnitures { get; set; }
+
+        // One User To Many Room
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         #endregion
 
