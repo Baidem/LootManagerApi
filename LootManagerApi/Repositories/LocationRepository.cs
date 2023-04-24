@@ -33,13 +33,7 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                Location location = new Location(locationCreateDto);
-
-                await context.Locations.AddAsync(location);
-
-                await context.SaveChangesAsync();
-
-                return new LocationDto(location);
+                return new LocationDto(await CreateLocationAsync(new Location(locationCreateDto)));
             }
             catch (Exception ex)
             {
@@ -47,10 +41,18 @@ namespace LootManagerApi.Repositories
             }
         }
 
+        public async Task<Location> CreateLocationAsync(Location location)
+        {
+            await context.Locations.AddAsync(location);
+
+            await context.SaveChangesAsync();
+
+            return location;
+        }
+
         #endregion
 
         #region READ
-
 
         public async Task<LocationAddressDto> GetLocationAddressAsync(int locationId)
         {
@@ -110,9 +112,7 @@ namespace LootManagerApi.Repositories
 
                 location.PositionId = locationUpdateDto.PositionId;
 
-                await context.SaveChangesAsync();
-
-                return new LocationDto(location);
+                return new LocationDto(await UpdateLocationAsync(location));
             }
             catch (Exception ex)
             {
@@ -120,6 +120,13 @@ namespace LootManagerApi.Repositories
             }
 
             throw new NotImplementedException();
+        }
+
+        public async Task<Location> UpdateLocationAsync(Location location)
+        {
+                await context.SaveChangesAsync();
+
+                return location;
         }
 
         #endregion

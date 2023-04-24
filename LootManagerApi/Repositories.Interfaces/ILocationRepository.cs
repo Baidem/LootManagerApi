@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto.LogisticsDto;
+using LootManagerApi.Entities.logistics;
 
 namespace LootManagerApi.Repositories.Interfaces
 {
@@ -6,6 +7,9 @@ namespace LootManagerApi.Repositories.Interfaces
     {
         // CREATE
         Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto);
+        Task<Location> CreateLocationAsync(Location location);
+
+
 
         // READ
         Task<LocationAddressDto> GetLocationAddressAsync(int locationId);
@@ -15,6 +19,7 @@ namespace LootManagerApi.Repositories.Interfaces
 
         // UPDATE
         Task<LocationDto> UpdateLocationAsync(LocationUpdateDto locationUpdateDto);
+        Task<Location> UpdateLocationAsync(Location location);
 
         // DELETE
         Task<LocationDto> DeleteLocationAsync(int locationId);
