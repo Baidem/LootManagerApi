@@ -1,4 +1,6 @@
 ﻿using LootManagerApi.Dto.LogisticsDto;
+using System.Reflection;
+using System.Text;
 
 namespace LootManagerApi.Entities.logistics
 {
@@ -46,5 +48,16 @@ namespace LootManagerApi.Entities.logistics
         }
 
         #endregion
+
+        public override string? ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (PropertyInfo prop in GetType().GetProperties())
+            {
+                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
+            }
+            return sb.ToString();
+        }
+
     }
 }

@@ -67,9 +67,5 @@ namespace LootManagerApi.Entities.logistics
             return sb.ToString();
         }
 
-        public string GetLocationAddress()
-        {
-            return $"{House}-{Room}-{Furniture}-{Shelf}-{Position}";
-        }
     }
 }

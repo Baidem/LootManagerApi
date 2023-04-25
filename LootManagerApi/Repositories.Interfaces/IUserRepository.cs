@@ -13,7 +13,8 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <param name="userCreateDto">The DTO containing the user's information.</param>
         /// <returns>A UserSummaryDto representing the created user.</returns>
         /// <exception cref="Exception">Throws an exception if there is an error while saving the changes to the database.</exception>
-        Task<UserDto> CreateUserAsync(UserCreateDto userCreateDto);
+        Task<UserDto> CreateNewUserWithMainLocationAsync(UserCreateDto userCreateDto);
+        Task<User> CreateUserAsync(User user);
 
         // READ
         /// <summary>
@@ -80,7 +81,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// </summary>
         /// <param name="userCreateDto">The user creation DTO to validate.</param>
         /// <returns>A boolean indicating whether the validation was successful or not.</returns>
-        Task<bool> IsValidUserCreateDtoAsync(UserCreateDto userCreatedDto);
+        Task<bool> CheckUserCreateDtoAsync(UserCreateDto userCreatedDto);
 
         /// <summary>
         /// Validates if the data in the UserUpdateDto matches the data in the UserAuthDto.

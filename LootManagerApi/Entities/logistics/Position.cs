@@ -1,4 +1,7 @@
-﻿namespace LootManagerApi.Entities.logistics
+﻿using System.Reflection;
+using System.Text;
+
+namespace LootManagerApi.Entities.logistics
 {
     public class Position
     {
@@ -20,5 +23,16 @@
         public int? UserId { get; set; }
         public User? User { get; set; }
 
+
+        // Methods
+        public override string? ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (PropertyInfo prop in GetType().GetProperties())
+            {
+                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
+            }
+            return sb.ToString();
+        }
     }
 }

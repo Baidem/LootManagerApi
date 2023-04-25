@@ -89,23 +89,29 @@ namespace LootManagerApi.Controllers
         #region CREATE USER
 
         /// <summary>
-        /// Creates a new user.
+        /// Create a new user with the main location.
         /// </summary>
         /// <param name="userCreateDto">User creation DTO object containing user information.</param>
-        /// <returns>Returns the user summary DTO object.</returns>
+        /// <returns>UserDto</returns>
         /// <exception cref="Exception">Thrown when there is an error in creating the user.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<UserDto>> CreateUser([FromForm] UserCreateDto userCreateDto)
+        public async Task<ActionResult<UserDto>> CreateNewUserWithMainLocation([FromForm] UserCreateDto userCreateDto)
         {
             try
             {
-                await userRepository.IsValidUserCreateDtoAsync(userCreateDto);
+                // Checking the input data of 'UserCreateDto'.
+                await userRepository.CheckUserCreateDtoAsync(userCreateDto);
 
-                var userDto = await userRepository.CreateUserAsync(userCreateDto);
-
-                HouseDto housedto = await houseRepository.CreateTheDefaultHouseAsync(userDto.Id);
+                // Creation of the new user
+                // Creation of the house "My House"
+                // Creation of the room "Main"
+                // Creation of the furniture "Main"
+                // Creation of the Shelft "Main"
+                // Creation of the position "Main"
+                // Creation of the location
+                var userDto = await userRepository.CreateNewUserWithMainLocationAsync(userCreateDto);
 
                 return Ok(userDto);
             }

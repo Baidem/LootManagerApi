@@ -304,7 +304,7 @@ namespace LootManagerApi.Repositories.Tests
             };
 
             // Act
-            var result = await _userRepository.IsValidUserCreateDtoAsync(userCreateDto);
+            var result = await _userRepository.CheckUserCreateDtoAsync(userCreateDto);
 
             // Assert
             Assert.IsTrue(result);
@@ -322,7 +322,7 @@ namespace LootManagerApi.Repositories.Tests
             };
 
             // Act & Assert
-            await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+            await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserCreateDtoAsync(userCreateDto));
         }
 
         [TestMethod()]
@@ -342,7 +342,7 @@ namespace LootManagerApi.Repositories.Tests
             await _context.SaveChangesAsync();
 
             // Act & Assert
-            await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+            await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserCreateDtoAsync(userCreateDto));
         }
 
         [TestMethod()]
@@ -357,7 +357,7 @@ namespace LootManagerApi.Repositories.Tests
             };
 
             // Act & Assert
-            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserCreateDtoAsync(userCreateDto));
             Assert.AreEqual($"The password must have at least {Utils.UtilsPassword.PASSWORD_MIN_LENGTH} characters.", exception.Message);
 
 
@@ -375,7 +375,7 @@ namespace LootManagerApi.Repositories.Tests
             };
 
             // Act & Assert
-            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.IsValidUserCreateDtoAsync(userCreateDto));
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _userRepository.CheckUserCreateDtoAsync(userCreateDto));
             Assert.AreEqual("The password must contain at least one upper case letter, one lower case letter, one number and one special character.", exception.Message);
         }
 
