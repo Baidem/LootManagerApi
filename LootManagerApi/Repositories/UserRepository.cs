@@ -106,7 +106,7 @@ namespace LootManagerApi.Repositories
         #region CREATE USER
 
         /// <summary>
-        /// Create a User.
+        /// Create a user with its main house and default location.
         /// </summary>
         /// <param name="userCreateDto">The DTO containing the user's information.</param>
         /// <returns>UserDto</returns>
@@ -119,7 +119,9 @@ namespace LootManagerApi.Repositories
 
                 var house = await CreateTheMainHouseAsync(user.Id);
 
-                var location = await CreateTheDefaultLocation(user.Id, house.Id);
+                var location = await CreateLocation(user.Id, house.Id);
+
+                var defaultlocation = await CreateTheDefaultLocation(user.Id, location.Id);
 
                 return new UserDto(user);
             }
@@ -151,7 +153,7 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        private async Task<Location> CreateTheDefaultLocation(int userId, int houseId)
+        private async Task<Location> CreateLocation(int userId, int houseId)
         {
             var location = new Location
             {
@@ -162,10 +164,22 @@ namespace LootManagerApi.Repositories
             await context.Locations.AddAsync(location);
             await context.SaveChangesAsync();
 
-            // TODO create default location
-
             return location;
         }
+
+        private async Task<DefaultLocation> CreateTheDefaultLocation(int userId, int locationId)
+        {
+            var defaultLocation = new DefaultLocation
+            {
+                UserId = userId,
+                LocationId = locationId,
+            };
+            await context.DefaultLocations.AddAsync(defaultLocation);
+            await context.SaveChangesAsync();
+
+            return defaultLocation;
+        }
+
 
         /// <summary>
         /// Create a User.
