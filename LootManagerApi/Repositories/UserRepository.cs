@@ -1,4 +1,5 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities;
 using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
@@ -123,7 +124,7 @@ namespace LootManagerApi.Repositories
 
                 var defaultlocation = await CreateTheDefaultLocation(user.Id, location.Id);
 
-                return new UserDto(user);
+                return new UserDto(user, new DefaultLocationDto(defaultlocation));
             }
             catch (Exception ex)
             {

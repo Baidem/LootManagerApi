@@ -1,4 +1,6 @@
-﻿using LootManagerApi.Entities;
+﻿using LootManagerApi.Dto.LogisticsDto;
+using LootManagerApi.Entities;
+using LootManagerApi.Entities.logistics;
 using System.Reflection;
 using System.Text;
 
@@ -15,6 +17,7 @@ namespace LootManagerApi.Dto
         public DateTime? UpdatedAt { get; set; }
         public UserRole Role { get; set; }
         public string? AuthorSignature { get; set; }
+        public DefaultLocationDto? DefaultLocationDto { get; set; }
 
         #endregion
 
@@ -33,7 +36,21 @@ namespace LootManagerApi.Dto
             UpdatedAt = user.UpdatedAt;
             Role = user.Role;
             AuthorSignature = user.AuthorSignature;
+            DefaultLocationDto = null;
         }
+
+        public UserDto(User user,DefaultLocationDto defaultLocationDto)
+        {
+            Id = user.Id;
+            FullName = user.FullName;
+            Email = user.Email;
+            CreatedAt = user.CreatedAt;
+            UpdatedAt = user.UpdatedAt;
+            Role = user.Role;
+            AuthorSignature = user.AuthorSignature;
+            DefaultLocationDto = defaultLocationDto;
+        }
+
 
         #endregion
 
