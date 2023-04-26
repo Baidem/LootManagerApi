@@ -111,40 +111,15 @@ namespace LootManagerApi.Repositories
         /// <param name="userCreateDto">The DTO containing the user's information.</param>
         /// <returns>UserDto</returns>
         /// <exception cref="Exception">Throws an exception if there is an error while creating a User.</exception>
-        public async Task<UserDto> CreateNewUserWithMainLocationAsync(UserCreateDto userCreateDto)
+        public async Task<UserDto> CreateNewUserWithMainHouseAsync(UserCreateDto userCreateDto)
         {
             try
             {
                 var user = await CreateUserAsync(new User(userCreateDto));
 
-                var house = await CreateTheMyHouseAsync(user.Id);
+                var house = await CreateTheMainHouseAsync(user.Id);
 
-                var room = await CreateTheMainRoomAsync(house.Id);
-
-                var furniture = await CreateTheMainFurnitureAsync(room.Id);
-
-                var shelf = await CreateTheMainShelfAsync(furniture.Id);
-
-                var position = await CreateTheMainPositionAsync(shelf.Id);
-
-                var location = new Location
-                {
-                    CreatedAt = DateTime.UtcNow,
-                    HouseId = house.Id,
-                    RoomId = room.Id,
-                    FurnitureId = furniture.Id,
-                    ShelfId = shelf.Id,
-                    PositionId = position.Id,
-                };
-                await context.Locations.AddAsync(location);
-
-                Console.WriteLine("location after save");
-                Console.WriteLine(location);
-
-                await context.SaveChangesAsync();
-
-                Console.WriteLine("location after save");
-                Console.WriteLine(location);
+                var location = await CreateTheDefaultLocation(user.Id, house.Id);
 
                 return new UserDto(user);
             }
@@ -154,14 +129,14 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        private async Task<House> CreateTheMyHouseAsync(int userId)
+        private async Task<House> CreateTheMainHouseAsync(int userId)
         {
             try
             {
                 var house = new House
                 {
                     UserId = userId,
-                    Name = "My House",
+                    Name = "Main House",
                     Indice = 1,
                     CreatedAt = DateTime.UtcNow
                 };
@@ -172,98 +147,25 @@ namespace LootManagerApi.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("CreateTheMyHouseAsync exception", ex);
+                throw new Exception("CreateTheMainHouseAsync exception", ex);
             }
         }
 
-        private async Task<Room> CreateTheMainRoomAsync(int houseId)
+        private async Task<Location> CreateTheDefaultLocation(int userId, int houseId)
         {
-            try
+            var location = new Location
             {
-                var room = new Room
-                {
-                    HouseId = houseId,
-                    Name = "Main",
-                    Indice = 1,
-                    CreatedAt = DateTime.UtcNow
-                };
-                await context.Rooms.AddAsync(room);
-                await context.SaveChangesAsync();
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId,
+                HouseId = houseId
+            };
+            await context.Locations.AddAsync(location);
+            await context.SaveChangesAsync();
 
-                return room;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("CreateTheMainRoomAsync exception", ex);
-            }
+            // TODO create default location
+
+            return location;
         }
-
-        private async Task<Furniture> CreateTheMainFurnitureAsync(int roomId)
-        {
-            try
-            {
-                var furniture = new Furniture
-                {
-                    RoomId = roomId,
-                    Name = "Main",
-                    Indice = 1,
-                    CreatedAt = DateTime.UtcNow
-                };
-                await context.Furnitures.AddAsync(furniture);
-                await context.SaveChangesAsync();
-
-                return furniture;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("CreateTheMainFurnitureAsync exception", ex);
-            }
-        }
-
-        private async Task<Shelf> CreateTheMainShelfAsync(int furnitureId)
-        {
-            try
-            {
-                var shelf = new Shelf
-                {
-                    FurnitureId = furnitureId,
-                    Name = "Main",
-                    Indice = 1,
-                    CreatedAt = DateTime.UtcNow
-                };
-                await context.Shelves.AddAsync(shelf);
-                await context.SaveChangesAsync();
-
-                return shelf;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("CreateTheMainShelfAsync exception", ex);
-            }
-        }
-
-        private async Task<Position> CreateTheMainPositionAsync(int shelfId)
-        {
-            try
-            {
-                var position = new Position
-                {
-                    ShelfId = shelfId,
-                    Name = "Main",
-                    Indice = 1,
-                    CreatedAt = DateTime.UtcNow
-                };
-                await context.Positions.AddAsync(position);
-                await context.SaveChangesAsync();
-
-                return position;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("CreateTheMainPositionAsync exception", ex);
-            }
-        }
-
 
         /// <summary>
         /// Create a User.

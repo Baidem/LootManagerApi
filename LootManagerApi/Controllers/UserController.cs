@@ -97,21 +97,13 @@ namespace LootManagerApi.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<UserDto>> CreateNewUserWithMainLocation([FromForm] UserCreateDto userCreateDto)
+        public async Task<ActionResult<UserDto>> CreateNewUserWithTheMainHouse([FromForm] UserCreateDto userCreateDto)
         {
             try
             {
-                // Checking the input data of 'UserCreateDto'.
                 await userRepository.CheckUserCreateDtoAsync(userCreateDto);
 
-                // Creation of the new user
-                // Creation of the house "My House"
-                // Creation of the room "Main"
-                // Creation of the furniture "Main"
-                // Creation of the Shelft "Main"
-                // Creation of the position "Main"
-                // Creation of the location
-                var userDto = await userRepository.CreateNewUserWithMainLocationAsync(userCreateDto);
+                var userDto = await userRepository.CreateNewUserWithMainHouseAsync(userCreateDto);
 
                 return Ok(userDto);
             }
