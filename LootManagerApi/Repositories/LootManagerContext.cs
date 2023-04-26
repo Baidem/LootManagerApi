@@ -16,7 +16,7 @@ namespace LootManagerApi.Repositories
         public DbSet<Furniture> Furnitures { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<Position> Positions { get; set; }
-        public DbSet<DefaultLocation> defaultLocations { get; set; }
+        public DbSet<DefaultLocation> DefaultLocations { get; set; }
 
         public LootManagerContext(DbContextOptions<LootManagerContext> option) : base(option)
         {

@@ -7,11 +7,15 @@
         // NAVIGATION PROPERTIES
 
         // One DefaultLocation To One User
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
         // One DefaultLocation To One User
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public int? LocationId { get; set; }
+        public Location? Location { get; set; }
+
+        public DefaultLocation()
+        {
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace LootManagerApi.Entities
         public List<Location>? Locations { get; set; }
 
         // One DefaultLocation To One User
-        public DefaultLocation DefaultLocation { get; set; }
+        public DefaultLocation? DefaultLocation { get; set; }
 
 
         #endregion

@@ -9,11 +9,15 @@ namespace LootManagerApi.Entities.logistics
 {
     public class Location
     {
+        #region PROPERTIES
+
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // NAVIGATION PROPERTIES (8)
+        #endregion
+
+        #region NAVIGATION PROPERTIES (8)
 
         // One Location? To Many Element?
         public List<Element>? Elements { get; set; }
@@ -43,8 +47,11 @@ namespace LootManagerApi.Entities.logistics
         public User? User { get; set; }
 
         // One DefaultLocation To One User
-        public DefaultLocation DefaultLocation { get; set; }
+        public DefaultLocation? DefaultLocation { get; set; }
 
+        #endregion
+
+        #region CONSTRUCTORS
 
         public Location()
         {
@@ -61,6 +68,10 @@ namespace LootManagerApi.Entities.logistics
             CreatedAt = DateTime.UtcNow;
         }
 
+        #endregion
+
+        #region METHODS
+
         public override string? ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -70,6 +81,8 @@ namespace LootManagerApi.Entities.logistics
             }
             return sb.ToString();
         }
+
+        #endregion
 
     }
 }
