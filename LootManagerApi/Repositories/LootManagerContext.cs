@@ -16,6 +16,7 @@ namespace LootManagerApi.Repositories
         public DbSet<Furniture> Furnitures { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<DefaultLocation> defaultLocations { get; set; }
 
         public LootManagerContext(DbContextOptions<LootManagerContext> option) : base(option)
         {
@@ -57,9 +58,9 @@ namespace LootManagerApi.Repositories
 
             #region HOUSES DATA
 
-            var h1 = new House { Id = 1, Name = "Admin House", Indice = 1, UserId = 1, CreatedAt = DateTime.UtcNow };
-            var h2 = new House { Id = 2, Name = "User House", Indice = 1, UserId = 2, CreatedAt = DateTime.UtcNow };
-            var h3 = new House { Id = 3, Name = "Cont House", Indice = 1, UserId = 3, CreatedAt = DateTime.UtcNow };
+            var h1 = new House { Id = 1, Name = "Admin's Main House", Indice = 1, UserId = 1, CreatedAt = DateTime.UtcNow };
+            var h2 = new House { Id = 2, Name = "User's Main House", Indice = 1, UserId = 2, CreatedAt = DateTime.UtcNow };
+            var h3 = new House { Id = 3, Name = "Cont's Main House", Indice = 1, UserId = 3, CreatedAt = DateTime.UtcNow };
 
             modelBuilder.Entity<House>().HasData(new List<House> { h1, h2, h3 });
 
@@ -136,6 +137,16 @@ namespace LootManagerApi.Repositories
             var lp3 = new Location { Id = 15, HouseId = 3, RoomId = 3, FurnitureId = 3, ShelfId = 3, PositionId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
 
             modelBuilder.Entity<Location>().HasData(new List<Location> { lp1, lp2, lp3 });
+
+            #endregion
+
+            #region DEFAULTLOCATION DATA
+
+            var d1 = new DefaultLocation { Id = 1, UserId = 1, LocationId = 1 };
+            var d2 = new DefaultLocation { Id = 2, UserId = 2, LocationId = 2 };
+            var d3 = new DefaultLocation { Id = 3, UserId = 3, LocationId = 3 };
+
+            modelBuilder.Entity<DefaultLocation>().HasData(new List<DefaultLocation> { d1, d2, d3 });
 
             #endregion
 

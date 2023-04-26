@@ -20,7 +20,7 @@ namespace LootManagerApi.Entities
 
         #endregion
 
-        #region NAVIGATION PROPERTIES (8)
+        #region NAVIGATION PROPERTIES (9)
 
         // One User To Many Element?
         public List<Element> Elements { get; set; }
@@ -45,6 +45,10 @@ namespace LootManagerApi.Entities
 
         // One User To Many Location
         public List<Location>? Locations { get; set; }
+
+        // One DefaultLocation To One User
+        public DefaultLocation DefaultLocation { get; set; }
+
 
         #endregion
 
