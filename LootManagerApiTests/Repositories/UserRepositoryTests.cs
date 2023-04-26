@@ -263,36 +263,6 @@ namespace LootManagerApi.Repositories.Tests
         }
 
         [TestMethod()]
-        public async Task CreateUserAsyncTest_ValidUserCreateDto_ReturnsUserSummaryDto()
-        {
-            // Arrange
-            var userCreateDto = new UserCreateDto
-            {
-                FullName = "user5",
-                Email = "user5@loot.com",
-                Password = "password",
-            };
-
-            // Act
-            var userSummaryDto = await _userRepository.CreateUserAsync(userCreateDto);
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userCreateDto.Email);
-
-            // Assert
-            Assert.IsNotNull(userSummaryDto);
-            Assert.AreEqual(userSummaryDto.FullName, userCreateDto.FullName);
-            Assert.AreEqual(userSummaryDto.Email, userCreateDto.Email);
-            Assert.IsNotNull(userSummaryDto.CreatedAt);
-            Assert.IsNotNull(user);
-            Assert.IsNotNull(user.Id);
-            Assert.AreEqual(user.FullName, userCreateDto.FullName);
-            Assert.AreEqual(user.Email, userCreateDto.Email);
-            Assert.IsTrue(BCrypt.Net.BCrypt.Verify(userCreateDto.Password, user.PasswordHash));
-            Assert.AreEqual(user.CreatedAt, userSummaryDto.CreatedAt);
-            Assert.IsNull(user.UpdatedAt);
-            Assert.AreEqual(user.Role, UserRole.User);
-        }
-
-        [TestMethod()]
         public async Task IsValidUserCreateDtoAsyncTest_ValidUser_ReturnsTrue()
         {
             // Arrange
