@@ -66,6 +66,7 @@ namespace LootManagerApi.Repositories.Tests
             Console.Error.WriteLine("houseDto");
             Console.Error.WriteLine(houseDto);
             var house = await _context.Houses.FirstAsync(h => h.Name == houseCreateDto.Name);
+            Console.Error.WriteLine("house");
             Console.Error.WriteLine(house);
 
             // Assert
@@ -75,7 +76,7 @@ namespace LootManagerApi.Repositories.Tests
                 Name = name,
                 Indice = indice,
                 UserId = userId,
-            };
+                CreatedAt = houseDto.CreatedAt            };
             Console.Error.WriteLine("expected_houseDto");
             Console.Error.WriteLine(expected_houseDto);
 
@@ -85,6 +86,7 @@ namespace LootManagerApi.Repositories.Tests
                 Name = name,
                 Indice = indice,
                 UserId = userId,
+                CreatedAt = house.CreatedAt
             };
             Console.Error.WriteLine("expected_house");
             Console.Error.WriteLine(expected_house);
