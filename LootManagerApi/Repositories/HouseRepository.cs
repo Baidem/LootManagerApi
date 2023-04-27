@@ -28,23 +28,27 @@ namespace LootManagerApi.Repositories
 
         #region CREATE
 
-        public async Task<HouseDto> CreateHouseAsync(HouseCreateDto houseCreateDto, int UserId)
+        public async Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, int UserId)
         {
             try
             {
-                House house = new House(houseCreateDto, UserId);
-
-                await context.Houses.AddAsync(house);
-
-                await context.SaveChangesAsync();
-
-                return new HouseDto(house);
+                return new HouseDto(await CreateHouseAsync(new House(houseCreateDto, UserId)));
             }
             catch (Exception ex)
             {
                 throw new Exception($"An error occurred while creating the House : {ex.Message}");
             }
         }
+
+        private async Task<House> CreateHouseAsync(House house)
+        {
+            await context.Houses.AddAsync(house);
+
+            await context.SaveChangesAsync();
+
+            return house;
+        }
+
 
         public async Task<HouseDto> CreateTheDefaultHouseAsync(int userId)
         {
@@ -56,7 +60,7 @@ namespace LootManagerApi.Repositories
                     Indice = 1
                 };
 
-                return await CreateHouseAsync(houseCreateDto, userId);
+                return await CreateHouseByDtoAsync(houseCreateDto, userId);
             }
             catch (Exception ex)
             {
@@ -171,31 +175,10 @@ namespace LootManagerApi.Repositories
             throw new Exception("An error occurred during the AutoIndice process.");
         }
 
-        public async Task<bool> ThisIndexIsFreeAsync(int indice, int userId)
+        public async Task<bool> ThisIndiceIsFreeAsync(int indice, int userId)
         {
-            var houseIndicelist = await context.Houses.Where(h => h.UserId == userId).Select(h => h.Indice).OrderBy(i => i).ToListAsync();
-
-            int left = 0;
-            int right = houseIndicelist.Count - 1;
-
-            while (left <= right)
-            {
-                int middle = (left + right) / 2;
-
-                if (houseIndicelist[middle] == indice)
-                {
-                    throw new Exception("This indice is not free.");
-                }
-
-                if (houseIndicelist[middle] < indice)
-                {
-                    left = middle + 1;
-                }
-                else
-                {
-                    right = middle - 1;
-                }
-            }
+            if (await context.Houses.AnyAsync(h => h.UserId == userId && h.Indice == indice))
+                throw new Exception("This indice is not free.");
 
             return true;
         }

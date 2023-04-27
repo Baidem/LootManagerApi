@@ -50,9 +50,9 @@ namespace LootManagerApi.Controllers
                 if (houseCreateDto.Indice == null)
                     houseCreateDto.Indice = await houseRepository.AutoIndice(userAuthDto.Id);
                 else
-                    await houseRepository.ThisIndexIsFreeAsync(houseCreateDto.Indice.Value, userAuthDto.Id);
+                    await houseRepository.ThisIndiceIsFreeAsync(houseCreateDto.Indice.Value, userAuthDto.Id);
 
-                var houseDto = await houseRepository.CreateHouseAsync(houseCreateDto, userAuthDto.Id);
+                var houseDto = await houseRepository.CreateHouseByDtoAsync(houseCreateDto, userAuthDto.Id);
 
                 return Ok(houseDto);
             }
@@ -143,7 +143,7 @@ namespace LootManagerApi.Controllers
                 await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
 
                 if (houseUpdateDto.Indice != null)
-                    await houseRepository.ThisIndexIsFreeAsync(houseUpdateDto.Indice.Value, userAuthDto.Id);
+                    await houseRepository.ThisIndiceIsFreeAsync(houseUpdateDto.Indice.Value, userAuthDto.Id);
 
                 var houseUpdated = await houseRepository.UpdateHouseAsync(houseUpdateDto);
 

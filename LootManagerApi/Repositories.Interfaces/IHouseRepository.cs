@@ -6,7 +6,7 @@ namespace LootManagerApi.Repositories.Interfaces
     public interface IHouseRepository
     {
         // CREATE
-        Task<HouseDto> CreateHouseAsync(HouseCreateDto houseCreateDto, int UserId);
+        Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, int UserId);
         Task<HouseDto> CreateTheDefaultHouseAsync(int userId);
 
         // READ
@@ -21,7 +21,7 @@ namespace LootManagerApi.Repositories.Interfaces
 
         // UTILS
         Task<int> AutoIndice(int userId);
-        Task<bool> ThisIndexIsFreeAsync(int indice, int userId);
+        Task<bool> ThisIndiceIsFreeAsync(int indice, int userId);
 
         Task<bool> IsOwnerOfTheHouseAsync(int userId, int houseId);
         // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
