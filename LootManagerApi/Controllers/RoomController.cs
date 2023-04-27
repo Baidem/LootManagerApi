@@ -45,7 +45,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, roomCreateDto.HouseId);
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, roomCreateDto.HouseId);
 
                 if (roomCreateDto.Indice == null)
                     roomCreateDto.Indice = await roomRepository.AutoIndice(userAuthDto.Id);
@@ -104,7 +104,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
 
                 var roomDtos = await roomRepository.GetRoomsByUserIdAsync(userAuthDto.Id);
 
@@ -171,7 +171,7 @@ namespace LootManagerApi.Controllers
                 if (roomUpdateDto.HouseId != null)
                 {
                     houseId = roomUpdateDto.HouseId.Value;
-                    await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+                    await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
                 }
                 else
                 {
