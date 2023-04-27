@@ -62,7 +62,7 @@ namespace LootManagerApi.Repositories.Tests
             await _context.SaveChangesAsync();
 
             // Act
-            var houseDto = await _houseRepository.CreateHouseAsync(houseCreateDto, userId);
+            var houseDto = await _houseRepository.CreateHouseByDtoAsync(houseCreateDto, userId);
             Console.Error.WriteLine("houseDto");
             Console.Error.WriteLine(houseDto);
             var house = await _context.Houses.FirstAsync(h => h.Name == houseCreateDto.Name);
@@ -109,7 +109,7 @@ namespace LootManagerApi.Repositories.Tests
             };
 
             // Act & Assert
-            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _houseRepository.CreateHouseAsync(houseCreateDto, userId));
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _houseRepository.CreateHouseByDtoAsync(houseCreateDto, userId));
             Assert.AreEqual("An error occurred while creating the House : Value cannot be null. (Parameter 'houseCreateDto.Indice is null')", exception.Message);
         }
 
