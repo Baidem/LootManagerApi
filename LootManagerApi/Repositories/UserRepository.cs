@@ -16,13 +16,13 @@ namespace LootManagerApi.Repositories
 
         LootManagerContext context;
         ILogger<UserRepository> logger;
-        HouseRepository houseRepository;
-        LocationRepository locationRepository;
+        IHouseRepository houseRepository;
+        ILocationRepository locationRepository;
 
         #endregion
 
         #region CONSTRUCTOR
-        public UserRepository(LootManagerContext context, ILogger<UserRepository> logger,HouseRepository houseRepository,LocationRepository locationRepository)
+        public UserRepository(LootManagerContext context, ILogger<UserRepository> logger,IHouseRepository houseRepository,ILocationRepository locationRepository)
         {
             this.context = context;
             this.logger = logger;
