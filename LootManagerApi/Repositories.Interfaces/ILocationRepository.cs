@@ -6,10 +6,7 @@ namespace LootManagerApi.Repositories.Interfaces
     public interface ILocationRepository
     {
         // CREATE
-        Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto);
-        Task<Location> CreateLocationAsync(Location location);
-
-
+        Task<LocationDto> CreateLocationByDtoAsync(LocationCreateDto locationCreateDto);
 
         // READ
         Task<LocationAddressDto> GetLocationAddressAsync(int locationId);

@@ -45,7 +45,7 @@ namespace LootManagerApi.Controllers
 
                 await locationRepository.CheckLocationCreateDto(locationCreateDto);
 
-                var locationDto = await locationRepository.CreateLocationAsync(locationCreateDto);
+                var locationDto = await locationRepository.CreateLocationByDtoAsync(locationCreateDto);
 
                 return Ok(locationDto);
             }

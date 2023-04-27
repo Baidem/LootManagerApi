@@ -30,7 +30,7 @@ namespace LootManagerApi.Repositories
 
         #region CREATE
 
-        public async Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto)
+        public async Task<LocationDto> CreateLocationByDtoAsync(LocationCreateDto locationCreateDto)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        public async Task<Location> CreateLocationAsync(Location location)
+        private async Task<Location> CreateLocationAsync(Location location)
         {
             await context.Locations.AddAsync(location);
 
