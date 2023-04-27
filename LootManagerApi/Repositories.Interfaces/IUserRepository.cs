@@ -24,6 +24,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <returns>A <see cref="ClaimsIdentity"/> object.</returns>
         /// <exception cref="Exception">Thrown if an error occurs while getting the claims identity.</exception>
         Task<ClaimsIdentity> GetClaimsIdentityAsync(UserLoginDto userLoginDto);
+        Task<UserDto> GetUserDto(int userId);
 
         /// <summary>
         /// Retrieves a list of all user summary data asynchronously from the database.
@@ -38,7 +39,7 @@ namespace LootManagerApi.Repositories.Interfaces
         /// <param name="userUpdateDto">The user update DTO containing the updated user information.</param>
         /// <returns>A UserSummaryDto object containing the updated user information.</returns>
         /// <exception cref="Exception">Thrown if the user cannot be found or if no changes were made.</exception>
-        Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto);
+        Task<UserDto> UpdateUserByUserUpdateDtoAsync(UserUpdateDto userUpdateDto);
 
         /// <summary>
         /// Updates the role of a user with the specified user ID.
@@ -60,45 +61,13 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<UserSummaryDto> DeleteUserAsync(int userId);
 
         // UTILS
-        /// <summary>
-        /// Check if user with given userId exists in the database
-        /// </summary>
-        /// <param name="userId">The ID of the user to check for.</param>
-        /// <returns>Returns true if the user with given userId exists in the database, otherwise throws an exception.</returns>
-        /// <exception cref="Exception">Throws exception if user with given userId doesn't exist in the database.</exception>
         Task<bool> IsUserExistByIdAsync(int userId);
-
-        /// <summary>
-        /// Checks if the provided user login DTO is valid.
-        /// </summary>
-        /// <param name="userLoginDto">The user login DTO to check.</param>
-        /// <returns>True if the user login DTO is valid, false otherwise.</returns>
-        /// <exception cref="Exception">Thrown if the email address attribute is invalid, the email does not exist, the password hash search was unsuccessful, or the password is invalid.</exception>
         Task<bool> CheckUserLoginDtoAsync(UserLoginDto userLoginDto);
-
-        /// <summary>
-        /// Validates a user creation DTO by checking if the email address is valid and not already used, and if the password meets certain complexity requirements.
-        /// </summary>
-        /// <param name="userCreateDto">The user creation DTO to validate.</param>
-        /// <returns>A boolean indicating whether the validation was successful or not.</returns>
         Task<bool> CheckUserCreateDtoAsync(UserCreateDto userCreatedDto);
+        //Task<bool> ValidateUserUpdateDtoMatchesUserAuthDtoAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
+        Task<bool> CheckUserUpdateDtoNewDataAsync(UserUpdateDto userUpdateDto);
 
-        /// <summary>
-        /// Validates if the data in the UserUpdateDto matches the data in the UserAuthDto.
-        /// </summary>
-        /// <param name="userUpdateDto">The UserUpdateDto to be validated.</param>
-        /// <param name="userAuthDto">The UserAuthDto to compare with.</param>
-        /// <returns>True if the data in UserUpdateDto matches the data in UserAuthDto, false otherwise.</returns>
-        /// <exception cref="Exception">Throws an exception if the data does not correspond to the current user.</exception>
-        Task<bool> ValidateUserUpdateDtoMatchesUserAuthDtoAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
-
-        /// <summary>
-        /// Validates user update DTO data.
-        /// </summary>
-        /// <param name="userUpdateDto">The user update DTO to validate.</param>
-        /// <returns>True if the DTO data is valid.</returns>
-        /// <exception cref="Exception">Thrown if the DTO data is invalid.</exception>
-        Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto);
+        Task<bool> CheckUserUpdateDtoAuthAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto);
 
     }
 }

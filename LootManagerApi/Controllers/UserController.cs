@@ -120,7 +120,7 @@ namespace LootManagerApi.Controllers
         /// <summary>
         /// Retrieves a list of all user summary DTOs from the repository and returns them in an ActionResult.
         /// </summary>
-        /// <returns>An ActionResult containing a List of UserSummaryDto objects.</returns>
+        /// <returns>UserSummaryDto</returns>
         /// <exception cref="Exception">Thrown when there is an error retrieving the list of users or when the current user is not authorized to retrieve the list.</exception> 
         [HttpGet]
         [ProducesResponseType(200)]
@@ -130,9 +130,63 @@ namespace LootManagerApi.Controllers
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
                 UtilsRole.CheckOnlyAdmin(userAuthDto);
+
                 var userSummaryDtoList = await userRepository.GetAllUsersAsync();
+
                 return Ok(userSummaryDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// -Administrator fonction-.
+        /// Get the user's dto by the user's ID
+        /// </summary>
+        /// <returns>UserDto</returns>
+        /// <exception cref="Exception"></exception> 
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserDto>> GetUserDtoById(int userId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                UtilsRole.CheckOnlyAdmin(userAuthDto);
+
+                var userDto = await userRepository.GetUserDto(userId);
+
+                return Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the user's dto of the current user.
+        /// </summary>
+        /// <returns>UserDto</returns>
+        /// <exception cref="Exception"></exception> 
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserDto>> GetMyUserDto()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var userDto = await userRepository.GetUserDto(userAuthDto.Id);
+
+                return Ok(userDto);
             }
             catch (Exception ex)
             {
@@ -148,28 +202,27 @@ namespace LootManagerApi.Controllers
         /// Updates the user with the provided UserUpdateDto object.
         /// </summary>
         /// <param name="userUpdateDto">The UserUpdateDto object containing the new user information.</param>
-        /// <returns>An Ok ActionResult with a message indicating the updated user's full name, email, and obfuscated password.</returns>
+        /// <returns>UserDto</returns>
         /// <exception cref="Exception">Thrown if the user is not authorized or if the UserUpdateDto is invalid.</exception>
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> UpdateUser([FromForm] UserUpdateDto userUpdateDto)
+        public async Task<ActionResult<UserDto>> UpdateUser([FromForm] UserUpdateDto userUpdateDto)
         {
             try
             {
                 var userAuthDto = loadUserAuthentifiedDto();
 
-                await userRepository.ValidateUserUpdateDtoMatchesUserAuthDtoAsync(userUpdateDto, userAuthDto);
+                await userRepository.CheckUserUpdateDtoAuthAsync(userUpdateDto, userAuthDto);
 
-                await userRepository.ValidateUserUpdateDtoDataAsync(userUpdateDto);
+                await userRepository.CheckUserUpdateDtoNewDataAsync(userUpdateDto);
 
-                var userSummaryDto = await userRepository.UpdateUserAsync(userUpdateDto);
+                var userDto = await userRepository.UpdateUserByUserUpdateDtoAsync(userUpdateDto);
 
                 string password = (userUpdateDto.NewPassword == null) ? userUpdateDto.CurrentPassword : userUpdateDto.NewPassword;
+                await updateUserIdentityAsync(userDto.Email, password);
 
-                await updateUserIdentityAsync(userSummaryDto.Email, password);
-
-                return Ok($"The user is update : FullName = {userSummaryDto.FullName}, Email = {userSummaryDto.Email}, Password = {dotsLine(userUpdateDto)}");
+                return Ok(userDto);
             }
             catch (Exception ex)
             {

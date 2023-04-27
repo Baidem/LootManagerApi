@@ -104,7 +104,40 @@ namespace LootManagerApi.Repositories
         }
         #endregion
 
-        #region CREATE USER
+        public async Task<UserDto> GetUserDto(int userId)
+        {
+            var userDto = await context.Users
+                .Where(u => u.Id == userId)
+                .Join(
+                    context.DefaultLocations,
+                    user => user.Id,
+                    defaultLocation => defaultLocation.UserId,
+                    (user, defaultLocation) => new UserDto(user, new DefaultLocationDto(defaultLocation))
+                )
+                .SingleOrDefaultAsync();
+
+            if (userDto == null)
+                throw new KeyNotFoundException("No user was found.");
+
+            return userDto;
+        }
+
+
+        #region CREATE
+
+        /// <summary>
+        /// Create a User.
+        /// </summary>
+        /// <param name="user">User user</param>
+        /// <returns>User</returns>
+        public async Task<User> CreateUserAsync(User user)
+        {
+            await context.Users.AddAsync(user);
+
+            await context.SaveChangesAsync();
+
+            return user;
+        }
 
         /// <summary>
         /// Create a user with its main house and default location.
@@ -181,21 +214,6 @@ namespace LootManagerApi.Repositories
             return defaultLocation;
         }
 
-
-        /// <summary>
-        /// Create a User.
-        /// </summary>
-        /// <param name="user">User user</param>
-        /// <returns>User</returns>
-        public async Task<User> CreateUserAsync(User user)
-        {
-            await context.Users.AddAsync(user);
-
-            await context.SaveChangesAsync();
-
-            return user;
-        }
-
         /// <summary>
         /// Checks if the provided user creation DTO is valid.
         /// </summary>
@@ -226,13 +244,7 @@ namespace LootManagerApi.Repositories
 
         #region UPDATE USER
 
-        /// <summary>
-        /// Updates an existing user's information in the database.
-        /// </summary>
-        /// <param name="userUpdateDto">The user update DTO containing the updated user information.</param>
-        /// <returns>A UserSummaryDto object containing the updated user information.</returns>
-        /// <exception cref="Exception">Thrown if the user cannot be found or if no changes were made.</exception>
-        public async Task<UserSummaryDto> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        public async Task<UserDto> UpdateUserByUserUpdateDtoAsync(UserUpdateDto userUpdateDto)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => userUpdateDto.CurrentEmail == u.Email);
             if (user != null)
@@ -253,61 +265,11 @@ namespace LootManagerApi.Repositories
 
                 await context.SaveChangesAsync();
 
-                return new UserSummaryDto(user);
+                var defaultLocationDto = await context.DefaultLocations.Where(d => d.UserId == user.Id).Select(d => new DefaultLocationDto(d)).FirstAsync();
+
+                return new UserDto(user, defaultLocationDto);
             }
             throw new Exception("The user cannot be found.");
-        }
-
-        /// <summary>
-        /// Validates if the data in the UserUpdateDto matches the data in the UserAuthDto.
-        /// </summary>
-        /// <param name="userUpdateDto">The UserUpdateDto to be validated.</param>
-        /// <param name="userAuthDto">The UserAuthDto to compare with.</param>
-        /// <returns>True if the data in UserUpdateDto matches the data in UserAuthDto, false otherwise.</returns>
-        /// <exception cref="Exception">Throws an exception if the data does not correspond to the current user.</exception>
-        public async Task<bool> ValidateUserUpdateDtoMatchesUserAuthDtoAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
-        {
-            if (userUpdateDto.CurrentFullName == userAuthDto.FullName && userUpdateDto.CurrentEmail == userAuthDto.Email)
-            {
-                var passwordHash = await context.Users.Where(u => u.Email == userAuthDto.Email).Select(p => p.PasswordHash).FirstAsync();
-
-                if (Utils.UtilsPassword.CheckPasswordMatchesHash(userUpdateDto.CurrentPassword, passwordHash))
-                    return true;
-            }
-            throw new Exception("Data does not correspond to the current user.");
-        }
-
-        /// <summary>
-        /// Validates user update DTO data.
-        /// </summary>
-        /// <param name="userUpdateDto">The user update DTO to validate.</param>
-        /// <returns>True if the DTO data is valid.</returns>
-        /// <exception cref="Exception">Thrown if the DTO data is invalid.</exception>
-        public async Task<bool> ValidateUserUpdateDtoDataAsync(UserUpdateDto userUpdateDto)
-        {
-            if (userUpdateDto.NewEmail != null)
-            {
-                if (!UtilsEmail.IsValidateEmailAddressAttribute(userUpdateDto.NewEmail))
-                {
-                    throw new Exception($"Invalid email address format : {userUpdateDto.NewEmail}");
-                }
-                if (await UtilsEmail.IsEmailExistInContextAsync(userUpdateDto.NewEmail, context))
-                {
-                    throw new Exception(string.Format($"Email is already used : {userUpdateDto.NewEmail}"));
-                }
-            }
-            if (userUpdateDto.NewPassword != null)
-            {
-                if (UtilsPassword.CheckPasswordLength(userUpdateDto.NewPassword))
-                {
-                    throw new Exception($"The password must have at least {Utils.UtilsPassword.PASSWORD_MIN_LENGTH} characters.");
-                }
-                if (!UtilsPassword.CheckPasswordComplexity(userUpdateDto.NewPassword))
-                {
-                    throw new Exception("The password must contain at least one upper case letter, one lower case letter, one number and one special character.");
-                }
-            }
-            return true;
         }
 
         /// <summary>
@@ -380,6 +342,62 @@ namespace LootManagerApi.Repositories
 
             throw new Exception($"User with ID {userId} does not exist in the database.");
         }
+
+        public async Task<bool> CheckUserUpdateDtoAuthAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
+        {
+            if (userUpdateDto.CurrentFullName != userAuthDto.FullName)
+                throw new Exception("The CurrentFullName is not correct.");
+
+            if (userUpdateDto.CurrentEmail != userAuthDto.Email)
+                throw new Exception("The CurrentEmail is not correct.");
+
+            var passwordHash = await context.Users.Where(u => u.Email == userAuthDto.Email).Select(p => p.PasswordHash).FirstAsync();
+            if (!Utils.UtilsPassword.CheckPasswordMatchesHash(userUpdateDto.CurrentPassword, passwordHash))
+                throw new Exception("The CurrentPassword is not correct.");
+
+            return true;
+        }
+
+        public async Task<bool> CheckUserUpdateDtoNewDataAsync(UserUpdateDto userUpdateDto)
+        {
+            if (userUpdateDto.NewEmail != null)
+            {
+                if (!UtilsEmail.IsValidateEmailAddressAttribute(userUpdateDto.NewEmail))
+                {
+                    throw new Exception($"Invalid email address format : {userUpdateDto.NewEmail}");
+                }
+                if (await UtilsEmail.IsEmailExistInContextAsync(userUpdateDto.NewEmail, context))
+                {
+                    throw new Exception(string.Format($"Email is already used : {userUpdateDto.NewEmail}"));
+                }
+            }
+            if (userUpdateDto.NewPassword != null)
+            {
+                if (UtilsPassword.CheckPasswordLength(userUpdateDto.NewPassword))
+                {
+                    throw new Exception($"The password must have at least {Utils.UtilsPassword.PASSWORD_MIN_LENGTH} characters.");
+                }
+                if (!UtilsPassword.CheckPasswordComplexity(userUpdateDto.NewPassword))
+                {
+                    throw new Exception("The password must contain at least one upper case letter, one lower case letter, one number and one special character.");
+                }
+            }
+            return true;
+        }
+
+
+        //public async Task<bool> ValidateUserUpdateDtoMatchesUserAuthDtoAsync(UserUpdateDto userUpdateDto, UserAuthDto userAuthDto)
+        //{
+        //    if (userUpdateDto.CurrentFullName == userAuthDto.FullName && userUpdateDto.CurrentEmail == userAuthDto.Email)
+        //    {
+        //        var passwordHash = await context.Users.Where(u => u.Email == userAuthDto.Email).Select(p => p.PasswordHash).FirstAsync();
+
+        //        if (Utils.UtilsPassword.CheckPasswordMatchesHash(userUpdateDto.CurrentPassword, passwordHash))
+        //            return true;
+        //    }
+        //    throw new Exception("Data does not correspond to the current user.");
+        //}
+
 
         #endregion
     }
