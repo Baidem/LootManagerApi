@@ -49,41 +49,21 @@ namespace LootManagerApi.Repositories
             return house;
         }
 
-
-        public async Task<HouseDto> CreateTheDefaultHouseAsync(int userId)
-        {
-            try
-            {
-                var houseCreateDto = new HouseCreateDto
-                {
-                    Name = "My house",
-                    Indice = 1
-                };
-
-                return await CreateHouseByDtoAsync(houseCreateDto, userId);
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception($"An error occurred while creating the default House : {ex.Message}");
-            }
-        }
-
         #endregion
 
         #region READ
 
-        public async Task<List<HouseDto>> GetHousesAsync(int userId)
+        public async Task<List<HouseDto>> GetListOfHouseDtoByUserIdAsync(int userId)
         {
-            var houseDtos = await context.Houses.Where(e => e.UserId == userId).Select(e => new HouseDto(e)).ToListAsync();
+            var houseDtoList = await context.Houses.Where(e => e.UserId == userId).Select(e => new HouseDto(e)).ToListAsync();
 
-            if (houseDtos.Any())
-                return houseDtos;
+            if (houseDtoList.Any())
+                return houseDtoList;
 
             throw new Exception($"You have zero houses in your collection actually.");
         }
 
-        public async Task<HouseDto> GetHouseByIdAsync(int houseId)
+        public async Task<HouseDto> GetHouseDtoByHouseIdAsync(int houseId)
         {
             var houseDtos = await context.Houses.Where(e => e.Id == houseId).Select(e => new HouseDto(e)).FirstOrDefaultAsync();
 
@@ -98,21 +78,21 @@ namespace LootManagerApi.Repositories
         #region UPDATE
 
         /// <summary>
-        /// Asynchronous method of updating an House by an HouseUpdateDto.
+        /// Asynchronous method of updating an House by an HouseUpdateDto. 
         /// Id required to find the house to be updated.
         /// Only non-null data will be modified.
         /// </summary>
         /// <param name="houseUpdateDto"></param>
         /// <returns>HouseDto</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<HouseDto> UpdateHouseAsync(HouseUpdateDto houseUpdateDto)
+        public async Task<HouseDto> UpdateHouseByDtoAsync(HouseUpdateDto houseUpdateDto)
         {
             try
             {
                 if (houseUpdateDto.Name == null && houseUpdateDto.Indice == null)
                     throw new Exception("No changes needed.");
 
-                House house = await context.Houses.FirstAsync(e => e.Id == houseUpdateDto.Id);
+                House house = await context.Houses.FirstAsync(h => h.Id == houseUpdateDto.Id);
 
                 if (houseUpdateDto.Name != null)
                     house.Name = houseUpdateDto.Name;
@@ -175,7 +155,7 @@ namespace LootManagerApi.Repositories
             throw new Exception("An error occurred during the AutoIndice process.");
         }
 
-        public async Task<bool> ThisIndiceIsFreeAsync(int indice, int userId)
+        public async Task<bool> CheckIndiceIsFreeAsync(int indice, int userId)
         {
             if (await context.Houses.AnyAsync(h => h.UserId == userId && h.Indice == indice))
                 throw new Exception("This indice is not free.");
@@ -183,20 +163,12 @@ namespace LootManagerApi.Repositories
             return true;
         }
 
-        public async Task<bool> IsOwnerOfTheHouseAsync(int userId, int houseId)
+        public async Task<bool> CheckTheOwnerOfTheHouseAsync(int userId, int houseId)
         {
             if (await context.Houses.AnyAsync(e => e.UserId == userId && e.Id == houseId))
                 return true;
 
             throw new Exception("This user cannot access this house.");
-        }
-        // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
-        public async Task<bool> IsHouseExistAsync(int houseId)
-        {
-            if (await context.Houses.AnyAsync(e => e.Id == houseId))
-                return true;
-
-            throw new Exception("This house does not exist in the database.");
         }
 
         #endregion

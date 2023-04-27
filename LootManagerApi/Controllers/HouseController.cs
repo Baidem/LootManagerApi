@@ -33,7 +33,7 @@ namespace LootManagerApi.Controllers
         #region CREATE
 
         /// <summary>
-        /// Create a new House
+        /// Create a new House. House ID is required. Only non-null data will be modified.
         /// </summary>
         /// <param name="houseCreateDto">House creation DTO object containing House information</param>
         /// <returns>HouseDto</returns>
@@ -50,7 +50,7 @@ namespace LootManagerApi.Controllers
                 if (houseCreateDto.Indice == null)
                     houseCreateDto.Indice = await houseRepository.AutoIndice(userAuthDto.Id);
                 else
-                    await houseRepository.ThisIndiceIsFreeAsync(houseCreateDto.Indice.Value, userAuthDto.Id);
+                    await houseRepository.CheckIndiceIsFreeAsync(houseCreateDto.Indice.Value, userAuthDto.Id);
 
                 var houseDto = await houseRepository.CreateHouseByDtoAsync(houseCreateDto, userAuthDto.Id);
 
@@ -80,7 +80,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var houseDtos = await houseRepository.GetHousesAsync(userAuthDto.Id);
+                var houseDtos = await houseRepository.GetListOfHouseDtoByUserIdAsync(userAuthDto.Id);
 
                 return Ok(houseDtos);
             }
@@ -104,11 +104,9 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await houseRepository.IsHouseExistAsync(houseId);
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
 
-                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
-
-                var houseDto = await houseRepository.GetHouseByIdAsync(houseId);
+                var houseDto = await houseRepository.GetHouseDtoByHouseIdAsync(houseId);
 
                 return Ok(houseDto);
             }
@@ -137,15 +135,12 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
-                await houseRepository.IsHouseExistAsync(houseUpdateDto.Id);
-
-                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
 
                 if (houseUpdateDto.Indice != null)
-                    await houseRepository.ThisIndiceIsFreeAsync(houseUpdateDto.Indice.Value, userAuthDto.Id);
+                    await houseRepository.CheckIndiceIsFreeAsync(houseUpdateDto.Indice.Value, userAuthDto.Id);
 
-                var houseUpdated = await houseRepository.UpdateHouseAsync(houseUpdateDto);
+                var houseUpdated = await houseRepository.UpdateHouseByDtoAsync(houseUpdateDto);
 
                 return Ok(houseUpdated);
             }
@@ -174,9 +169,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await houseRepository.IsHouseExistAsync(houseId);
-
-                await houseRepository.IsOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
 
                 HouseDto houseDto = await houseRepository.DeleteHouseAsync(houseId);
 

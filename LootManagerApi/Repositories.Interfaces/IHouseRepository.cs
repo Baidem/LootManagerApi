@@ -7,24 +7,21 @@ namespace LootManagerApi.Repositories.Interfaces
     {
         // CREATE
         Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, int UserId);
-        Task<HouseDto> CreateTheDefaultHouseAsync(int userId);
 
         // READ
-        Task<List<HouseDto>> GetHousesAsync(int userId);
-        Task<HouseDto> GetHouseByIdAsync(int houseId);
+        Task<List<HouseDto>> GetListOfHouseDtoByUserIdAsync(int userId);
+        Task<HouseDto> GetHouseDtoByHouseIdAsync(int houseId);
 
         // UPDATE
-        Task<HouseDto> UpdateHouseAsync(HouseUpdateDto houseUpdateDto);
+        Task<HouseDto> UpdateHouseByDtoAsync(HouseUpdateDto houseUpdateDto);
 
         // DELETE
         Task<HouseDto> DeleteHouseAsync(int houseId);
 
         // UTILS
         Task<int> AutoIndice(int userId);
-        Task<bool> ThisIndiceIsFreeAsync(int indice, int userId);
+        Task<bool> CheckIndiceIsFreeAsync(int indice, int userId);
 
-        Task<bool> IsOwnerOfTheHouseAsync(int userId, int houseId);
-        // TODO La fonction IsOwnerOfTheHouseAsync rend cette fonction obsolète.
-        Task<bool> IsHouseExistAsync(int houseId);
+        Task<bool> CheckTheOwnerOfTheHouseAsync(int userId, int houseId);
     }
 }
