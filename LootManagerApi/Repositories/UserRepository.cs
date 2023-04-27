@@ -16,14 +16,18 @@ namespace LootManagerApi.Repositories
 
         LootManagerContext context;
         ILogger<UserRepository> logger;
+        HouseRepository houseRepository;
+        LocationRepository locationRepository;
 
         #endregion
 
         #region CONSTRUCTOR
-        public UserRepository(LootManagerContext context, ILogger<UserRepository> logger)
+        public UserRepository(LootManagerContext context, ILogger<UserRepository> logger,HouseRepository houseRepository,LocationRepository locationRepository)
         {
             this.context = context;
             this.logger = logger;
+            this.houseRepository = houseRepository;
+            this.locationRepository = locationRepository;
         }
         #endregion
 
@@ -102,7 +106,6 @@ namespace LootManagerApi.Repositories
 
             return list;
         }
-        #endregion
 
         public async Task<UserDto> GetUserDto(int userId)
         {
@@ -122,6 +125,7 @@ namespace LootManagerApi.Repositories
             return userDto;
         }
 
+        #endregion
 
         #region CREATE
 
@@ -151,11 +155,11 @@ namespace LootManagerApi.Repositories
             {
                 var user = await CreateUserAsync(new User(userCreateDto));
 
-                var house = await CreateTheMainHouseAsync(user.Id);
+                var houseDto = await CreateTheMainHouseAsync(user.Id);
 
-                var location = await CreateLocation(user.Id, house.Id);
+                var locationDto = await CreateLocation(user.Id, houseDto.Id);
 
-                var defaultlocation = await CreateTheDefaultLocation(user.Id, location.Id);
+                var defaultlocation = await CreateTheDefaultLocation(user.Id, locationDto.LocationId);
 
                 return new UserDto(user, new DefaultLocationDto(defaultlocation));
             }
@@ -165,21 +169,17 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        private async Task<House> CreateTheMainHouseAsync(int userId)
+        private async Task<HouseDto> CreateTheMainHouseAsync(int userId)
         {
             try
             {
-                var house = new House
+                var houseCreateDto = new HouseCreateDto
                 {
-                    UserId = userId,
                     Name = "Main House",
                     Indice = 1,
-                    CreatedAt = DateTime.UtcNow
                 };
-                await context.Houses.AddAsync(house);
-                await context.SaveChangesAsync();
 
-                return house;
+                return await houseRepository.CreateHouseByDtoAsync(houseCreateDto, userId);
             }
             catch (Exception ex)
             {
@@ -187,18 +187,15 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        private async Task<Location> CreateLocation(int userId, int houseId)
+        private async Task<LocationDto> CreateLocation(int userId, int houseId)
         {
-            var location = new Location
+            var locationCreateDto = new LocationCreateDto
             {
-                CreatedAt = DateTime.UtcNow,
                 UserId = userId,
                 HouseId = houseId
             };
-            await context.Locations.AddAsync(location);
-            await context.SaveChangesAsync();
-
-            return location;
+            
+            return await locationRepository.CreateLocationByDtoAsync(locationCreateDto);
         }
 
         private async Task<DefaultLocation> CreateTheDefaultLocation(int userId, int locationId)
