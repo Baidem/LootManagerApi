@@ -17,19 +17,15 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<int> GetHouseIdOfTheRoomAsync(int roomId);
 
         // UPDATE
-        Task<RoomDto> UpdateRoomAsync(RoomUpdateDto roomUpdateDto);
+        Task<RoomDto> UpdateRoomByDtoAsync(RoomUpdateDto roomUpdateDto);
 
+        // DELETE
+        Task<RoomDto> DeleteRoomAsync(int roomId);
 
         // UTILS
         Task<int> AutoIndice(int userId);
-        Task<bool> ThisIndexIsFreeAsync(int indice, int houseId);
-        Task<bool> IsARoomInTheHouseAsync(int roomId, int houseId);
-        Task<bool> IsOwnerOfTheRoomAsync(int userId, int roomId);
-        Task<bool> CheckRoomUpdateDtoAsync(RoomUpdateDto roomUpdateDto, int userId);
-
-
-
-
+        Task<bool> CheckIfTheRoomIndiceIsFreeThisHouseAsync(int indice, int houseId);
+        Task<bool> CheckTheOwnerOfTheRoomAsync(int userId, int roomId);
 
     }
 }

@@ -6,8 +6,8 @@ namespace LootManagerApi.Dto.LogisticsDto
     public class RoomUpdateDto
     {
         [Required] public int Id { get; set; }
-        public string? Name { get; set; }
-        public int? Indice { get; set; }
-        public int? HouseId { get; set; }
+        [Required] public string Name { get; set; }
+        [Required] public int HouseId { get; set; }
+        [Required] public int Indice { get; set; }
     }
 }

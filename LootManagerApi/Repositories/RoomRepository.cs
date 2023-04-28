@@ -12,15 +12,17 @@ namespace LootManagerApi.Repositories
 
         LootManagerContext context;
         ILogger<UserRepository> logger;
+        IHouseRepository houseRepository;
 
         #endregion
 
         #region CONSTRUCTOR
 
-        public RoomRepository(LootManagerContext context, ILogger<UserRepository> logger)
+        public RoomRepository(LootManagerContext context, ILogger<UserRepository> logger, IHouseRepository houseRepository)
         {
             this.context = context;
             this.logger = logger;
+            this.houseRepository = houseRepository;
         }
 
         #endregion
@@ -105,7 +107,7 @@ namespace LootManagerApi.Repositories
 
         public async Task<int> GetHouseIdOfTheRoomAsync(int roomId)
         {
-            return await context.Rooms.Where(r => r.Id == roomId).Select(r =>  r.HouseId).FirstAsync();
+            return await context.Rooms.Where(r => r.Id == roomId).Select(r => r.HouseId).FirstAsync();
         }
 
         private async Task<int> GetOwnerIdOfTheRoomAsync(int roomId)
@@ -124,29 +126,29 @@ namespace LootManagerApi.Repositories
 
         /// <summary>
         /// Updating an Room by an RoomUpdateDto.
-        /// Id required to find the room to be updated.
-        /// Only non-null data will be modified.
         /// </summary>
         /// <param name="roomUpdateDto"></param>
         /// <returns>RoomDto</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<RoomDto> UpdateRoomAsync(RoomUpdateDto roomUpdateDto)
+        public async Task<RoomDto> UpdateRoomByDtoAsync(RoomUpdateDto roomUpdateDto)
         {
             try
             {
-                if (roomUpdateDto.Name == null && roomUpdateDto.Indice == null && roomUpdateDto.HouseId == null)
-                    throw new Exception("No changes needed.");
-
                 Room room = await context.Rooms.FirstAsync(e => e.Id == roomUpdateDto.Id);
+                
+                room.Name = roomUpdateDto.Name;
 
-                if (roomUpdateDto.Name != null)
-                    room.Name = roomUpdateDto.Name;
+                if (roomUpdateDto.HouseId != room.House.Id)
+                {
+                    room.HouseId = roomUpdateDto.HouseId;
 
-                if (roomUpdateDto.Indice != null)
-                    room.Indice = roomUpdateDto.Indice.Value;
-
-                if (roomUpdateDto.HouseId != null)
-                    room.HouseId = roomUpdateDto.HouseId.Value;
+                    await CheckIfTheRoomIndiceIsFreeThisHouseAsync(room.HouseId, roomUpdateDto.Indice);
+                }
+                else if (roomUpdateDto.HouseId == room.House.Id)
+                {
+                    if (roomUpdateDto.Indice != room.Indice)
+                        await CheckIfTheRoomIndiceIsFreeThisHouseAsync(room.HouseId, roomUpdateDto.Indice);
+                }
 
                 room.UpdatedAt = DateTime.UtcNow;
 
@@ -162,94 +164,48 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region DELETE
+        public async Task<RoomDto> DeleteRoomAsync(int roomId)
+        {
+            var room = await context.Rooms.FirstAsync(r => r.Id == roomId);
+
+            context.Rooms.Remove(room);
+
+            await context.SaveChangesAsync();
+
+            return new RoomDto(room);
+        }
+
+        #endregion
 
         #region UTILS
 
         public async Task<int> AutoIndice(int houseId)
         {
-            var roomIndicelist = await context.Rooms.Where(r => r.HouseId == houseId).Select(r => r.Indice).ToListAsync();
+            var maxIndice = await context.Rooms
+                        .Where(r => r.HouseId == houseId)
+                        .Select(r => r.Indice)
+                        .DefaultIfEmpty(0)
+                        .MaxAsync();
 
-            roomIndicelist.Sort();
-            for (int i = 0; i < roomIndicelist.Count; i++)
-            {
-                if (i == 0 && roomIndicelist[i] > 1)
-                    return 1;
-
-                if (i == roomIndicelist.Count - 1 || roomIndicelist[i + 1] - roomIndicelist[i] > 1)
-                    return roomIndicelist[i] + 1;
-            }
+            return maxIndice + 1;
 
             throw new Exception("An error occurred during the AutoIndice process.");
         }
 
-        public async Task<bool> ThisIndexIsFreeAsync(int indice, int houseId)
+        public async Task<bool> CheckIfTheRoomIndiceIsFreeThisHouseAsync(int indice, int houseId)
         {
-            var roomIndicelist = await context.Rooms.Where(r => r.HouseId == houseId).Select(r => r.Indice).OrderBy(i => i).ToListAsync();
-
-            int left = 0;
-            int right = roomIndicelist.Count - 1;
-
-            while (left <= right)
-            {
-                int middle = (left + right) / 2;
-
-                if (roomIndicelist[middle] == indice)
-                {
-                    throw new Exception("This indice is not free.");
-                }
-
-                if (roomIndicelist[middle] < indice)
-                {
-                    left = middle + 1;
-                }
-                else
-                {
-                    right = middle - 1;
-                }
-            }
-
-            return true;
-        }
-
-        public async Task<bool> IsARoomInTheHouseAsync(int houseId, int roomId)
-        {
-            if (await context.Rooms.AnyAsync(r => r.HouseId == houseId && r.Id == roomId))
+            if (!await context.Rooms.AnyAsync(r => r.HouseId == houseId && r.Indice == indice))
                 return true;
-
-            throw new Exception("This room is not part of the house.");
+            throw new Exception("The index does not free.");
         }
 
-        public async Task<bool> IsOwnerOfTheRoomAsync(int userId, int roomId)
+        public async Task<bool> CheckTheOwnerOfTheRoomAsync(int userId, int roomId)
         {
-            var roomList = await context.Houses
-                    .Include(h => h.Rooms)
-                    .Where(h => h.UserId == userId)
-                    .SelectMany(h => h.Rooms)
-                    .ToListAsync();
-
-            var roomIdList = roomList.Select(r => r.Id).ToList();
-
-            if (roomIdList.Any(i => i == roomId))
+            if (await context.Rooms.AnyAsync(r => r.UserId == userId && r.Id == roomId))
                 return true;
 
             throw new Exception("This user cannot access this house.");
-        }
-
-        public async Task<bool>CheckRoomUpdateDtoAsync(RoomUpdateDto roomUpdateDto, int userId)
-        {
-            // Pour résoudre la méthode il faut passer par la Location //
-
-            // Tableau gén : Un seul appel à la db doit pouvoir résoudre toutes les étapes de la méthode
-
-            // Check User => Room
-
-            // Check User => House
-
-            // Check Id House Si nul Id current House
-
-            // Check Indice Room; Si le même que le current c'est OK; Si Déjà utilisé : Erreur ; Si Nul : Auto Indice 
-
-            throw new NotImplementedException();
         }
 
         #endregion

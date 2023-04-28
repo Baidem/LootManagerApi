@@ -1,13 +1,8 @@
 ﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Repositories;
-using System.ComponentModel.DataAnnotations;
 
 namespace LootManagerApi.Controllers
 {
@@ -137,8 +132,7 @@ namespace LootManagerApi.Controllers
 
                 await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseUpdateDto.Id);
 
-                if (houseUpdateDto.Indice != null)
-                    await houseRepository.CheckIndiceIsFreeAsync(houseUpdateDto.Indice.Value, userAuthDto.Id);
+                await houseRepository.CheckIndiceIsFreeAsync(houseUpdateDto.Indice, userAuthDto.Id);
 
                 var houseUpdated = await houseRepository.UpdateHouseByDtoAsync(houseUpdateDto);
 

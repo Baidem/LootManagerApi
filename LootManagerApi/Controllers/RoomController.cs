@@ -50,7 +50,7 @@ namespace LootManagerApi.Controllers
                 if (roomCreateDto.Indice == null)
                     roomCreateDto.Indice = await roomRepository.AutoIndice(userAuthDto.Id);
                 else
-                    await roomRepository.ThisIndexIsFreeAsync(roomCreateDto.Indice.Value, roomCreateDto.HouseId);
+                    await roomRepository.CheckIfTheRoomIndiceIsFreeThisHouseAsync(roomCreateDto.Indice.Value, roomCreateDto.HouseId);
 
                 var roomDto = await roomRepository.CreateRoomAsync(roomCreateDto);
 
@@ -131,7 +131,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await roomRepository.IsOwnerOfTheRoomAsync(userAuthDto.Id, roomId);
+                await roomRepository.CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, roomId);
 
                 var roomDto = await roomRepository.GetRoomAsync(roomId);
 
@@ -160,30 +160,13 @@ namespace LootManagerApi.Controllers
         {
             try
             {
-                int houseId;
-
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await roomRepository.CheckRoomUpdateDtoAsync(roomUpdateDto, userAuthDto.Id);
+                await roomRepository.CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, roomUpdateDto.Id);
 
-                await roomRepository.IsOwnerOfTheRoomAsync(userAuthDto.Id, roomUpdateDto.Id);
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, roomUpdateDto.HouseId);
 
-                if (roomUpdateDto.HouseId != null)
-                {
-                    houseId = roomUpdateDto.HouseId.Value;
-                    await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
-                }
-                else
-                {
-                    houseId = await roomRepository.GetHouseIdOfTheRoomAsync(roomUpdateDto.Id);
-                }
-
-                if (roomUpdateDto.Indice != null)
-                {
-                    await roomRepository.ThisIndexIsFreeAsync(roomUpdateDto.Indice.Value, houseId);
-                }
-
-                var roomUpdated = await roomRepository.UpdateRoomAsync(roomUpdateDto);
+                var roomUpdated = await roomRepository.UpdateRoomByDtoAsync(roomUpdateDto);
 
                 return Ok(roomUpdated);
             }
@@ -195,38 +178,36 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-        //#region DELETE
+        #region DELETE
 
-        ///// <summary>
-        ///// Delete an room by its Id.
-        ///// </summary>
-        ///// <param name="roomId">The Id of the room to delete.</param>
-        ///// <returns>RoomDto</returns>
-        ///// <exception cref="Exception">Throw if there is an error when deleting the room.</exception>
-        //[HttpDelete("{roomId}")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(500)]
-        //public async Task<ActionResult<RoomDto>> DeleteRoom(int roomId)
-        //{
-        //    try
-        //    {
-        //        UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+        /// <summary>
+        /// Delete an room by its Id.
+        /// </summary>
+        /// <param name="roomId">The Id of the room to delete.</param>
+        /// <returns>RoomDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when deleting the room.</exception>
+        [HttpDelete("{roomId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<RoomDto>> DeleteRoom(int roomId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-        //        await roomRepository.IsRoomExistAsync(roomId);
+                await roomRepository.CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, roomId);
 
-        //        await roomRepository.IsOwnerOfTheRoomAsync(userAuthDto.Id, roomId);
+                RoomDto roomDto = await roomRepository.DeleteRoomAsync(roomId);
 
-        //        RoomDto roomDto = await roomRepository.DeleteRoomAsync(roomId);
+                return Ok(roomDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
-        //        return Ok(roomDto);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Problem(ex.Message);
-        //    }
-        //}
-
-        //#endregion
+        #endregion
 
         #region LOG
 

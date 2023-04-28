@@ -1,6 +1,4 @@
-﻿using LootManagerApi.Dto;
-using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Entities;
+﻿using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -78,9 +76,7 @@ namespace LootManagerApi.Repositories
         #region UPDATE
 
         /// <summary>
-        /// Asynchronous method of updating an House by an HouseUpdateDto. 
-        /// Id required to find the house to be updated.
-        /// Only non-null data will be modified.
+        ///Updating an House by an HouseUpdateDto. 
         /// </summary>
         /// <param name="houseUpdateDto"></param>
         /// <returns>HouseDto</returns>
@@ -89,16 +85,11 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                if (houseUpdateDto.Name == null && houseUpdateDto.Indice == null)
-                    throw new Exception("No changes needed.");
-
                 House house = await context.Houses.FirstAsync(h => h.Id == houseUpdateDto.Id);
 
-                if (houseUpdateDto.Name != null)
-                    house.Name = houseUpdateDto.Name;
+                house.Name = houseUpdateDto.Name;
 
-                if (houseUpdateDto.Indice != null)
-                    house.Indice = houseUpdateDto.Indice.Value;
+                house.Indice = houseUpdateDto.Indice;
 
                 house.UpdatedAt = DateTime.UtcNow;
 
