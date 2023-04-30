@@ -1,7 +1,11 @@
-﻿namespace LootManagerApi.Entities.logistics
+﻿using LootManagerApi.Dto.LogisticsDto;
+
+namespace LootManagerApi.Entities.logistics
 {
     public class Furniture
     {
+        #region PROPERTIES
+
         public int Id { get; set; }
         public string Name { get; set; }
         public int Indice { get; set; }
@@ -9,7 +13,9 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // NAVIGATION PROPERTIES (4)
+        #endregion
+
+        #region NAVIGATION PROPERTIES (4)
 
         // One Furniture? To Many Location
         public List<Location> Locations { get; set; }
@@ -24,5 +30,29 @@
         // One User To Many Furniture
         public int? UserId { get; set; }
         public User? User { get; set; }
+
+        #endregion
+
+        #region CONSTRUCTOR
+
+        public Furniture()
+        {
+        }
+
+        public Furniture(FurnitureCreateDto furnitureCreateDto, int userId)
+        {
+            if (furnitureCreateDto.IndiceOrDefault == null)
+                throw new ArgumentNullException("furnitureCreateDto.Indice is null");
+
+            Name = furnitureCreateDto.Name;
+            Indice = furnitureCreateDto.IndiceOrDefault;
+            NumberOfShelves = furnitureCreateDto.NumberOfShelves;
+            CreatedAt = DateTime.UtcNow;
+            RoomId = furnitureCreateDto.RoomId;
+            UserId = userId;
+        }
+
+        #endregion
+
     }
 }

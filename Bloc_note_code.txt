@@ -150,3 +150,43 @@ using (var context = new MaBaseDeDonneesEntities()) // Remplacez MaBaseDeDonnees
     }
 }
 
+/////////////////////////////////////////////////////
+public async Task<RoomUpdateDto> CompletedRoomUpdateDtoAsync(RoomUpdateDto roomUpdateDto, int userId)
+{
+    var room = await context.Rooms
+        .FirstOrDefaultAsync(r => r.UserId == userId && r.Id == roomUpdateDto.Id);
+    if (room == null)
+        throw new Exception("This user cannot access this room.");
+
+    if (roomUpdateDto.HouseId != null)
+    {
+        var house = await context.Houses
+            .FirstOrDefaultAsync(h => h.UserId == userId && h.Id == roomUpdateDto.HouseId);
+        if (house == null)
+            throw new Exception("This user cannot access this house.");
+    }
+    else
+    {
+        roomUpdateDto.HouseId = room.HouseId;
+    }
+
+    if (roomUpdateDto.Indice != null)
+    {
+        var indiceExists = await context.Rooms
+            .AnyAsync(r => r.HouseId == roomUpdateDto.HouseId && r.Indice == roomUpdateDto.Indice);
+        if (indiceExists)
+            throw new Exception("The index is not free.");
+    }
+    else
+    {
+        var maxIndice = await context.Rooms
+            .Where(r => r.HouseId == roomUpdateDto.HouseId)
+            .Select(r => r.Indice)
+            .DefaultIfEmpty(0)
+            .MaxAsync();
+        roomUpdateDto.Indice = maxIndice + 1;
+    }
+
+    return roomUpdateDto;
+}
+

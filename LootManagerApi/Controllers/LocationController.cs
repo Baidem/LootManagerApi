@@ -1,8 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -163,7 +161,7 @@ namespace LootManagerApi.Controllers
 
                 await locationRepository.CheckLocationUpdateDtoAsync(locationUpdateDto);
 
-                var locationUpdated = await locationRepository.UpdateLocationAsync(locationUpdateDto);
+                var locationUpdated = await locationRepository.UpdateLocationByDtoAsync(locationUpdateDto);
 
                 return Ok(locationUpdated);
             }

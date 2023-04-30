@@ -1,6 +1,5 @@
 ﻿using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities;
-using LootManagerApi.Entities.logistics;
 using System.Reflection;
 using System.Text;
 
@@ -39,7 +38,7 @@ namespace LootManagerApi.Dto
             DefaultLocationDto = null;
         }
 
-        public UserDto(User user,DefaultLocationDto defaultLocationDto)
+        public UserDto(User user, DefaultLocationDto defaultLocationDto)
         {
             Id = user.Id;
             FullName = user.FullName;

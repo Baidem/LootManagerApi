@@ -94,12 +94,11 @@ namespace LootManagerApi.Repositories
 
         /// <summary>
         /// Updating an Location by an LocationUpdateDto.
-        /// Only non-null data will be modified.
         /// </summary>
         /// <param name="locationUpdateDto"></param>
         /// <returns>LocationDto</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<LocationDto> UpdateLocationAsync(LocationUpdateDto locationUpdateDto)
+        public async Task<LocationDto> UpdateLocationByDtoAsync(LocationUpdateDto locationUpdateDto)
         {
             try
             {
@@ -115,19 +114,14 @@ namespace LootManagerApi.Repositories
 
                 location.UpdatedAt = DateTime.UtcNow;
 
-                return new LocationDto(await UpdateLocationAsync(location));
+                await context.SaveChangesAsync();
+
+                return new LocationDto(location);
             }
             catch (Exception ex)
             {
                 throw new Exception($"An error occurred while updating the location. {ex.Message}", ex);
             }
-        }
-
-        public async Task<Location> UpdateLocationAsync(Location location)
-        {
-            await context.SaveChangesAsync();
-
-            return location;
         }
 
         #endregion

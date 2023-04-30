@@ -23,7 +23,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<RoomDto> DeleteRoomAsync(int roomId);
 
         // UTILS
-        Task<int> AutoIndice(int userId);
+        Task<int> AutoIndice(int houseId);
         Task<bool> CheckIfTheRoomIndiceIsFreeThisHouseAsync(int indice, int houseId);
         Task<bool> CheckTheOwnerOfTheRoomAsync(int userId, int roomId);
 
