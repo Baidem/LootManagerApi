@@ -15,14 +15,14 @@ namespace LootManagerApi.Dto.LogisticsDto
         {
         }
 
-        public FurnitureCreateDto(Furniture furniture, int uderId )
-        {
-            Name = name;
-            IndiceOrDefault = indiceOrDefault;
-            RoomId = roomId;
-            NumberOfShelves = numberOfShelves;
-            NumberOfPositionsPerShelf = numberOfPositionsPerShelf;
-        }
+        //public FurnitureCreateDto(Furniture furniture, int uderId )
+        //{
+        //    Name = furniture.Name;
+        //    IndiceOrDefault = furniture.Indice;
+        //    RoomId = furniture.RoomId;
+        //    NumberOfShelves = furniture.NumberOfShelves;
+        //    // NumberOfPositionsPerShelf = furniture.;
+        //}
 
         // Constructors
 
