@@ -41,17 +41,18 @@ namespace LootManagerApi.Entities.logistics
         {
         }
 
-        public Furniture(FurnitureCreateDto furnitureCreateDto, int userId)
+        public Furniture(FurnitureCreateDto furnitureCreateDto, LocationDto locationDto)
         {
             if (furnitureCreateDto.IndiceOrDefault == null)
-                throw new ArgumentNullException("furnitureCreateDto.Indice is null");
+                throw new Exception("Furniture.Indice can't be null.");
 
             Name = furnitureCreateDto.Name;
-            Indice = furnitureCreateDto.IndiceOrDefault;
+            Indice = furnitureCreateDto.IndiceOrDefault.Value;
             NumberOfShelves = furnitureCreateDto.NumberOfShelves;
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = locationDto.CreatedAt;
             RoomId = furnitureCreateDto.RoomId;
-            UserId = userId;
+            UserId = locationDto.UserId;
+            LocationId = locationDto.LocationId;
         }
 
         #endregion

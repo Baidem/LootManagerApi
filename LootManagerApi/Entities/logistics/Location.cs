@@ -49,32 +49,6 @@ namespace LootManagerApi.Entities.logistics
         {
         }
 
-        public Location(LocationCreateDto locationCreateDto)
-        {
-            UserId = locationCreateDto.UserId;
-            HouseId = locationCreateDto.HouseId;
-            RoomId = locationCreateDto.RoomId;
-            FurnitureId = locationCreateDto.FurnitureId;
-            ShelfId = locationCreateDto.ShelfId;
-            PositionId = locationCreateDto.PositionId;
-            CreatedAt = DateTime.UtcNow;
-        }
-
         #endregion
-
-        #region METHODS
-
-        public override string? ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (PropertyInfo prop in GetType().GetProperties())
-            {
-                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
-            }
-            return sb.ToString();
-        }
-
-        #endregion
-
     }
 }

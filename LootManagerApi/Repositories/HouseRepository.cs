@@ -26,25 +26,22 @@ namespace LootManagerApi.Repositories
 
         #region CREATE
 
-        public async Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, int UserId)
+        public async Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, LocationDto locationDto)
         {
             try
             {
-                return new HouseDto(await CreateHouseAsync(new House(houseCreateDto, UserId)));
+                var house = new House(houseCreateDto, locationDto);
+
+                await context.Houses.AddAsync(house);
+
+                await context.SaveChangesAsync();
+
+                return new HouseDto(house);
             }
             catch (Exception ex)
             {
                 throw new Exception($"An error occurred while creating the House : {ex.Message}");
             }
-        }
-
-        private async Task<House> CreateHouseAsync(House house)
-        {
-            await context.Houses.AddAsync(house);
-
-            await context.SaveChangesAsync();
-
-            return house;
         }
 
         #endregion
@@ -161,6 +158,22 @@ namespace LootManagerApi.Repositories
 
             throw new Exception("This user cannot access this house.");
         }
+
+        public async Task<int> CheckIndiceFreeOrUpdateDefaultIndice(int? indiceOrDefault, int userId)
+        {
+            // If not null => Check indice is free. Else If null => update the indice.
+            if (indiceOrDefault != null)
+                await CheckIndiceIsFreeAsync(indiceOrDefault.Value, userId);
+            else // If null => update the indice
+                indiceOrDefault = await AutoIndice(userId);
+            if (indiceOrDefault.Value == 0)
+            {
+                throw new Exception("AutoIndiceFail");
+            }
+            return indiceOrDefault.Value;
+        }
+
+
 
         #endregion
     }

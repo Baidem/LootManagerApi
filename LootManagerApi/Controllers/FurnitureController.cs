@@ -48,22 +48,21 @@ namespace LootManagerApi.Controllers
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
                 // Check current user is the owner of the room of the new furniture.
-                await roomRepository.CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, furnitureCreateDto.RoomId);
+                await roomRepository.
+                    CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, furnitureCreateDto.RoomId);
 
-                // If not null => Check indice is free. Else If null => update the indice.
+                // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
                 furnitureCreateDto.IndiceOrDefault = await furnitureRepository.
                     CheckIndiceFreeOrUpdateDefaultIndice(furnitureCreateDto.IndiceOrDefault, furnitureCreateDto.RoomId);
 
+                // Create the Location of the new Furniture 
+                var locationDto = await locationRepository.
+                    CreateLocationByUserIdAsync(userAuthDto.Id);
+
                 // Create the new Furniture
                 var furnitureDto = await furnitureRepository.
-                    CreateFurnitureByDtoAsync(furnitureCreateDto, userAuthDto.Id);
+                    CreateFurnitureByDtoAsync(furnitureCreateDto, locationDto);
 
-                // Create the Location of the new Furniture 
-                var locationOfOnlyFurniture = await locationRepository.
-                    CreateLocationByDtoAsync(new LocationCreateDto
-                    {
-                        UserId = furnitureDto.UserId,
-                    });
                 // If NumberOfShelves > 0 => implement N shelves And Create a Location per shelf
 
 

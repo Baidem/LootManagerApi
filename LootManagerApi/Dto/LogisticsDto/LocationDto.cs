@@ -9,11 +9,13 @@ namespace LootManagerApi.Dto.LogisticsDto
     {
         public int LocationId { get; set; }
         public int UserId { get; set; }
-        public int HouseId { get; set; }
+        public int? HouseId { get; set; }
         public int? RoomId { get; set; }
         public int? FurnitureId { get; set; }
         public int? ShelfId { get; set; }
         public int? PositionId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         public LocationDto()
         {
@@ -23,11 +25,13 @@ namespace LootManagerApi.Dto.LogisticsDto
         {
             LocationId = location.Id;
             UserId = location.UserId.Value;
-            HouseId = location.HouseId;
-            RoomId = location.RoomId;
-            FurnitureId = location.FurnitureId;
-            ShelfId = location.ShelfId;
-            PositionId = location.PositionId;
+            CreatedAt = location.CreatedAt;
+            UpdatedAt = location.UpdatedAt;
+            HouseId = location.House.Id;
+            RoomId = location.Room.Id;
+            FurnitureId = location.Furniture.Id;
+            ShelfId = location.Shelf.Id;
+            PositionId = location.Position.Id;
         }
 
         public override string? ToString()

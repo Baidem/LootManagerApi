@@ -6,7 +6,7 @@ namespace LootManagerApi.Repositories.Interfaces
     public interface IHouseRepository
     {
         // CREATE
-        Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, int UserId);
+        Task<HouseDto> CreateHouseByDtoAsync(HouseCreateDto houseCreateDto, LocationDto locationDto);
 
         // READ
         Task<List<HouseDto>> GetListOfHouseDtoByUserIdAsync(int userId);
@@ -23,5 +23,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<bool> CheckIndiceIsFreeAsync(int indice, int userId);
 
         Task<bool> CheckTheOwnerOfTheHouseAsync(int userId, int houseId);
+        Task<int> CheckIndiceFreeOrUpdateDefaultIndice(int? IndiceOrDefault, int userId);
+
     }
 }

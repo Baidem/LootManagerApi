@@ -6,7 +6,7 @@ namespace LootManagerApi.Repositories.Interfaces
     public interface ILocationRepository
     {
         // CREATE
-        Task<LocationDto> CreateLocationByDtoAsync(LocationCreateDto locationCreateDto);
+        Task<LocationDto> CreateLocationByUserIdAsync(int userId);
 
         // READ
         Task<LocationAddressDto> GetLocationAddressAsync(int locationId);
@@ -15,7 +15,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<LocationDto> GetLocationAsync(int locationId);
 
         // UPDATE
-        Task<LocationDto> UpdateLocationByDtoAsync(LocationUpdateDto locationUpdateDto);
+        Task<LocationDto> UpdateLocationByIdAsync(int locationId);
 
         // DELETE
         Task<LocationDto> DeleteLocationAsync(int locationId);
@@ -23,7 +23,5 @@ namespace LootManagerApi.Repositories.Interfaces
         // UTILS
         Task<bool> IsLocationExistAsync(int locationId);
         Task<bool> CheckOwnerOfLocationAsync(int userId, int locationId);
-        Task<bool> CheckLocationCreateDto(LocationCreateDto locationCreateDto);
-        Task<bool> CheckLocationUpdateDtoAsync(LocationUpdateDto locationUpdateDto);
     }
 }

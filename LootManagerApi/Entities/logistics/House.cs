@@ -37,15 +37,16 @@ namespace LootManagerApi.Entities.logistics
         {
         }
 
-        public House(HouseCreateDto houseCreateDto, int userId)
+        public House(HouseCreateDto houseCreateDto, LocationDto locationDto)
         {
-            if (houseCreateDto.Indice == null) 
-                throw new ArgumentNullException("houseCreateDto.Indice is null");
+            if (houseCreateDto.IndiceOrDefault == null)
+                throw new Exception("House.Indice can't be null.");
 
             Name = houseCreateDto.Name;
-            Indice = houseCreateDto.Indice.Value;
-            UserId = userId;
-            CreatedAt = DateTime.UtcNow;
+            Indice = houseCreateDto.IndiceOrDefault.Value;
+            CreatedAt = locationDto.CreatedAt;
+            UserId = locationDto.UserId;
+            LocationId = locationDto.LocationId;
         }
 
         #endregion

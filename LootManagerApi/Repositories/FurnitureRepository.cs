@@ -27,11 +27,11 @@ namespace LootManagerApi.Repositories
 
         #region CREATE
 
-        public async Task<FurnitureDto> CreateFurnitureByDtoAsync(FurnitureCreateDto furnitureCreateDto, int userId)
+        public async Task<FurnitureDto> CreateFurnitureByDtoAsync(FurnitureCreateDto furnitureCreateDto, LocationDto locationDto)
         {
             try
             {
-                var furniture = new Furniture(furnitureCreateDto, userId);
+                var furniture = new Furniture(furnitureCreateDto, locationDto);
 
                 await context.Furnitures.AddAsync(furniture);
 
@@ -44,7 +44,6 @@ namespace LootManagerApi.Repositories
                 throw new Exception($"An error occurred while creating the Furniture : {ex.Message}");
             }
         }
-
 
         #endregion
 

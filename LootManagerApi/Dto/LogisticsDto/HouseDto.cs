@@ -14,6 +14,8 @@ namespace LootManagerApi.Dto.LogisticsDto
         public int UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public int? LocationId { get; set; }
+        public int? RoomsCount { get; set; }
 
         #endregion
 
@@ -31,6 +33,10 @@ namespace LootManagerApi.Dto.LogisticsDto
             UserId = house.UserId;
             CreatedAt = house.CreatedAt;
             UpdatedAt = house.UpdatedAt;
+            LocationId = house.LocationId;
+
+            if (house.Rooms != null)
+                RoomsCount = house.Rooms.Count;
         }
 
         #endregion

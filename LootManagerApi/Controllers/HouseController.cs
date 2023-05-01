@@ -1,5 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
+using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -13,14 +14,16 @@ namespace LootManagerApi.Controllers
         #region DECLARATIONS
 
         IHouseRepository houseRepository;
+        ILocationRepository locationRepository;
 
         #endregion
 
         #region CONSTRUCTOR
 
-        public HouseController(IHouseRepository houseRepository)
+        public HouseController(IHouseRepository houseRepository, ILocationRepository locationRepository)
         {
             this.houseRepository = houseRepository;
+            this.locationRepository = locationRepository;
         }
 
         #endregion
@@ -40,14 +43,20 @@ namespace LootManagerApi.Controllers
         {
             try
             {
+                // Check Log-in and load current user ID.
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                if (houseCreateDto.Indice == null)
-                    houseCreateDto.Indice = await houseRepository.AutoIndice(userAuthDto.Id);
-                else
-                    await houseRepository.CheckIndiceIsFreeAsync(houseCreateDto.Indice.Value, userAuthDto.Id);
+                // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
+                houseCreateDto.IndiceOrDefault = await houseRepository.
+                    CheckIndiceFreeOrUpdateDefaultIndice(houseCreateDto.IndiceOrDefault, userAuthDto.Id);
 
-                var houseDto = await houseRepository.CreateHouseByDtoAsync(houseCreateDto, userAuthDto.Id);
+                // Create the Location of the new House 
+                var locationDto = await locationRepository.
+                    CreateLocationByUserIdAsync(userAuthDto.Id);
+
+                // Create the new House
+                var houseDto = await houseRepository.
+                    CreateHouseByDtoAsync(houseCreateDto, locationDto);
 
                 return Ok(houseDto);
             }

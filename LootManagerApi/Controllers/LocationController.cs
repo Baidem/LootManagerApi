@@ -21,40 +21,6 @@ namespace LootManagerApi.Controllers
         }
         #endregion
 
-        #region CREATE
-
-        /// <summary>
-        /// -Admin Fonction-
-        /// Create a new location
-        /// </summary>
-        /// <param name="locationCreateDto">Location creation DTO object containing location information</param>
-        /// <returns>LocationDto</returns>
-        /// <exception cref="Exception">Thrown when there is an error in creating the location.</exception>
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<LocationDto>> CreateLocation([FromForm] LocationCreateDto locationCreateDto)
-        {
-            try
-            {
-                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-
-                Utils.UtilsRole.CheckOnlyAdmin(userAuthDto);
-
-                await locationRepository.CheckLocationCreateDto(locationCreateDto);
-
-                var locationDto = await locationRepository.CreateLocationByDtoAsync(locationCreateDto);
-
-                return Ok(locationDto);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-        #endregion
-
         #region READ
 
         /// <summary>
@@ -129,41 +95,6 @@ namespace LootManagerApi.Controllers
                 var locationDto = await locationRepository.GetLocationAsync(locationId);
 
                 return Ok(locationDto);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region UPDATE
-
-        /// <summary>
-        /// -Admin Fonction-
-        /// Updates the specified location.
-        /// Only for the administrator
-        /// </summary>
-        /// <param name="locationUpdateDto">The DTO containing updated location data.</param>
-        /// <returns>LocationDto</returns>
-        /// <exception cref="Exception">Throw if there is an error when updating the location.</exception>
-        [HttpPut]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<LocationDto>> UpdateLocation([FromForm] LocationUpdateDto locationUpdateDto)
-        {
-            try
-            {
-                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-
-                Utils.UtilsRole.CheckOnlyAdmin(userAuthDto);
-
-                await locationRepository.CheckLocationUpdateDtoAsync(locationUpdateDto);
-
-                var locationUpdated = await locationRepository.UpdateLocationByDtoAsync(locationUpdateDto);
-
-                return Ok(locationUpdated);
             }
             catch (Exception ex)
             {

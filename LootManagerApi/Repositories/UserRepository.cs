@@ -155,9 +155,10 @@ namespace LootManagerApi.Repositories
             {
                 var user = await CreateUserAsync(new User(userCreateDto));
 
-                var houseDto = await CreateTheMainHouseAsync(user.Id);
+                var locationDto = await locationRepository.CreateLocationByUserIdAsync(user.Id);
 
-                var locationDto = await CreateLocation(user.Id, houseDto.Id);
+                var houseDto = await CreateTheMainHouseAsync(user.Id, locationDto);
+
 
                 var defaultlocation = await CreateTheDefaultLocation(user.Id, locationDto.LocationId);
 
@@ -169,33 +170,22 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        private async Task<HouseDto> CreateTheMainHouseAsync(int userId)
+        private async Task<HouseDto> CreateTheMainHouseAsync(int userId, LocationDto locationDto)
         {
             try
             {
                 var houseCreateDto = new HouseCreateDto
                 {
                     Name = "Main House",
-                    Indice = 1,
+                    IndiceOrDefault = 1,
                 };
 
-                return await houseRepository.CreateHouseByDtoAsync(houseCreateDto, userId);
+                return await houseRepository.CreateHouseByDtoAsync(houseCreateDto, locationDto);
             }
             catch (Exception ex)
             {
                 throw new Exception("CreateTheMainHouseAsync exception", ex);
             }
-        }
-
-        private async Task<LocationDto> CreateLocation(int userId, int houseId)
-        {
-            var locationCreateDto = new LocationCreateDto
-            {
-                UserId = userId,
-                HouseId = houseId
-            };
-            
-            return await locationRepository.CreateLocationByDtoAsync(locationCreateDto);
         }
 
         private async Task<DefaultLocation> CreateTheDefaultLocation(int userId, int locationId)
