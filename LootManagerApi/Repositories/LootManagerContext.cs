@@ -56,11 +56,45 @@ namespace LootManagerApi.Repositories
             modelBuilder.Entity<User>().HasData(new List<User> { admin, user, cont });
             #endregion
 
+            #region LOCATION DATA
+
+            var lh1 = new Location { Id = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
+            var lh2 = new Location { Id = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
+            var lh3 = new Location { Id = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lh1, lh2, lh3 });
+
+            var lr1 = new Location { Id = 4, CreatedAt = DateTime.UtcNow, UserId = 1 };
+            var lr2 = new Location { Id = 5, CreatedAt = DateTime.UtcNow, UserId = 2 };
+            var lr3 = new Location { Id = 6, CreatedAt = DateTime.UtcNow, UserId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lr1, lr2, lr3 });
+
+            var lf1 = new Location { Id = 7, CreatedAt = DateTime.UtcNow, UserId = 1 };
+            var lf2 = new Location { Id = 8, CreatedAt = DateTime.UtcNow, UserId = 2 };
+            var lf3 = new Location { Id = 9, CreatedAt = DateTime.UtcNow, UserId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lf1, lf2, lf3 });
+
+            var ls1 = new Location { Id = 10, CreatedAt = DateTime.UtcNow, UserId = 1 };
+            var ls2 = new Location { Id = 11, CreatedAt = DateTime.UtcNow, UserId = 2 };
+            var ls3 = new Location { Id = 12, CreatedAt = DateTime.UtcNow, UserId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { ls1, ls2, ls3 });
+
+            var lp1 = new Location { Id = 13, CreatedAt = DateTime.UtcNow, UserId = 1 };
+            var lp2 = new Location { Id = 14, CreatedAt = DateTime.UtcNow, UserId = 2 };
+            var lp3 = new Location { Id = 15, CreatedAt = DateTime.UtcNow, UserId = 3 };
+
+            modelBuilder.Entity<Location>().HasData(new List<Location> { lp1, lp2, lp3 });
+
+            #endregion
+
             #region HOUSES DATA
 
-            var h1 = new House { Id = 1, Name = "Admin's Main House", Indice = 1, UserId = 1, CreatedAt = DateTime.UtcNow };
-            var h2 = new House { Id = 2, Name = "User's Main House", Indice = 1, UserId = 2, CreatedAt = DateTime.UtcNow };
-            var h3 = new House { Id = 3, Name = "Cont's Main House", Indice = 1, UserId = 3, CreatedAt = DateTime.UtcNow };
+            var h1 = new House { Id = 1, Name = "Admin's Main House", Indice = 1, UserId = 1, CreatedAt = DateTime.UtcNow, LocationId = lh1.Id };
+            var h2 = new House { Id = 2, Name = "User's Main House", Indice = 1, UserId = 2, CreatedAt = DateTime.UtcNow, LocationId = lh2.Id };
+            var h3 = new House { Id = 3, Name = "Cont's Main House", Indice = 1, UserId = 3, CreatedAt = DateTime.UtcNow, LocationId = lh3.Id };
 
             modelBuilder.Entity<House>().HasData(new List<House> { h1, h2, h3 });
 
@@ -68,9 +102,9 @@ namespace LootManagerApi.Repositories
 
             #region ROOMS DATA
 
-            var r1 = new Room { Id = 1, Name = "Admin Room", Indice = 1, HouseId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var r2 = new Room { Id = 2, Name = "User Room", Indice = 1, HouseId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var r3 = new Room { Id = 3, Name = "Cont Room", Indice = 1, HouseId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
+            var r1 = new Room { Id = 1, Name = "Admin Room", Indice = 1, HouseId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = lr1.Id };
+            var r2 = new Room { Id = 2, Name = "User Room", Indice = 1, HouseId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = lr2.Id };
+            var r3 = new Room { Id = 3, Name = "Cont Room", Indice = 1, HouseId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = lr3.Id };
 
             modelBuilder.Entity<Room>().HasData(new List<Room> { r1, r2, r3 });
 
@@ -78,9 +112,9 @@ namespace LootManagerApi.Repositories
 
             #region FURNITURES DATA
 
-            var f1 = new Furniture { Id = 1, Name = "Admin Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var f2 = new Furniture { Id = 2, Name = "User Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var f3 = new Furniture { Id = 3, Name = "Cont Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
+            var f1 = new Furniture { Id = 1, Name = "Admin Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = lf1.Id };
+            var f2 = new Furniture { Id = 2, Name = "User Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = lf2.Id };
+            var f3 = new Furniture { Id = 3, Name = "Cont Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = lf3.Id };
 
             modelBuilder.Entity<Furniture>().HasData(new List<Furniture> { f1, f2, f3 });
 
@@ -88,9 +122,9 @@ namespace LootManagerApi.Repositories
 
             #region SHELVES DATA
 
-            var s1 = new Shelf { Id = 1, Name = "Admin Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var s2 = new Shelf { Id = 2, Name = "User Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var s3 = new Shelf { Id = 3, Name = "Cont Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
+            var s1 = new Shelf { Id = 1, Name = "Admin Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = ls1.Id };
+            var s2 = new Shelf { Id = 2, Name = "User Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = ls2.Id };
+            var s3 = new Shelf { Id = 3, Name = "Cont Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = ls3.Id };
 
             modelBuilder.Entity<Shelf>().HasData(new List<Shelf> { s1, s2, s3 });
 
@@ -98,45 +132,11 @@ namespace LootManagerApi.Repositories
 
             #region POSITIONS DATA
 
-            var p1 = new Position { Id = 1, Name = "Admin Position", Indice = 1, ShelfId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var p2 = new Position { Id = 2, Name = "User Position", Indice = 1, ShelfId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var p3 = new Position { Id = 3, Name = "Cont Position", Indice = 1, ShelfId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
+            var p1 = new Position { Id = 1, Name = "Admin Position", Indice = 1, ShelfId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = lp1.Id };
+            var p2 = new Position { Id = 2, Name = "User Position", Indice = 1, ShelfId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = lp2.Id };
+            var p3 = new Position { Id = 3, Name = "Cont Position", Indice = 1, ShelfId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = lp3.Id };
 
             modelBuilder.Entity<Position>().HasData(new List<Position> { p1, p2, p3 });
-
-            #endregion
-
-            #region LOCATION DATA
-
-            var lh1 = new Location { Id = 1, HouseId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var lh2 = new Location { Id = 2, HouseId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var lh3 = new Location { Id = 3, HouseId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
-
-            modelBuilder.Entity<Location>().HasData(new List<Location> { lh1, lh2, lh3 });
-
-            var lr1 = new Location { Id = 4, HouseId = 1, RoomId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var lr2 = new Location { Id = 5, HouseId = 2, RoomId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var lr3 = new Location { Id = 6, HouseId = 3, RoomId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
-
-            modelBuilder.Entity<Location>().HasData(new List<Location> { lr1, lr2, lr3 });
-
-            var lf1 = new Location { Id = 7, HouseId = 1, RoomId = 1, FurnitureId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var lf2 = new Location { Id = 8, HouseId = 2, RoomId = 2, FurnitureId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var lf3 = new Location { Id = 9, HouseId = 3, RoomId = 3, FurnitureId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
-
-            modelBuilder.Entity<Location>().HasData(new List<Location> { lf1, lf2, lf3 });
-
-            var ls1 = new Location { Id = 10, HouseId = 1, RoomId = 1, FurnitureId = 1, ShelfId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var ls2 = new Location { Id = 11, HouseId = 2, RoomId = 2, FurnitureId = 2, ShelfId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var ls3 = new Location { Id = 12, HouseId = 3, RoomId = 3, FurnitureId = 3, ShelfId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
-
-            modelBuilder.Entity<Location>().HasData(new List<Location> { ls1, ls2, ls3 });
-
-            var lp1 = new Location { Id = 13, HouseId = 1, RoomId = 1, FurnitureId = 1, ShelfId = 1, PositionId = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
-            var lp2 = new Location { Id = 14, HouseId = 2, RoomId = 2, FurnitureId = 2, ShelfId = 2, PositionId = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
-            var lp3 = new Location { Id = 15, HouseId = 3, RoomId = 3, FurnitureId = 3, ShelfId = 3, PositionId = 3, CreatedAt = DateTime.UtcNow, UserId = 3 };
-
-            modelBuilder.Entity<Location>().HasData(new List<Location> { lp1, lp2, lp3 });
 
             #endregion
 
