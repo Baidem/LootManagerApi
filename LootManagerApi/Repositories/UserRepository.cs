@@ -159,7 +159,6 @@ namespace LootManagerApi.Repositories
 
                 var houseDto = await CreateTheMainHouseAsync(user.Id, locationDto);
 
-
                 var defaultlocation = await CreateTheDefaultLocation(user.Id, locationDto.LocationId);
 
                 return new UserDto(user, new DefaultLocationDto(defaultlocation));

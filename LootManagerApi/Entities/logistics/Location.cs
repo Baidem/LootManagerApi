@@ -50,5 +50,16 @@ namespace LootManagerApi.Entities.logistics
         }
 
         #endregion
+
+        public override string? ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (PropertyInfo prop in GetType().GetProperties())
+            {
+                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
+            }
+            return sb.ToString();
+        }
+
     }
 }

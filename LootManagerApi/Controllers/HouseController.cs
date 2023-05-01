@@ -39,7 +39,7 @@ namespace LootManagerApi.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<List<HouseDto>>> CreateHouse([FromForm] HouseCreateDto houseCreateDto)
+        public async Task<ActionResult<List<HouseDto>>> CreateNewHouse([FromForm] HouseCreateDto houseCreateDto)
         {
             try
             {
