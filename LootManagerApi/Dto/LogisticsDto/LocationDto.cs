@@ -27,11 +27,22 @@ namespace LootManagerApi.Dto.LogisticsDto
             UserId = location.UserId.Value;
             CreatedAt = location.CreatedAt;
             UpdatedAt = location.UpdatedAt;
-            HouseId = location.House.Id;
-            RoomId = location.Room.Id;
-            FurnitureId = location.Furniture.Id;
-            ShelfId = location.Shelf.Id;
-            PositionId = location.Position.Id;
+
+            if (location.House != null)
+                HouseId = location.House.Id;
+
+            if (location.Room != null)
+                RoomId = location.Room.Id;
+
+            if (location.Furniture != null)
+                FurnitureId = location.Furniture.Id;
+
+            if (location.Shelf != null)
+                ShelfId = location.Shelf.Id;
+
+            if (location.Position != null)
+                PositionId = location.Position.Id;
+
         }
 
         public override string? ToString()
