@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Security.Claims;
+using LootManagerApi.Repositories.Interfaces;
 
 namespace LootManagerApi.Repositories.Tests
 {
@@ -13,13 +14,16 @@ namespace LootManagerApi.Repositories.Tests
     {
         private LootManagerContext _context;
         private UserRepository _userRepository;
+        private HouseRepository houseRepository;
+        private LocationRepository locationRepository;
+
 
         [TestInitialize]
         public void TestInitialize()
         {
             var builder = new DbContextOptionsBuilder<LootManagerContext>().UseInMemoryDatabase("LootManagerTest");
             _context = new LootManagerContext(builder.Options);
-            _userRepository = new UserRepository(_context, null);
+            _userRepository = new UserRepository(_context, null, houseRepository, locationRepository);
         }
 
         [TestCleanup]

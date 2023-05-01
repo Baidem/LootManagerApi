@@ -34,7 +34,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("ImagesId");
 
-                    b.ToTable("ElementImage");
+                    b.ToTable("ElementImage", (string)null);
                 });
 
             modelBuilder.Entity("ImageInfoSheet", b =>
@@ -49,7 +49,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("InfoSheetsId");
 
-                    b.ToTable("ImageInfoSheet");
+                    b.ToTable("ImageInfoSheet", (string)null);
                 });
 
             modelBuilder.Entity("LootManagerApi.Entities.Element", b =>
@@ -96,7 +96,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Elements");
+                    b.ToTable("Elements", (string)null);
 
                     b.HasData(
                         new
@@ -229,7 +229,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("LootManagerApi.Entities.InfoSheet", b =>
@@ -268,7 +268,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("InfoSheets");
+                    b.ToTable("InfoSheets", (string)null);
 
                     b.HasData(
                         new
@@ -340,7 +340,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -396,7 +396,7 @@ namespace LootManagerApi.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("DefaultLocations");
+                    b.ToTable("DefaultLocations", (string)null);
 
                     b.HasData(
                         new
@@ -455,7 +455,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Furnitures");
+                    b.ToTable("Furnitures", (string)null);
 
                     b.HasData(
                         new
@@ -518,7 +518,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Houses");
+                    b.ToTable("Houses", (string)null);
 
                     b.HasData(
                         new
@@ -595,7 +595,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
 
                     b.HasData(
                         new
@@ -768,7 +768,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Positions");
+                    b.ToTable("Positions", (string)null);
 
                     b.HasData(
                         new
@@ -833,7 +833,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
 
                     b.HasData(
                         new
@@ -901,7 +901,7 @@ namespace LootManagerApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Shelves");
+                    b.ToTable("Shelves", (string)null);
 
                     b.HasData(
                         new
