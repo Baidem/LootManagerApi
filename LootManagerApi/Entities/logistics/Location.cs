@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using LootManagerApi.Dto;
+﻿using LootManagerApi.Dto.LogisticsDto;
 using System.Reflection;
 using System.Text;
-using LootManagerApi.Dto.LogisticsDto;
 
 namespace LootManagerApi.Entities.logistics
 {
@@ -22,31 +19,26 @@ namespace LootManagerApi.Entities.logistics
         // One Location? To Many Element?
         public List<Element>? Elements { get; set; }
 
-        // One House To Many Location
-        public int HouseId { get; set; }
-        public House House { get; set; }
+        // One House? To One Location?
+        public House? House { get; set; }
 
-        // One Room? To Many Location
-        public int? RoomId { get; set; }
+        // One Room? To One Location?
         public Room? Room { get; set; }
 
-        // One Furniture? To Many Location
-        public int? FurnitureId { get; set; }
+        // One Furniture? To One Location?
         public Furniture? Furniture { get; set; }
 
-        // One Shelf? To Many Location
-        public int? ShelfId { get; set; }
+        // One Shelf? To One Location?
         public Shelf? Shelf { get; set; }
 
-        // One Position? To One Location
-        public int? PositionId { get; set; }
+        // One Position? To One Location?
         public Position? Position { get; set; }
 
         // One User To Many Location
         public int? UserId { get; set; }
         public User? User { get; set; }
 
-        // One DefaultLocation To One User
+        // One DefaultLocation? To One Location
         public DefaultLocation? DefaultLocation { get; set; }
 
         #endregion

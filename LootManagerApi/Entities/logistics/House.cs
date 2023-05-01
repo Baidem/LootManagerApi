@@ -22,8 +22,9 @@ namespace LootManagerApi.Entities.logistics
         public int UserId { get; set; }
         public User User { get; set; }
 
-        // One House To Many Location
-        public List<Location> Locations { get; set; }
+        // One House? To One Location?
+        public int? LocationId { get; set; }
+        public Location? Location { get; set; }
 
         // One House To Many Rooms?
         public List<Room>? Rooms { get; set; }

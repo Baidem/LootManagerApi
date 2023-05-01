@@ -14,7 +14,9 @@ namespace LootManagerApi.Entities.logistics
         // NAVIGATION PROPERTIES (3)
 
         // One Position? To One Location
+        public int LocationId { get; set; }
         public Location Location { get; set; }
+
 
         // One Shelf To Many Position?
         public int ShelfId { get; set; }

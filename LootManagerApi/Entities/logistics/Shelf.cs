@@ -11,8 +11,10 @@
 
         // NAVIGATION PROPERTIES (3)
 
-        // One Shelf? To Many Location
-        public List<Location> Locations { get; set; }
+        // One Shelf? To One Location?
+        public int? LocationId { get; set; }
+        public Location? Location { get; set; }
+
 
         // One Furniture To Many Shelf?
         public int FurnitureId { get; set; }
