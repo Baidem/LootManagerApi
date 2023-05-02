@@ -1,7 +1,11 @@
-﻿namespace LootManagerApi.Entities.logistics
+﻿using LootManagerApi.Dto.LogisticsDto;
+
+namespace LootManagerApi.Entities.logistics
 {
     public class Shelf
     {
+        #region PROPERTIES
+
         public int Id { get; set; }
         public string Name { get; set; }
         public int Indice { get; set; }
@@ -9,7 +13,9 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        // NAVIGATION PROPERTIES (3)
+        #endregion
+
+        #region NAVIGATION PROPERTIES (3)
 
         // One Shelf? To One Location?
         public int? LocationId { get; set; }
@@ -27,8 +33,39 @@
         public int? UserId { get; set; }
         public User? User { get; set; }
 
+        #endregion
+
+        #region CONSTRUCTORS
+
         public Shelf()
         {
         }
+
+        public Shelf(ShelfCreateDto shelfCreateDto, LocationDto locationDto)
+        {
+            if (shelfCreateDto.IndiceOrDefault == null)
+                throw new ArgumentNullException("shelfCreateDto.IndiceOrDefault is null");
+
+            Name = shelfCreateDto.Name;
+            Indice = shelfCreateDto.IndiceOrDefault.Value;
+            CreatedAt = locationDto.CreatedAt;
+
+            if (shelfCreateDto.NumberOfPositions == null)
+            {
+                NumberOfPositions = 0;
+            }
+            else
+            {
+                NumberOfPositions = shelfCreateDto.NumberOfPositions;
+            }
+            // System.NullReferenceException: 'Object reference not set to an instance of an object.'
+            // LootManagerApi.Entities.logistics.Shelf.Positions.get returned null.
+
+            LocationId = locationDto.LocationId;
+            FurnitureId = shelfCreateDto.FurnitureId;
+            UserId = locationDto.UserId;
+        }
+
+        #endregion
     }
 }

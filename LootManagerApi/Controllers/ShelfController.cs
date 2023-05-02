@@ -1,78 +1,80 @@
-﻿using LootManagerApi.Dto;
-using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Repositories;
+﻿using LootManagerApi.Dto.LogisticsDto;
+using LootManagerApi.Dto;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using LootManagerApi.Repositories;
 
 namespace LootManagerApi.Controllers
 {
     [Route("[controller]/[Action]")]
     [ApiController]
-    public class FurnitureController : ControllerBase
+    public class ShelfController : ControllerBase
     {
         #region DECLARATIONS
 
+        IShelfRepository shelfRepository;
         IFurnitureRepository furnitureRepository;
-        IRoomRepository roomRepository;
+        IPositionRepository positionRepository;
         ILocationRepository locationRepository;
 
         #endregion
 
         #region CONSTRUCTOR
-        public FurnitureController(IFurnitureRepository furnitureRepository, IRoomRepository roomRepository, ILocationRepository locaqtionRepository)
+        public ShelfController(IShelfRepository shelfRepository, IFurnitureRepository furnitureRepository, IPositionRepository positionRepository, ILocationRepository locaqtionRepository)
         {
+            this.shelfRepository = shelfRepository;
             this.furnitureRepository = furnitureRepository;
-            this.roomRepository = roomRepository;
+            this.positionRepository = positionRepository;
             this.locationRepository = locaqtionRepository;
+
         }
+
         #endregion
 
         #region CREATE
 
         /// <summary>
-        /// Create a new furniture and these shelves, positions and locations
+        /// Create a new shelf and these positions and locations
         /// </summary>
-        /// <param name="furnitureCreateDto">furniture creation DTO object containing furniture information</param>
-        /// <returns>FurnitureDto</returns>
-        /// <exception cref="Exception">Thrown when there is an error in creating the furniture.</exception>
+        /// <param name="shelfCreateDto">shelf creation DTO object containing shelf information</param>
+        /// <returns>ShelfDto</returns>
+        /// <exception cref="Exception">Thrown when there is an error in creating the shelf.</exception>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<FurnitureDto>> CreateFurniture([FromForm] FurnitureCreateDto furnitureCreateDto)
+        public async Task<ActionResult<ShelfDto>> CreateShelf([FromForm] ShelfCreateDto shelfCreateDto)
         {
             try
             {
                 // Check Log-in and load current user ID.
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                // Check current user is the owner of the room of the new furniture.
-                await roomRepository.
-                    CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, furnitureCreateDto.RoomId);
+                // Check current user is the owner of the furniture of the new shelf.
+                await furnitureRepository.
+                    CheckTheOwnerOfTheFurnitureAsync(userAuthDto.Id, shelfCreateDto.FurnitureId);
 
                 // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
-                furnitureCreateDto.IndiceOrDefault = await furnitureRepository.
-                    CheckIndiceFreeOrUpdateDefaultIndice(furnitureCreateDto.IndiceOrDefault, furnitureCreateDto.RoomId);
+                shelfCreateDto = await shelfRepository.
+                    CheckIndiceFreeOrUpdateDefaultIndice(shelfCreateDto);
 
-                // Create the Location of the new Furniture 
+                // Create the Location of the new Shelf 
                 var locationDto = await locationRepository.
                     CreateLocationByUserIdAsync(userAuthDto.Id);
 
-                // Create the new Furniture
-                var furnitureDto = await furnitureRepository.
-                    CreateFurnitureByDtoAsync(furnitureCreateDto, locationDto);
+                // Create the new Shelf
+                var shelfDto = await shelfRepository.
+                    CreateShelfByDtoAsync(shelfCreateDto, locationDto);
 
-                // If NumberOfShelves > 0 => implement N shelves And Create a Location per shelf
-
-
-                //     If NumberOfPositionsPerShelf > 0 =>  implement N positions per shelves And Create a Location per position
-
+                // If NumberOfPositionsPerShelf > 0 =>  implement N positions And Create a Location per position
+                shelfDto = await positionRepository.
+                    GeneratePositionsAsync(shelfDto);
 
                 // Build the DTO
 
 
-                return Ok(furnitureDto);
+                return Ok(shelfDto);
             }
             catch (Exception ex)
             {

@@ -12,15 +12,17 @@ namespace LootManagerApi.Repositories
 
         LootManagerContext context;
         ILogger<PositionRepository> logger;
+        ILocationRepository locationRepository;
 
         #endregion
 
         #region CONSTRUCTOR
 
-        public PositionRepository(LootManagerContext context, ILogger<PositionRepository> logger)
+        public PositionRepository(LootManagerContext context, ILogger<PositionRepository> logger, ILocationRepository locationRepository)
         {
             this.context = context;
             this.logger = logger;
+            this.locationRepository = locationRepository;
         }
 
         #endregion
@@ -44,6 +46,42 @@ namespace LootManagerApi.Repositories
                 throw new Exception($"An error occurred while creating the Position : {ex.Message}");
             }
         }
+
+        public async Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto)
+        {
+            try
+            {
+                Shelf shelf = await context.Shelves.
+                    FirstAsync(s => s.Id == shelfDto.Id);
+
+                int N = shelfDto.PositionsCount.Value;
+
+                if (N > 0)
+                {
+                    for (int i = 0; i < N; i++)
+                    {
+                        LocationDto locDto = await locationRepository.
+                            CreateLocationByUserIdAsync(shelfDto.UserId);
+
+                        var posCreDto = new PositionCreateDto { ShelfId = shelfDto.Id, IndiceOrDefault = i + 1 };
+
+                        await CreatePositionByDtoAsync(posCreDto, locDto);
+                    }
+                }
+
+                shelf.NumberOfPositions = await context.Positions.
+                    CountAsync(p => p.ShelfId == shelfDto.Id);
+
+                await context.SaveChangesAsync();
+
+                return new ShelfDto(shelf);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while generating the Positions : {ex.Message}");
+            }
+        }
+
 
         #endregion
 
@@ -88,6 +126,7 @@ namespace LootManagerApi.Repositories
             }
             return positionCreateDto;
         }
+
 
         #endregion
     }

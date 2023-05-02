@@ -50,7 +50,7 @@ namespace LootManagerApi.Repositories
 
         #region UTILS
 
-        public async Task<int> AutoIndiceFirstPlaceFinded(int roomId)
+        public async Task<int> AutoIndiceFurniture_FirstPlaceFinded(int roomId)
         {
             var furnitureIndicelist = await context.Furnitures.
                 Where(r => r.RoomId == roomId).
@@ -86,16 +86,25 @@ namespace LootManagerApi.Repositories
 
         public async Task<int> CheckIndiceFreeOrUpdateDefaultIndice(int? indiceOrDefault, int roomId)
         {
-            // If not null => Check indice is free. Else If null => update the indice.
-            if (indiceOrDefault != null)
-                await CheckIndiceIsFreeAsync(indiceOrDefault.Value, roomId);
-            else // If null => update the indice
-                indiceOrDefault = await AutoIndiceFirstPlaceFinded(roomId);
-            if (indiceOrDefault.Value == 0)
+            try
             {
-                throw new Exception("AutoIndiceFail");
+                // If not null => Check indice is free. Else If null => update the indice.
+                if (indiceOrDefault != null)
+                    await CheckIndiceIsFreeAsync(indiceOrDefault.Value, roomId);
+                else // If null => update the indice
+                    indiceOrDefault = await AutoIndiceFurniture_FirstPlaceFinded(roomId);
+
+                if (indiceOrDefault.Value == 0)
+                {
+                    throw new Exception("AutoIndiceFail");
+                }
+
+                return indiceOrDefault.Value;
             }
-            return indiceOrDefault.Value;
+            catch (Exception ex)
+            {
+                throw new Exception("Indice error. ", ex);
+            }
         }
 
 

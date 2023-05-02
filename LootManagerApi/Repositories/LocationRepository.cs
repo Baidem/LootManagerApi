@@ -34,7 +34,7 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                var location = new Location { UserId = userId, CreatedAt = DateTime.UtcNow };
+                Location location = new() { UserId = userId, CreatedAt = DateTime.UtcNow };
 
                 await context.Locations.AddAsync(location);
 

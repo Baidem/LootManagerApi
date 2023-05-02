@@ -30,7 +30,7 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
-                #region CREATE
+        #region CREATE
 
         /// <summary>
         /// Create a new position and his locations

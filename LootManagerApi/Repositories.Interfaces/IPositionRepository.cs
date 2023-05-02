@@ -7,6 +7,7 @@ namespace LootManagerApi.Repositories.Interfaces
     {
         // CREATE
         Task<PositionDto> CreatePositionByDtoAsync(PositionCreateDto positionCreateDto, LocationDto locationDto);
+        Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto);
 
 
 

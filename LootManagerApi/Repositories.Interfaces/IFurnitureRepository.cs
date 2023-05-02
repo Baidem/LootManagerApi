@@ -18,7 +18,7 @@ namespace LootManagerApi.Repositories.Interfaces
         //Task<FurnitureDto> DeleteFurnitureAsync(int furnitureId);
 
         // UTILS
-        Task<int> AutoIndiceFirstPlaceFinded(int roomId);
+        Task<int> AutoIndiceFurniture_FirstPlaceFinded(int roomId);
         Task<bool> CheckIndiceIsFreeAsync(int indice, int roomId);
 
         Task<bool> CheckTheOwnerOfTheFurnitureAsync(int userId, int furnitureId);
