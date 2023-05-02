@@ -7,8 +7,7 @@ namespace LootManagerApi.Repositories.Interfaces
     public interface IRoomRepository
     {
         // CREATE
-        Task<RoomDto> CreateRoomAsync(RoomCreateDto roomCreateDto);
-        Task<RoomDto> CreateTheDefaultRoomAsync(int userId);
+        Task<RoomDto> CreateRoomByDtoAsync(RoomCreateDto roomCreateDto, LocationDto locationDto);
 
         // READ
         Task<List<RoomDto>> GetRoomsByUserIdAsync(int userId);
@@ -23,9 +22,10 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<RoomDto> DeleteRoomAsync(int roomId);
 
         // UTILS
-        Task<int> AutoIndice(int houseId);
+        Task<int> AutoIndiceRoom_LastAddOne(int houseId);
         Task<bool> CheckIfTheRoomIndiceIsFreeThisHouseAsync(int indice, int houseId);
         Task<bool> CheckTheOwnerOfTheRoomAsync(int userId, int roomId);
+        Task<RoomCreateDto> CheckIndiceFreeOrUpdateDefaultIndice(RoomCreateDto roomcreateDto);
 
     }
 }

@@ -4,6 +4,7 @@ using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using LootManagerApi.Repositories;
 
 namespace LootManagerApi.Controllers
 {
@@ -15,6 +16,7 @@ namespace LootManagerApi.Controllers
 
         IRoomRepository roomRepository;
         IHouseRepository houseRepository;
+        ILocationRepository locationRepository;
 
         #endregion
 
@@ -43,16 +45,24 @@ namespace LootManagerApi.Controllers
         {
             try
             {
+                // Check Log-in and load current user ID.
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, roomCreateDto.HouseId);
+                // Check current user is the owner of the House of the new furniture.
+                await houseRepository.
+                    CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, roomCreateDto.HouseId);
 
-                if (roomCreateDto.Indice == null)
-                    roomCreateDto.Indice = await roomRepository.AutoIndice(userAuthDto.Id);
-                else
-                    await roomRepository.CheckIfTheRoomIndiceIsFreeThisHouseAsync(roomCreateDto.Indice.Value, roomCreateDto.HouseId);
+                // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
+                roomCreateDto = await roomRepository.
+                    CheckIndiceFreeOrUpdateDefaultIndice(roomCreateDto);
 
-                var roomDto = await roomRepository.CreateRoomAsync(roomCreateDto);
+                // Create the Location of the new Furniture 
+                var locationDto = await locationRepository.
+                    CreateLocationByUserIdAsync(userAuthDto.Id);
+
+                // Create the new Room
+                var roomDto = await roomRepository.
+                    CreateRoomByDtoAsync(roomCreateDto, locationDto);
 
                 return Ok(roomDto);
             }

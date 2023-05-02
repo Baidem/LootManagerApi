@@ -29,11 +29,11 @@ namespace LootManagerApi.Repositories
 
         #region CREATE
 
-        public async Task<RoomDto> CreateRoomAsync(RoomCreateDto roomCreateDto)
+        public async Task<RoomDto> CreateRoomByDtoAsync(RoomCreateDto roomCreateDto, LocationDto locationDto)
         {
             try
             {
-                var room = new Room(roomCreateDto);
+                var room = new Room(roomCreateDto, locationDto);
 
                 await context.Rooms.AddAsync(room);
 
@@ -47,25 +47,6 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        public async Task<RoomDto> CreateTheDefaultRoomAsync(int houseId)
-        {
-            try
-            {
-                var roomCreateDto = new RoomCreateDto
-                {
-                    Name = "My hub",
-                    Indice = 1,
-                    HouseId = houseId
-                };
-
-                return await CreateRoomAsync(roomCreateDto);
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception($"An error occurred while creating the default Room : {ex.Message}");
-            }
-        }
 
         #endregion
 
@@ -135,7 +116,7 @@ namespace LootManagerApi.Repositories
             try
             {
                 Room room = await context.Rooms.FirstAsync(e => e.Id == roomUpdateDto.Id);
-                
+
                 room.Name = roomUpdateDto.Name;
 
                 if (roomUpdateDto.HouseId != room.House.Id)
@@ -180,17 +161,23 @@ namespace LootManagerApi.Repositories
 
         #region UTILS
 
-        public async Task<int> AutoIndice(int houseId)
+        public async Task<int> AutoIndiceRoom_LastAddOne(int houseId)
         {
-            var maxIndice = await context.Rooms
-                        .Where(r => r.HouseId == houseId)
-                        .Select(r => r.Indice)
-                        .DefaultIfEmpty(0)
-                        .MaxAsync();
+            try
+            {
+                var maxIndice = await context.Rooms
+                            .Where(r => r.HouseId == houseId)
+                            .Select(r => r.Indice)
+                            .DefaultIfEmpty(0)
+                            .MaxAsync();
 
-            return maxIndice + 1;
+                return maxIndice + 1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred during the AutoIndice process.", ex);
+            }
 
-            throw new Exception("An error occurred during the AutoIndice process.");
         }
 
         public async Task<bool> CheckIfTheRoomIndiceIsFreeThisHouseAsync(int indice, int houseId)
@@ -206,6 +193,20 @@ namespace LootManagerApi.Repositories
                 return true;
 
             throw new Exception("This user cannot access this house.");
+        }
+
+        public async Task<RoomCreateDto> CheckIndiceFreeOrUpdateDefaultIndice(RoomCreateDto roomCreateDto)
+        {
+            // If not null => Check indice is free. Else If null => update the indice.
+            if (roomCreateDto.IndiceOrDefault != null)
+                await CheckIfTheRoomIndiceIsFreeThisHouseAsync(roomCreateDto.IndiceOrDefault.Value, roomCreateDto.HouseId);
+            else // If null => update the indice
+                roomCreateDto.IndiceOrDefault = await AutoIndiceRoom_LastAddOne(roomCreateDto.HouseId);
+            if (roomCreateDto.IndiceOrDefault.Value == 0)
+            {
+                throw new Exception("AutoIndiceFail");
+            }
+            return roomCreateDto;
         }
 
         #endregion

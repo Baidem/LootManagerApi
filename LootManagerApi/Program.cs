@@ -39,6 +39,10 @@ builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 builder.Services.AddScoped<IFurnitureRepository, FurnitureRepository>();
 
+builder.Services.AddScoped<IShelfRepository, ShelfRepository>();
+
+builder.Services.AddScoped<IPositionRepository, PositionRepository>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 var app = builder.Build();

@@ -12,9 +12,13 @@ namespace LootManagerApi.Dto.LogisticsDto
         public int Id { get; set; }
         public string Name { get; set; }
         public int Indice { get; set; }
+        public int UserId { get; set; }
+        public int HouseId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int HouseId { get; set; }
+        public int? LocationId { get; set; }
+        public int? FurnituresCount { get; set; }
+
 
         #endregion
 
@@ -29,9 +33,14 @@ namespace LootManagerApi.Dto.LogisticsDto
             Id = room.Id;
             Name = room.Name;
             Indice = room.Indice;
+            UserId = room.UserId.Value;
             HouseId = room.HouseId;
             CreatedAt = room.CreatedAt;
             UpdatedAt = room.UpdatedAt;
+            LocationId = room.LocationId;
+
+            if (room.Furnitures != null)
+                FurnituresCount = room.Furnitures.Count;
         }
 
         #endregion

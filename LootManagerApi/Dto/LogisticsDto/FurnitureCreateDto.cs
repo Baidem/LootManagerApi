@@ -16,19 +16,5 @@ namespace LootManagerApi.Dto.LogisticsDto
         public FurnitureCreateDto()
         {
         }
-
-        #region METHODS
-
-        public override string? ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (PropertyInfo prop in this.GetType().GetProperties())
-            {
-                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
-            }
-            return sb.ToString();
-        }
-
-        #endregion
     }
 }

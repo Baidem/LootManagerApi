@@ -9,7 +9,10 @@ namespace LootManagerApi.Dto.LogisticsDto
         public int Indice { get; set; }
         public int UserId { get; set; }
         public int RoomId { get; set; }
-        public int LocationId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public int? LocationId { get; set; }
+        public int? ShelvesCount { get; set; }
 
         public FurnitureDto()
         {
@@ -17,13 +20,18 @@ namespace LootManagerApi.Dto.LogisticsDto
 
         public FurnitureDto(Furniture furniture)
         {
-            Id =furniture.Id;
+            Id = furniture.Id;
             Name = furniture.Name;
             Indice = furniture.Indice;
-            UserId = furniture.RoomId;
+            UserId = furniture.UserId.Value;
             RoomId = furniture.RoomId;
-            //LocationId = furniture.LocationId; // TODO mise à jour des clés de Location
+            CreatedAt = furniture.CreatedAt;
+            UpdatedAt = furniture.UpdatedAt;
+            LocationId = furniture.LocationId;
+
+            if (furniture.Shelves != null)
+                ShelvesCount = furniture.Shelves.Count;
         }
     }
-      
+
 }

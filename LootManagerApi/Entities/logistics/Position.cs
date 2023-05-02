@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using LootManagerApi.Dto.LogisticsDto;
+using System.Reflection;
 using System.Text;
 
 namespace LootManagerApi.Entities.logistics
@@ -17,7 +18,6 @@ namespace LootManagerApi.Entities.logistics
         public int LocationId { get; set; }
         public Location Location { get; set; }
 
-
         // One Shelf To Many Position?
         public int ShelfId { get; set; }
 
@@ -25,16 +25,22 @@ namespace LootManagerApi.Entities.logistics
         public int? UserId { get; set; }
         public User? User { get; set; }
 
-
-        // Methods
-        public override string? ToString()
+        // CONSTRUCTORS
+        public Position()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (PropertyInfo prop in GetType().GetProperties())
-            {
-                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
-            }
-            return sb.ToString();
+        }
+
+        public Position(PositionCreateDto positionCreateDto, LocationDto locationDto)
+        {
+            if (positionCreateDto.IndiceOrDefault == null)
+                throw new Exception("Furniture.Indice can't be null.");
+
+            Name = positionCreateDto.Name;
+            Indice = positionCreateDto.IndiceOrDefault.Value;
+            CreatedAt = locationDto.CreatedAt;
+            LocationId = locationDto.LocationId;
+            ShelfId = positionCreateDto.ShelfId;
+            UserId = locationDto.UserId;
         }
     }
 }

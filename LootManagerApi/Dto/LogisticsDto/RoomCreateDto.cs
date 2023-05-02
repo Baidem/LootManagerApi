@@ -8,6 +8,6 @@ namespace LootManagerApi.Dto.LogisticsDto
     {
         [Required] public string Name { get; set; }
         [Required] public int HouseId { get; set; }
-        public int? Indice { get; set; }
+        public int? IndiceOrDefault { get; set; }
     }
 }

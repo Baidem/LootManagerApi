@@ -50,7 +50,7 @@ namespace LootManagerApi.Repositories
 
         #region UTILS
 
-        public async Task<int> AutoIndice(int roomId)
+        public async Task<int> AutoIndiceFirstPlaceFinded(int roomId)
         {
             var furnitureIndicelist = await context.Furnitures.
                 Where(r => r.RoomId == roomId).
@@ -90,7 +90,7 @@ namespace LootManagerApi.Repositories
             if (indiceOrDefault != null)
                 await CheckIndiceIsFreeAsync(indiceOrDefault.Value, roomId);
             else // If null => update the indice
-                indiceOrDefault = await AutoIndice(roomId);
+                indiceOrDefault = await AutoIndiceFirstPlaceFinded(roomId);
             if (indiceOrDefault.Value == 0)
             {
                 throw new Exception("AutoIndiceFail");
