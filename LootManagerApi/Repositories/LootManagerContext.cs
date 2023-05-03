@@ -122,9 +122,9 @@ namespace LootManagerApi.Repositories
 
             #region SHELVES DATA
 
-            var s1 = new Shelf { Id = 1, Name = "Admin Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = ls1.Id };
-            var s2 = new Shelf { Id = 2, Name = "User Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = ls2.Id };
-            var s3 = new Shelf { Id = 3, Name = "Cont Shelf", Indice = 1, NumberOfPositions = 1, FurnitureId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = ls3.Id };
+            var s1 = new Shelf { Id = 1, Name = "Admin Shelf", Indice = 1, FurnitureId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = ls1.Id };
+            var s2 = new Shelf { Id = 2, Name = "User Shelf", Indice = 2, FurnitureId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = ls2.Id };
+            var s3 = new Shelf { Id = 3, Name = "Cont Shelf", Indice = 3, FurnitureId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = ls3.Id };
 
             modelBuilder.Entity<Shelf>().HasData(new List<Shelf> { s1, s2, s3 });
 

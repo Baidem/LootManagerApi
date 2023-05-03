@@ -17,8 +17,8 @@ namespace LootManagerApi.Entities.logistics
         #region NAVIGATION PROPERTIES (3)
 
         // One Shelf? To One Location?
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public int? LocationId { get; set; }
+        public Location? Location { get; set; }
 
 
         // One Furniture To Many Shelf?
