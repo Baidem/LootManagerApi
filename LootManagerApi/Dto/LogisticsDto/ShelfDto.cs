@@ -26,7 +26,7 @@ namespace LootManagerApi.Dto.LogisticsDto
             CreatedAt = shelf.CreatedAt;
             UpdatedAt = shelf.UpdatedAt;
             LocationId = shelf.LocationId;
-            PositionsCount = shelf.Positions.Count;
+            PositionsCount = shelf.Positions != null ? shelf.Positions.Count : 0;
         }
     }
 }

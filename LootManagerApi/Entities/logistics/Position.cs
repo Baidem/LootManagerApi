@@ -35,7 +35,11 @@ namespace LootManagerApi.Entities.logistics
             if (positionCreateDto.IndiceOrDefault == null)
                 throw new Exception("Furniture.Indice can't be null.");
 
-            Name = positionCreateDto.Name;
+            if (positionCreateDto.Name == null)
+                Name = "pos";
+            else
+                Name = positionCreateDto.Name;
+
             Indice = positionCreateDto.IndiceOrDefault.Value;
             CreatedAt = locationDto.CreatedAt;
             LocationId = locationDto.LocationId;
