@@ -47,18 +47,16 @@ namespace LootManagerApi.Repositories
             }
         }
 
-        public async Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto)
+        public async Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto, int numberOfPositions)
         {
             try
             {
                 Shelf shelf = await context.Shelves.
                     FirstAsync(s => s.Id == shelfDto.Id);
 
-                int N = shelfDto.PositionsCount.Value;
-
-                if (N > 0)
+                if (numberOfPositions > 0)
                 {
-                    for (int i = 0; i < N; i++)
+                    for (int i = 0; i < numberOfPositions; i++)
                     {
                         LocationDto locDto = await locationRepository.
                             CreateLocationByUserIdAsync(shelfDto.UserId);
@@ -68,9 +66,6 @@ namespace LootManagerApi.Repositories
                         await CreatePositionByDtoAsync(posCreDto, locDto);
                     }
                 }
-
-                shelf.NumberOfPositions = await context.Positions.
-                    CountAsync(p => p.ShelfId == shelfDto.Id);
 
                 await context.SaveChangesAsync();
 

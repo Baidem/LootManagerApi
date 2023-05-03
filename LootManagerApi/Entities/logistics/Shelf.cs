@@ -9,7 +9,6 @@ namespace LootManagerApi.Entities.logistics
         public int Id { get; set; }
         public string Name { get; set; }
         public int Indice { get; set; }
-        public int NumberOfPositions { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
@@ -18,8 +17,8 @@ namespace LootManagerApi.Entities.logistics
         #region NAVIGATION PROPERTIES (3)
 
         // One Shelf? To One Location?
-        public int? LocationId { get; set; }
-        public Location? Location { get; set; }
+        public int LocationId { get; set; }
+        public Location Location { get; set; }
 
 
         // One Furniture To Many Shelf?
@@ -49,18 +48,6 @@ namespace LootManagerApi.Entities.logistics
             Name = shelfCreateDto.Name;
             Indice = shelfCreateDto.IndiceOrDefault.Value;
             CreatedAt = locationDto.CreatedAt;
-
-            if (shelfCreateDto.NumberOfPositions == null)
-            {
-                NumberOfPositions = 0;
-            }
-            else
-            {
-                NumberOfPositions = shelfCreateDto.NumberOfPositions;
-            }
-            // System.NullReferenceException: 'Object reference not set to an instance of an object.'
-            // LootManagerApi.Entities.logistics.Shelf.Positions.get returned null.
-
             LocationId = locationDto.LocationId;
             FurnitureId = shelfCreateDto.FurnitureId;
             UserId = locationDto.UserId;

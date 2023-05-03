@@ -10,8 +10,8 @@ namespace LootManagerApi.Dto.LogisticsDto
         public int UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int? LocationId { get; set; }
-        public int? PositionsCount { get; set; }
+        public int LocationId { get; set; }
+        public int PositionsCount { get; set; }
 
         public ShelfDto()
         {
@@ -26,10 +26,7 @@ namespace LootManagerApi.Dto.LogisticsDto
             CreatedAt = shelf.CreatedAt;
             UpdatedAt = shelf.UpdatedAt;
             LocationId = shelf.LocationId;
-            PositionsCount = shelf.NumberOfPositions;
-
-            if (shelf.NumberOfPositions != null)
-                PositionsCount = shelf.Positions.Count;
+            PositionsCount = shelf.Positions.Count;
         }
     }
 }

@@ -69,7 +69,7 @@ namespace LootManagerApi.Controllers
 
                 // If NumberOfPositionsPerShelf > 0 =>  implement N positions And Create a Location per position
                 shelfDto = await positionRepository.
-                    GeneratePositionsAsync(shelfDto);
+                    GeneratePositionsAsync(shelfDto, shelfCreateDto.NumberOfPositions);
 
                 // Build the DTO
 

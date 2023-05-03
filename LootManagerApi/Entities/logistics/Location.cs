@@ -28,7 +28,7 @@ namespace LootManagerApi.Entities.logistics
         // One Furniture? To One Location?
         public Furniture? Furniture { get; set; }
 
-        // One Shelf? To One Location?
+        // One Shelf? To One Location
         public Shelf? Shelf { get; set; }
 
         // One Position? To One Location?

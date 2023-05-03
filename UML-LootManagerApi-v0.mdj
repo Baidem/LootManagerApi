@@ -21394,24 +21394,6 @@
 												},
 												{
 													"_type": "UMLAttributeView",
-													"_id": "AAAAAAGHmdWzF17uSfY=",
-													"_parent": {
-														"$ref": "AAAAAAGHmSAin+GZ2Zg="
-													},
-													"model": {
-														"$ref": "AAAAAAGHmdWzDl7ZT8k="
-													},
-													"fillColor": "#d1ffa3",
-													"font": "Arial;13;0",
-													"left": 1312,
-													"top": 523,
-													"width": 141.25439453125,
-													"height": 13,
-													"text": "+NumberOfPositions: int",
-													"horizontalAlignment": 0
-												},
-												{
-													"_type": "UMLAttributeView",
 													"_id": "AAAAAAGHoxLlnYetOvc=",
 													"_parent": {
 														"$ref": "AAAAAAGHmSAin+GZ2Zg="
@@ -21422,7 +21404,7 @@
 													"fillColor": "#d1ffa3",
 													"font": "Arial;13;0",
 													"left": 1312,
-													"top": 538,
+													"top": 523,
 													"width": 141.25439453125,
 													"height": 13,
 													"text": "+CreatedAt: DateTime",
@@ -21440,7 +21422,7 @@
 													"fillColor": "#d1ffa3",
 													"font": "Arial;13;0",
 													"left": 1312,
-													"top": 553,
+													"top": 538,
 													"width": 141.25439453125,
 													"height": 13,
 													"text": "+UpdatedAt: DateTime",
@@ -21452,7 +21434,7 @@
 											"left": 1307,
 											"top": 473,
 											"width": 151.25439453125,
-											"height": 98
+											"height": 83
 										},
 										{
 											"_type": "UMLOperationCompartmentView",
@@ -21466,7 +21448,7 @@
 											"fillColor": "#d1ffa3",
 											"font": "Arial;13;0",
 											"left": 1307,
-											"top": 571,
+											"top": 556,
 											"width": 151.25439453125,
 											"height": 10
 										},
@@ -28015,15 +27997,6 @@
 										"$ref": "AAAAAAGHmSAin+GR4Nc="
 									},
 									"name": "Index",
-									"type": "int"
-								},
-								{
-									"_type": "UMLAttribute",
-									"_id": "AAAAAAGHmdWzDl7ZT8k=",
-									"_parent": {
-										"$ref": "AAAAAAGHmSAin+GR4Nc="
-									},
-									"name": "NumberOfPositions",
 									"type": "int"
 								},
 								{
