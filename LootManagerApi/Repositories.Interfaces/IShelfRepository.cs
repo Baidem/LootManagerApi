@@ -6,6 +6,7 @@ namespace LootManagerApi.Repositories.Interfaces
     {
         // CREATE
         Task<ShelfDto> CreateShelfByDtoAsync(ShelfCreateDto shelfCreateDto, LocationDto location);
+        Task<FurnitureDto> GenerateShelvesAsync(FurnitureDto furnitureDto, int numberOfShelves, int numberOfPositionsPerShelf);
 
         // UTILS
         Task<int> AutoIndiceShelf_LastAddOne(int furnitureId);

@@ -12,7 +12,7 @@ namespace LootManagerApi.Dto.LogisticsDto
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int? LocationId { get; set; }
-        public int? ShelvesCount { get; set; }
+        public int ShelvesCount { get; set; }
 
         public FurnitureDto()
         {
@@ -28,9 +28,7 @@ namespace LootManagerApi.Dto.LogisticsDto
             CreatedAt = furniture.CreatedAt;
             UpdatedAt = furniture.UpdatedAt;
             LocationId = furniture.LocationId;
-
-            if (furniture.Shelves != null)
-                ShelvesCount = furniture.Shelves.Count;
+            ShelvesCount = furniture.Shelves != null ? furniture.Shelves.Count : 0;
         }
     }
 

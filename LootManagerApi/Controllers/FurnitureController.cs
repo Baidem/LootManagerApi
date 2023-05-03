@@ -14,19 +14,23 @@ namespace LootManagerApi.Controllers
     {
         #region DECLARATIONS
 
-        IFurnitureRepository furnitureRepository;
         IRoomRepository roomRepository;
+        IFurnitureRepository furnitureRepository;
+        IShelfRepository shelfRepository;
         ILocationRepository locationRepository;
 
         #endregion
 
         #region CONSTRUCTOR
-        public FurnitureController(IFurnitureRepository furnitureRepository, IRoomRepository roomRepository, ILocationRepository locaqtionRepository)
+
+        public FurnitureController(IRoomRepository roomRepository, IFurnitureRepository furnitureRepository, IShelfRepository shelfRepository, ILocationRepository locationRepository)
         {
-            this.furnitureRepository = furnitureRepository;
             this.roomRepository = roomRepository;
-            this.locationRepository = locaqtionRepository;
+            this.furnitureRepository = furnitureRepository;
+            this.shelfRepository = shelfRepository;
+            this.locationRepository = locationRepository;
         }
+
         #endregion
 
         #region CREATE
@@ -64,9 +68,9 @@ namespace LootManagerApi.Controllers
                     CreateFurnitureByDtoAsync(furnitureCreateDto, locationDto);
 
                 // If NumberOfShelves > 0 => implement N shelves And Create a Location per shelf
-
-
                 //     If NumberOfPositionsPerShelf > 0 =>  implement N positions per shelves And Create a Location per position
+                furnitureDto = await shelfRepository.GenerateShelvesAsync(furnitureDto, furnitureCreateDto.NumberOfShelves, furnitureCreateDto.NumberOfPositionsPerShelf);
+
 
 
                 // Build the DTO

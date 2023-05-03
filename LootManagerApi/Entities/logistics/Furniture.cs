@@ -9,7 +9,6 @@ namespace LootManagerApi.Entities.logistics
         public int Id { get; set; }
         public string Name { get; set; }
         public int Indice { get; set; }
-        public int NumberOfShelves { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
@@ -48,7 +47,6 @@ namespace LootManagerApi.Entities.logistics
 
             Name = furnitureCreateDto.Name;
             Indice = furnitureCreateDto.IndiceOrDefault.Value;
-            NumberOfShelves = furnitureCreateDto.NumberOfShelves;
             CreatedAt = locationDto.CreatedAt;
             RoomId = furnitureCreateDto.RoomId;
             UserId = locationDto.UserId;

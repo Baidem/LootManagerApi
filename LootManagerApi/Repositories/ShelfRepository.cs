@@ -11,15 +11,19 @@ namespace LootManagerApi.Repositories
 
         LootManagerContext context;
         ILogger<ShelfRepository> logger;
+        ILocationRepository locationRepository;
+        IPositionRepository positionRepository;
 
         #endregion
 
         #region CONSTRUCTOR
 
-        public ShelfRepository(LootManagerContext context, ILogger<ShelfRepository> logger)
+        public ShelfRepository(LootManagerContext context, ILogger<ShelfRepository> logger, ILocationRepository locationRepository, IPositionRepository positionRepository)
         {
             this.context = context;
             this.logger = logger;
+            this.locationRepository = locationRepository;
+            this.positionRepository = positionRepository;
         }
 
         #endregion
@@ -42,6 +46,45 @@ namespace LootManagerApi.Repositories
             {
                 throw new Exception($"An error occurred while creating the Shelf : {ex.Message}");
             }
+        }
+
+        public async Task<FurnitureDto> GenerateShelvesAsync(FurnitureDto furnitureDto, int numberOfShelves, int numberOfPositionsPerShelf)
+        {
+            Furniture furniture = await context.Furnitures.
+                FirstAsync(f => f.Id == furnitureDto.Id);
+
+            if (numberOfShelves > 0)
+            {
+                for (int i = 0; i < numberOfShelves; i++)
+                {
+                    LocationDto locDto_shelf = await locationRepository.
+                        CreateLocationByUserIdAsync(furnitureDto.UserId);
+
+                    var sheCreDto = new ShelfCreateDto { FurnitureId = furnitureDto.Id, IndiceOrDefault = i + 1 };
+
+                    var shelfDto = await CreateShelfByDtoAsync(sheCreDto, locDto_shelf);
+
+                    if (numberOfPositionsPerShelf > 0)
+                    {
+                        for (int j = 0; j < numberOfPositionsPerShelf; j++)
+                        {
+                            LocationDto locDto_pos = await locationRepository.
+                                CreateLocationByUserIdAsync(shelfDto.UserId);
+
+                            var posCreDto = new PositionCreateDto { ShelfId = shelfDto.Id, IndiceOrDefault = i + 1 };
+
+                            await positionRepository.CreatePositionByDtoAsync(posCreDto, locDto_pos);
+                        }
+                    }
+                }
+
+            }
+
+            await context.SaveChangesAsync();
+
+            return furnitureDto;
+
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -104,6 +147,7 @@ namespace LootManagerApi.Repositories
                 throw new Exception("Indice error. ", ex);
             }
         }
+
 
         #endregion
 

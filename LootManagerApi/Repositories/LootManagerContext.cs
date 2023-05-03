@@ -56,7 +56,7 @@ namespace LootManagerApi.Repositories
             modelBuilder.Entity<User>().HasData(new List<User> { admin, user, cont });
             #endregion
 
-            #region LOCATION DATA
+            #region LOCATIONS DATA
 
             var lh1 = new Location { Id = 1, CreatedAt = DateTime.UtcNow, UserId = 1 };
             var lh2 = new Location { Id = 2, CreatedAt = DateTime.UtcNow, UserId = 2 };
@@ -112,9 +112,9 @@ namespace LootManagerApi.Repositories
 
             #region FURNITURES DATA
 
-            var f1 = new Furniture { Id = 1, Name = "Admin Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = lf1.Id };
-            var f2 = new Furniture { Id = 2, Name = "User Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = lf2.Id };
-            var f3 = new Furniture { Id = 3, Name = "Cont Furniture", Indice = 1, NumberOfShelves = 1, RoomId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = lf3.Id };
+            var f1 = new Furniture { Id = 1, Name = "Admin Furniture", Indice = 1, RoomId = 1, CreatedAt = DateTime.UtcNow, UserId = 1, LocationId = lf1.Id };
+            var f2 = new Furniture { Id = 2, Name = "User Furniture", Indice = 1, RoomId = 2, CreatedAt = DateTime.UtcNow, UserId = 2, LocationId = lf2.Id };
+            var f3 = new Furniture { Id = 3, Name = "Cont Furniture", Indice = 1, RoomId = 3, CreatedAt = DateTime.UtcNow, UserId = 3, LocationId = lf3.Id };
 
             modelBuilder.Entity<Furniture>().HasData(new List<Furniture> { f1, f2, f3 });
 
