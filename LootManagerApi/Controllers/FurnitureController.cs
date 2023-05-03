@@ -1,8 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -56,25 +54,21 @@ namespace LootManagerApi.Controllers
                     CheckTheOwnerOfTheRoomAsync(userAuthDto.Id, furnitureCreateDto.RoomId);
 
                 // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
-                furnitureCreateDto.IndiceOrDefault = await furnitureRepository.
-                    CheckIndiceFreeOrUpdateDefaultIndice(furnitureCreateDto.IndiceOrDefault, furnitureCreateDto.RoomId);
+                furnitureCreateDto.IndiceOrDefault = await furnitureRepository
+                    .CheckIndiceFreeOrUpdateDefaultIndice(furnitureCreateDto.IndiceOrDefault, furnitureCreateDto.RoomId);
 
                 // Create the Location of the new Furniture 
-                var locationDto = await locationRepository.
-                    CreateLocationByUserIdAsync(userAuthDto.Id);
+                var locationDto = await locationRepository
+                    .CreateLocationByUserIdAsync(userAuthDto.Id);
 
                 // Create the new Furniture
-                var furnitureDto = await furnitureRepository.
-                    CreateFurnitureByDtoAsync(furnitureCreateDto, locationDto);
+                var furnitureDto = await furnitureRepository
+                    .CreateFurnitureByDtoAsync(furnitureCreateDto, locationDto);
 
                 // If NumberOfShelves > 0 => implement N shelves And Create a Location per shelf
                 //     If NumberOfPositionsPerShelf > 0 =>  implement N positions per shelves And Create a Location per position
-                furnitureDto = await shelfRepository.GenerateShelvesAsync(furnitureDto, furnitureCreateDto.NumberOfShelves, furnitureCreateDto.NumberOfPositionsPerShelf);
-
-
-
-                // Build the DTO
-
+                furnitureDto = await shelfRepository
+                    .GenerateShelvesAsync(furnitureDto, furnitureCreateDto.NumberOfShelves, furnitureCreateDto.NumberOfPositionsPerShelf);
 
                 return Ok(furnitureDto);
             }

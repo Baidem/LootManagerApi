@@ -1,5 +1,4 @@
 ﻿using LootManagerApi.Dto;
-using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities;
 using LootManagerApi.Repositories.Interfaces;
 using LootManagerApi.Utils;
@@ -309,7 +308,6 @@ namespace LootManagerApi.Controllers
             }
         }
 
-
         #endregion
 
         #region DELETE USER
@@ -344,7 +342,6 @@ namespace LootManagerApi.Controllers
         }
 
         #endregion
-
     }
 }
 

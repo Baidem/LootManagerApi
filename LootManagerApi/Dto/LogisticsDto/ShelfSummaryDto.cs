@@ -1,7 +1,4 @@
-﻿using LootManagerApi.Entities.logistics;
-using LootManagerApi.Entities;
-
-namespace LootManagerApi.Dto.LogisticsDto
+﻿namespace LootManagerApi.Dto.LogisticsDto
 {
     public class ShelfSummaryDto
     {

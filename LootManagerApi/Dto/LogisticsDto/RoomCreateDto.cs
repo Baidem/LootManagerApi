@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using System.Text;
 
 namespace LootManagerApi.Dto.LogisticsDto
 {

@@ -126,21 +126,23 @@ namespace LootManagerApi.Repositories
 
         #region UTILS
 
-        public async Task<int> AutoIndice(int userId)
+        public async Task<int> AutoIndiceHouse_LastAddOne(int userId)
         {
-            var houseIndicelist = await context.Houses.Where(h => h.UserId == userId).Select(h => h.Indice).ToListAsync();
-
-            houseIndicelist.Sort();
-            for (int i = 0; i < houseIndicelist.Count; i++)
+            try
             {
-                if (i == 0 && houseIndicelist[i] > 1)
-                    return 1;
+                var maxIndice = await context.Houses
+                    .Where(h => h.UserId == userId)
+                    .Select(h => h.Indice)
+                    .OrderByDescending(h => h)
+                    .FirstOrDefaultAsync()
+                    .ConfigureAwait(false);
 
-                if (i == houseIndicelist.Count - 1 || houseIndicelist[i + 1] - houseIndicelist[i] > 1)
-                    return houseIndicelist[i] + 1;
+                return maxIndice > 0 ? maxIndice + 1 : 1;
             }
-
-            throw new Exception("An error occurred during the AutoIndice process.");
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred during the house AutoIndice process. {ex.Message}", ex);
+            }
         }
 
         public async Task<bool> CheckIndiceIsFreeAsync(int indice, int userId)
@@ -165,15 +167,13 @@ namespace LootManagerApi.Repositories
             if (indiceOrDefault != null)
                 await CheckIndiceIsFreeAsync(indiceOrDefault.Value, userId);
             else // If null => update the indice
-                indiceOrDefault = await AutoIndice(userId);
+                indiceOrDefault = await AutoIndiceHouse_LastAddOne(userId);
             if (indiceOrDefault.Value == 0)
             {
                 throw new Exception("AutoIndiceFail");
             }
             return indiceOrDefault.Value;
         }
-
-
 
         #endregion
     }

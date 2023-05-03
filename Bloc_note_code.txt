@@ -190,3 +190,45 @@ public async Task<RoomUpdateDto> CompletedRoomUpdateDtoAsync(RoomUpdateDto roomU
     return roomUpdateDto;
 }
 
+//////////////////////////////////////////////
+        public async Task<int> AutoIndice(int userId)
+        {
+            var houseIndicelist = await context.Houses.Where(h => h.UserId == userId).Select(h => h.Indice).ToListAsync();
+
+            houseIndicelist.Sort();
+            for (int i = 0; i < houseIndicelist.Count; i++)
+            {
+                if (i == 0 && houseIndicelist[i] > 1)
+                    return 1;
+
+                if (i == houseIndicelist.Count - 1 || houseIndicelist[i + 1] - houseIndicelist[i] > 1)
+                    return houseIndicelist[i] + 1;
+            }
+
+            throw new Exception("An error occurred during the AutoIndice process.");
+        }
+///////////////////////////////////////////////
+        public async Task<int> AutoIndiceFurniture_FirstPlaceFinded(int roomId)
+        {
+            var furnitureIndicelist = await context.Furnitures
+                .Where(r => r.RoomId == roomId)
+                .Select(r => r.Indice)
+                .OrderBy(i => i)
+                .ToListAsync();
+
+            if (furnitureIndicelist == null)
+            {
+                return 1;
+            }
+
+            for (int i = 0; i < furnitureIndicelist.Count; i++)
+            {
+                if (i == 0 && furnitureIndicelist[i] > 1)
+                    return 1;
+
+                if (i == furnitureIndicelist.Count - 1 || furnitureIndicelist[i + 1] - furnitureIndicelist[i] > 1)
+                    return furnitureIndicelist[i] + 1;
+            }
+
+            throw new Exception("An error occurred during the AutoIndice process.");
+        }

@@ -15,6 +15,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<LocationDto> GetLocationAsync(int locationId);
 
         // UPDATE
+        // TODO implement UpdateLocationByIdAsync
         Task<LocationDto> UpdateLocationByIdAsync(int locationId);
 
         // DELETE

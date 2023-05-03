@@ -1,10 +1,8 @@
-﻿using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Dto;
+﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using LootManagerApi.Repositories;
 
 namespace LootManagerApi.Controllers
 {
@@ -22,13 +20,13 @@ namespace LootManagerApi.Controllers
         #endregion
 
         #region CONSTRUCTOR
+
         public ShelfController(IShelfRepository shelfRepository, IFurnitureRepository furnitureRepository, IPositionRepository positionRepository, ILocationRepository locaqtionRepository)
         {
             this.shelfRepository = shelfRepository;
             this.furnitureRepository = furnitureRepository;
             this.positionRepository = positionRepository;
             this.locationRepository = locaqtionRepository;
-
         }
 
         #endregion
@@ -52,27 +50,24 @@ namespace LootManagerApi.Controllers
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
                 // Check current user is the owner of the furniture of the new shelf.
-                await furnitureRepository.
-                    CheckTheOwnerOfTheFurnitureAsync(userAuthDto.Id, shelfCreateDto.FurnitureId);
+                await furnitureRepository
+                    .CheckTheOwnerOfTheFurnitureAsync(userAuthDto.Id, shelfCreateDto.FurnitureId);
 
                 // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
-                shelfCreateDto = await shelfRepository.
-                    CheckIndiceFreeOrUpdateDefaultIndice(shelfCreateDto);
+                shelfCreateDto = await shelfRepository
+                    .CheckIndiceFreeOrUpdateDefaultIndice(shelfCreateDto);
 
                 // Create the Location of the new Shelf 
-                var locationDto = await locationRepository.
-                    CreateLocationByUserIdAsync(userAuthDto.Id);
+                var locationDto = await locationRepository
+                    .CreateLocationByUserIdAsync(userAuthDto.Id);
 
                 // Create the new Shelf
-                var shelfDto = await shelfRepository.
-                    CreateShelfByDtoAsync(shelfCreateDto, locationDto);
+                var shelfDto = await shelfRepository
+                    .CreateShelfByDtoAsync(shelfCreateDto, locationDto);
 
                 // If NumberOfPositionsPerShelf > 0 =>  implement N positions And Create a Location per position
-                shelfDto = await positionRepository.
-                    GeneratePositionsAsync(shelfDto, shelfCreateDto.NumberOfPositions);
-
-                // Build the DTO
-
+                shelfDto = await positionRepository
+                    .GeneratePositionsAsync(shelfDto, shelfCreateDto.NumberOfPositions);
 
                 return Ok(shelfDto);
             }
@@ -102,6 +97,5 @@ namespace LootManagerApi.Controllers
         }
 
         #endregion
-
     }
 }

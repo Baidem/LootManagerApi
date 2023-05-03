@@ -54,15 +54,8 @@ namespace LootManagerApi.Repositories
 
         public async Task<LocationAddressDto> GetLocationAddressAsync(int locationId)
         {
-            Location location = await context.Locations
-                .Include(x => x.House)
-                .Include(x => x.Room)
-                .Include(x => x.Furniture)
-                .Include(x => x.Shelf)
-                .Include(x => x.Position)
-                .FirstAsync(x => x.Id == locationId);
-
-            return new LocationAddressDto(location);
+            // TODO Implement GetLocationAddressAsync
+            throw new NotImplementedException();
         }
 
         public async Task<List<LocationDto>> GetLocationsAsync(int userId)
@@ -89,15 +82,17 @@ namespace LootManagerApi.Repositories
 
         #region UPDATE
 
+        // TODO Implement UpdateLocationByIdAsync
         public async Task<LocationDto> UpdateLocationByIdAsync(int locationId)
         {
-                Location location = await context.Locations.FirstAsync(l => l.Id == locationId);
+            throw new NotSupportedException();
+            //Location location = await context.Locations.FirstAsync(l => l.Id == locationId);
 
-                location.UpdatedAt = DateTime.UtcNow;
+            //location.UpdatedAt = DateTime.UtcNow;
 
-                await context.SaveChangesAsync();
+            //await context.SaveChangesAsync();
 
-                return new LocationDto(location);
+            //return new LocationDto(location);
         }
 
         #endregion

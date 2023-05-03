@@ -49,7 +49,6 @@ namespace LootManagerApi.Entities
         // One DefaultLocation To One User
         public DefaultLocation? DefaultLocation { get; set; }
 
-
         #endregion
 
         #region CONSTRUCTORS
@@ -82,6 +81,5 @@ namespace LootManagerApi.Entities
         }
 
         #endregion
-
     }
 }

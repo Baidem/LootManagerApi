@@ -1,7 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -49,20 +48,20 @@ namespace LootManagerApi.Controllers
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
                 // Check current user is the owner of the shelf of the new position.
-                await shelfRepository.
-                    CheckTheOwnerOfTheShelfAsync(userAuthDto.Id, positionCreateDto.ShelfId);
+                await shelfRepository
+                    .CheckTheOwnerOfTheShelfAsync(userAuthDto.Id, positionCreateDto.ShelfId);
 
                 // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
-                positionCreateDto = await positionRepository.
-                    CheckIndiceFreeOrUpdateDefaultIndice(positionCreateDto);
+                positionCreateDto = await positionRepository
+                    .CheckIndiceFreeOrUpdateDefaultIndice(positionCreateDto);
 
-                // Create the Location of the new Furniture 
-                var locationDto = await locationRepository.
-                    CreateLocationByUserIdAsync(userAuthDto.Id);
+                // Create the Location of the new Position 
+                var locationDto = await locationRepository
+                    .CreateLocationByUserIdAsync(userAuthDto.Id);
 
                 // Create the new Position
-                var positionDto = await positionRepository.
-                    CreatePositionByDtoAsync(positionCreateDto, locationDto);
+                var positionDto = await positionRepository
+                    .CreatePositionByDtoAsync(positionCreateDto, locationDto);
 
                 return Ok(positionDto);
             }
@@ -92,7 +91,5 @@ namespace LootManagerApi.Controllers
         }
 
         #endregion
-
-
     }
 }

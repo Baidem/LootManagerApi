@@ -1,6 +1,5 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -47,16 +46,16 @@ namespace LootManagerApi.Controllers
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
                 // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
-                houseCreateDto.IndiceOrDefault = await houseRepository.
-                    CheckIndiceFreeOrUpdateDefaultIndice(houseCreateDto.IndiceOrDefault, userAuthDto.Id);
+                houseCreateDto.IndiceOrDefault = await houseRepository
+                    .CheckIndiceFreeOrUpdateDefaultIndice(houseCreateDto.IndiceOrDefault, userAuthDto.Id);
 
                 // Create the Location of the new House 
-                var locationDto = await locationRepository.
-                    CreateLocationByUserIdAsync(userAuthDto.Id);
+                var locationDto = await locationRepository
+                    .CreateLocationByUserIdAsync(userAuthDto.Id);
 
                 // Create the new House
-                var houseDto = await houseRepository.
-                    CreateHouseByDtoAsync(houseCreateDto, locationDto);
+                var houseDto = await houseRepository
+                    .CreateHouseByDtoAsync(houseCreateDto, locationDto);
 
                 return Ok(houseDto);
             }

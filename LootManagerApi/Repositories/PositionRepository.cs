@@ -1,8 +1,7 @@
 ﻿using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Dto;
+using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using LootManagerApi.Entities.logistics;
 
 namespace LootManagerApi.Repositories
 {
@@ -77,7 +76,6 @@ namespace LootManagerApi.Repositories
             }
         }
 
-
         #endregion
 
         #region UTILS
@@ -86,17 +84,18 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                var maxIndice = await context.Positions // version corrigée
-                            .Where(p => p.ShelfId == shelfId)
-                            .Select(p => p.Indice)
-                            .MaxAsync()
-                            .ConfigureAwait(false);
+                var maxIndice = await context.Positions
+                    .Where(p => p.ShelfId == shelfId)
+                    .Select(p => p.Indice)
+                    .OrderByDescending(p => p)
+                    .FirstOrDefaultAsync()
+                    .ConfigureAwait(false);
 
-                return maxIndice + 1;
+                return maxIndice > 0 ? maxIndice + 1 : 1;
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred during the AutoIndice process.", ex);
+                throw new Exception($"An error occurred during the position AutoIndice process. {ex.Message}", ex);
             }
         }
 
@@ -121,7 +120,6 @@ namespace LootManagerApi.Repositories
             }
             return positionCreateDto;
         }
-
 
         #endregion
     }

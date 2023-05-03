@@ -1,5 +1,4 @@
-﻿using LootManagerApi.Dto;
-using LootManagerApi.Dto.LogisticsDto;
+﻿using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +45,6 @@ namespace LootManagerApi.Repositories
                 throw new Exception($"An error occurred while creating the Room : {ex.Message}");
             }
         }
-
 
         #endregion
 
@@ -166,18 +164,18 @@ namespace LootManagerApi.Repositories
             try
             {
                 var maxIndice = await context.Rooms
-                            .Where(r => r.HouseId == houseId)
-                            .Select(r => r.Indice)
-                            .DefaultIfEmpty(0)
-                            .MaxAsync();
+                    .Where(r => r.HouseId == houseId)
+                    .Select(r => r.Indice)
+                    .OrderByDescending(r => r)
+                    .FirstOrDefaultAsync()
+                    .ConfigureAwait(false);
 
-                return maxIndice + 1;
+                return maxIndice > 0 ? maxIndice + 1 : 1;
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred during the AutoIndice process.", ex);
+                throw new Exception($"An error occurred during the room AutoIndice process. {ex.Message}", ex);
             }
-
         }
 
         public async Task<bool> CheckIfTheRoomIndiceIsFreeThisHouseAsync(int indice, int houseId)

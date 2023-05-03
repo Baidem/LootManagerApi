@@ -1,5 +1,4 @@
-﻿using LootManagerApi.Dto.LogisticsDto;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 
 namespace LootManagerApi.Entities.logistics
@@ -60,6 +59,5 @@ namespace LootManagerApi.Entities.logistics
             }
             return sb.ToString();
         }
-
     }
 }

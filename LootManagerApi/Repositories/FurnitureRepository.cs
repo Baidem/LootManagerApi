@@ -47,25 +47,25 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
-
         #region UTILS
 
         public async Task<int> AutoIndiceFurniture_FirstPlaceFinded(int roomId)
         {
-            var furnitureIndicelist = await context.Furnitures.
-                Where(r => r.RoomId == roomId).
-                Select(r => r.Indice).Order().ToListAsync();
-
-            for (int i = 0; i < furnitureIndicelist.Count; i++)
+            try
             {
-                if (i == 0 && furnitureIndicelist[i] > 1)
-                    return 1;
+                var maxIndice = await context.Furnitures
+                    .Where(f => f.RoomId == roomId)
+                    .Select(f => f.Indice)
+                    .OrderByDescending(f => f)
+                    .FirstOrDefaultAsync()
+                    .ConfigureAwait(false);
 
-                if (i == furnitureIndicelist.Count - 1 || furnitureIndicelist[i + 1] - furnitureIndicelist[i] > 1)
-                    return furnitureIndicelist[i] + 1;
+                return maxIndice > 0 ? maxIndice + 1 : 1;
             }
-
-            throw new Exception("An error occurred during the AutoIndice process.");
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred during the furniture AutoIndice process. {ex.Message}", ex);
+            }
         }
 
         public async Task<bool> CheckIndiceIsFreeAsync(int indice, int roomId)
@@ -103,15 +103,10 @@ namespace LootManagerApi.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Indice error. ", ex);
+                throw new Exception($"Indice error. : {ex.Message}", ex);
             }
         }
 
-
-
         #endregion
-
-
-
     }
 }

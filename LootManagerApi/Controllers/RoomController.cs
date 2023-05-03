@@ -1,10 +1,8 @@
-﻿using LootManagerApi.Dto.LogisticsDto;
-using LootManagerApi.Dto;
+﻿using LootManagerApi.Dto;
+using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using LootManagerApi.Repositories;
 
 namespace LootManagerApi.Controllers
 {
@@ -22,10 +20,11 @@ namespace LootManagerApi.Controllers
 
         #region CONSTRUCTOR
 
-        public RoomController(IRoomRepository roomRepository, IHouseRepository houseRepository)
+        public RoomController(IRoomRepository roomRepository, IHouseRepository houseRepository, ILocationRepository locationRepository)
         {
             this.roomRepository = roomRepository;
             this.houseRepository = houseRepository;
+            this.locationRepository = locationRepository;
         }
 
         #endregion
@@ -49,20 +48,20 @@ namespace LootManagerApi.Controllers
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
                 // Check current user is the owner of the House of the new furniture.
-                await houseRepository.
-                    CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, roomCreateDto.HouseId);
+                await houseRepository
+                    .CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, roomCreateDto.HouseId);
 
                 // If IndiceOrDefault not null => Check indice is free. Else If null => update the indice.
-                roomCreateDto = await roomRepository.
-                    CheckIndiceFreeOrUpdateDefaultIndice(roomCreateDto);
+                roomCreateDto = await roomRepository
+                    .CheckIndiceFreeOrUpdateDefaultIndice(roomCreateDto);
 
                 // Create the Location of the new Furniture 
-                var locationDto = await locationRepository.
-                    CreateLocationByUserIdAsync(userAuthDto.Id);
+                var locationDto = await locationRepository
+                    .CreateLocationByUserIdAsync(userAuthDto.Id);
 
                 // Create the new Room
-                var roomDto = await roomRepository.
-                    CreateRoomByDtoAsync(roomCreateDto, locationDto);
+                var roomDto = await roomRepository
+                    .CreateRoomByDtoAsync(roomCreateDto, locationDto);
 
                 return Ok(roomDto);
             }
@@ -125,7 +124,6 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-
 
         /// <summary>
         /// Get user's room by Id.
@@ -237,6 +235,5 @@ namespace LootManagerApi.Controllers
         }
 
         #endregion
-
     }
 }

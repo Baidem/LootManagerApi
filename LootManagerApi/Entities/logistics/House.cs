@@ -60,6 +60,5 @@ namespace LootManagerApi.Entities.logistics
             }
             return sb.ToString();
         }
-
     }
 }

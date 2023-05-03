@@ -1,5 +1,4 @@
-﻿using LootManagerApi.Entities.logistics;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LootManagerApi.Dto.LogisticsDto
 {

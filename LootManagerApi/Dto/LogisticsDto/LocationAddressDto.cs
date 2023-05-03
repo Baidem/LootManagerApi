@@ -1,6 +1,4 @@
-﻿using LootManagerApi.Entities.logistics;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 
 
@@ -40,69 +38,71 @@ namespace LootManagerApi.Dto.LogisticsDto
         {
         }
 
-        public LocationAddressDto(Location location)
-        {
-            Location_Id = location.Id;
 
-            House_Id = location.House.Id;
-            House_Name = location.House.Name;
-            House_Indice = location.House.Indice;
+        // TODO Obosolete
+        //public LocationAddressDto(Location location)
+        //{
+        //    Location_Id = location.Id;
 
-            if (location.Room == null)
-            {
-                Room_Id = null;
-                Room_Name = null;
-                Room_Indice = null;
-            }
-            else
-            {
-                Room_Id = location.Room.Id;
-                Room_Name = location.Room.Name;
-                Room_Indice = location.Room.Indice;
-            }
+        //    House_Id = location.House.Id;
+        //    House_Name = location.House.Name;
+        //    House_Indice = location.House.Indice;
 
-
-            if (location.Furniture == null)
-            {
-                Furniture_Id = null;
-                Furniture_Name = null;
-                Furniture_Indice = null;
-            }
-            else
-            {
-                Furniture_Id = location.Furniture.Id;
-                Furniture_Name = location.Furniture.Name;
-                Furniture_Indice = location.Furniture.Indice;
-            }
+        //    if (location.Room == null)
+        //    {
+        //        Room_Id = null;
+        //        Room_Name = null;
+        //        Room_Indice = null;
+        //    }
+        //    else
+        //    {
+        //        Room_Id = location.Room.Id;
+        //        Room_Name = location.Room.Name;
+        //        Room_Indice = location.Room.Indice;
+        //    }
 
 
-            if (location.Shelf == null)
-            {
-                Shelf_Id = null;
-                Shelf_Name = null;
-                Shelf_Indice = null;
-            }
-            else
-            {
-                Shelf_Id = location.Shelf.Id;
-                Shelf_Name = location.Shelf.Name;
-                Shelf_Indice = location.Shelf.Indice;
-            }
+        //    if (location.Furniture == null)
+        //    {
+        //        Furniture_Id = null;
+        //        Furniture_Name = null;
+        //        Furniture_Indice = null;
+        //    }
+        //    else
+        //    {
+        //        Furniture_Id = location.Furniture.Id;
+        //        Furniture_Name = location.Furniture.Name;
+        //        Furniture_Indice = location.Furniture.Indice;
+        //    }
 
 
-            if (location.Position == null)
-            {
-                Position_Id = null;
-                Position_Name = null;
-                Position_Indice = null;
-            }
-            else
-            {
-                Position_Id = location.Position.Id;
-                Position_Name = location.Position.Name;
-                Position_Indice = location.Position.Indice;
-            }
-        }
+        //    if (location.Shelf == null)
+        //    {
+        //        Shelf_Id = null;
+        //        Shelf_Name = null;
+        //        Shelf_Indice = null;
+        //    }
+        //    else
+        //    {
+        //        Shelf_Id = location.Shelf.Id;
+        //        Shelf_Name = location.Shelf.Name;
+        //        Shelf_Indice = location.Shelf.Indice;
+        //    }
+
+
+        //    if (location.Position == null)
+        //    {
+        //        Position_Id = null;
+        //        Position_Name = null;
+        //        Position_Indice = null;
+        //    }
+        //    else
+        //    {
+        //        Position_Id = location.Position.Id;
+        //        Position_Name = location.Position.Name;
+        //        Position_Indice = location.Position.Indice;
+        //    }
+        //}
 
         #endregion
 

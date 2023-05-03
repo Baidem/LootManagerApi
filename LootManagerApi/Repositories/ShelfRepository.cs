@@ -50,46 +50,55 @@ namespace LootManagerApi.Repositories
 
         public async Task<FurnitureDto> GenerateShelvesAsync(FurnitureDto furnitureDto, int numberOfShelves, int numberOfPositionsPerShelf)
         {
-            Furniture furniture = await context.Furnitures.
-                FirstAsync(f => f.Id == furnitureDto.Id);
-
-            if (numberOfShelves > 0)
+            try
             {
-                for (int i = 0; i < numberOfShelves; i++)
+                Furniture furniture = await context.Furnitures.
+                    FirstAsync(f => f.Id == furnitureDto.Id);
+
+                if (numberOfShelves > 0)
                 {
-                    LocationDto locDto_shelf = await locationRepository.
-                        CreateLocationByUserIdAsync(furnitureDto.UserId);
-
-                    var sheCreDto = new ShelfCreateDto { FurnitureId = furnitureDto.Id, IndiceOrDefault = i + 1 };
-
-                    var shelfDto = await CreateShelfByDtoAsync(sheCreDto, locDto_shelf);
-
-                    if (numberOfPositionsPerShelf > 0)
+                    for (int i = 0; i < numberOfShelves; i++)
                     {
-                        for (int j = 0; j < numberOfPositionsPerShelf; j++)
+                        LocationDto locDto_shelf = await locationRepository.
+                            CreateLocationByUserIdAsync(furnitureDto.UserId);
+
+                        var sheCreDto = new ShelfCreateDto { FurnitureId = furnitureDto.Id, IndiceOrDefault = i + 1 };
+
+                        var shelfDto = await CreateShelfByDtoAsync(sheCreDto, locDto_shelf);
+
+                        if (numberOfPositionsPerShelf > 0)
                         {
-                            LocationDto locDto_pos = await locationRepository.
-                                CreateLocationByUserIdAsync(shelfDto.UserId);
+                            for (int j = 0; j < numberOfPositionsPerShelf; j++)
+                            {
+                                LocationDto locDto_pos = await locationRepository.
+                                    CreateLocationByUserIdAsync(shelfDto.UserId);
 
-                            var posCreDto = new PositionCreateDto { ShelfId = shelfDto.Id, IndiceOrDefault = i + 1 };
+                                var posCreDto = new PositionCreateDto
+                                {
+                                    ShelfId = shelfDto.Id,
+                                    IndiceOrDefault = i + 1
+                                };
 
-                            await positionRepository.CreatePositionByDtoAsync(posCreDto, locDto_pos);
+                                await positionRepository.
+                                    CreatePositionByDtoAsync(posCreDto, locDto_pos);
+                            }
                         }
                     }
                 }
 
+                await context.SaveChangesAsync();
+
+                return new FurnitureDto(furniture);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while generating the Shelves : {ex.Message}");
             }
 
-            await context.SaveChangesAsync();
-
-            return furnitureDto;
-
-            throw new NotImplementedException();
         }
 
         #endregion
-
-
 
         #region UTILS
 
@@ -97,17 +106,18 @@ namespace LootManagerApi.Repositories
         {
             try
             {
-                var maxIndice = await context.Shelves // version corrigée
-                            .Where(s => s.FurnitureId == furnitureId)
-                            .Select(s => s.Indice)
-                            .MaxAsync()
-                            .ConfigureAwait(false);
+                var maxIndice = await context.Shelves
+                    .Where(s => s.FurnitureId == furnitureId)
+                    .Select(s => s.Indice)
+                    .OrderByDescending(s => s)
+                    .FirstOrDefaultAsync()
+                    .ConfigureAwait(false);
 
-                return maxIndice + 1;
+                return maxIndice > 0 ? maxIndice + 1 : 1;
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred during the AutoIndice process.", ex);
+                throw new Exception($"An error occurred during the shelf AutoIndice process. {ex.Message}", ex);
             }
         }
 
@@ -148,8 +158,6 @@ namespace LootManagerApi.Repositories
             }
         }
 
-
         #endregion
-
     }
 }

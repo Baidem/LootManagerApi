@@ -45,7 +45,11 @@ namespace LootManagerApi.Entities.logistics
             if (shelfCreateDto.IndiceOrDefault == null)
                 throw new ArgumentNullException("shelfCreateDto.IndiceOrDefault is null");
 
-            Name = shelfCreateDto.Name;
+            if (shelfCreateDto.Name == null)
+                Name = "Shelf";
+            else
+                Name = shelfCreateDto.Name;
+
             Indice = shelfCreateDto.IndiceOrDefault.Value;
             CreatedAt = locationDto.CreatedAt;
             LocationId = locationDto.LocationId;

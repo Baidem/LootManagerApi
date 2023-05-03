@@ -19,7 +19,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<HouseDto> DeleteHouseAsync(int houseId);
 
         // UTILS
-        Task<int> AutoIndice(int userId);
+        Task<int> AutoIndiceHouse_LastAddOne(int userId);
         Task<bool> CheckIndiceIsFreeAsync(int indice, int userId);
 
         Task<bool> CheckTheOwnerOfTheHouseAsync(int userId, int houseId);

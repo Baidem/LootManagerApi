@@ -27,6 +27,5 @@ namespace LootManagerApi.Dto.LogisticsDto
             }
             return sb.ToString();
         }
-
     }
 }

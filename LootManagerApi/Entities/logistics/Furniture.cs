@@ -54,6 +54,5 @@ namespace LootManagerApi.Entities.logistics
         }
 
         #endregion
-
     }
 }
