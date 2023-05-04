@@ -120,6 +120,28 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        [HttpGet("{houseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<HouseBoard>>> GetHouseBoard(int houseId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+
+                var list = await houseRepository.GetHouseBoardByUserIdAsync(userAuthDto.Id, houseId);
+
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+
         #endregion
 
         #region UPDATE

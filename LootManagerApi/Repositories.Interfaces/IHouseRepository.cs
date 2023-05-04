@@ -11,6 +11,7 @@ namespace LootManagerApi.Repositories.Interfaces
         // READ
         Task<List<HouseDto>> GetListOfHouseDtoByUserIdAsync(int userId);
         Task<HouseDto> GetHouseDtoByHouseIdAsync(int houseId);
+        Task<List<HouseBoard>> GetHouseBoardByUserIdAsync(int userId, int houseId);
 
         // UPDATE
         Task<HouseDto> UpdateHouseByDtoAsync(HouseUpdateDto houseUpdateDto);
