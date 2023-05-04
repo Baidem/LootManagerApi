@@ -1,5 +1,6 @@
 ﻿using LootManagerApi.Dto.LogisticsDto;
 using LootManagerApi.Dto;
+using LootManagerApi.Entities.logistics;
 
 namespace LootManagerApi.Repositories.Interfaces
 {
@@ -11,6 +12,7 @@ namespace LootManagerApi.Repositories.Interfaces
 
         // READ
         Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId, int numberOfElements);
+        Task<List<PositionDto>> GetListOfPositionDtoByShelfIdAsync(int shelfId, int numberOfElements);
 
 
         // UTILS

@@ -43,6 +43,21 @@ namespace LootManagerApi.Repositories
             throw new Exception($"You have zero positions in your collection actually.");
         }
 
+        public async Task<List<PositionDto>> GetListOfPositionDtoByShelfIdAsync(int shelfId, int numberOfElements)
+        {
+            var positionDtoList = await context.Positions
+                .Where(s => s.ShelfId == shelfId)
+                .Select(s => new PositionDto(s))
+                .Take(numberOfElements)
+                .ToListAsync();
+
+            if (positionDtoList.Any())
+                return positionDtoList;
+
+            throw new Exception($"You have zero positions in your collection actually.");
+        }
+
+
         #endregion
 
         #region CREATE

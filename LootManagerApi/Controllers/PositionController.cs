@@ -72,6 +72,7 @@ namespace LootManagerApi.Controllers
             }
         }
 
+
         #endregion
 
         #region READ
@@ -80,7 +81,7 @@ namespace LootManagerApi.Controllers
         /// Get the list of Positions of the current user.
         /// </summary>
         /// <returns>List of PositionDto</returns>
-        /// <param name="numberOfElements">position creation DTO object containing position information</param>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
         /// <exception cref="Exception">Throw if there is an error when searching for Position.</exception>
         [HttpGet()]
         [ProducesResponseType(200)]
@@ -101,7 +102,33 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the list of Positions by Shelf ID.
+        /// </summary>
+        /// <returns>List of PositionDto</returns>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for Position.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<PositionDto>>> GetPositionsByShelfId(int shelfId,int numberOfElements = 100)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var positionDtoList = await positionRepository.GetListOfPositionDtoByShelfIdAsync(shelfId, numberOfElements);
+
+                return Ok(positionDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
         #endregion
+
 
         #region LOG
 
