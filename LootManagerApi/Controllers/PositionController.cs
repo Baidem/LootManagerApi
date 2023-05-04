@@ -76,13 +76,22 @@ namespace LootManagerApi.Controllers
 
         #region READ
 
-        public async Task<ActionResult<List<PositionDto>>> GetPositionsOfCurrentUser()
+        /// <summary>
+        /// Get the list of Positions of the current user.
+        /// </summary>
+        /// <returns>List of PositionDto</returns>
+        /// <param name="numberOfElements">position creation DTO object containing position information</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for Position.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<PositionDto>>> GetPositionsOfCurrentUser(int numberOfElements = 100)
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var positionDtoList = await PositionRepository.GetListOfPositionDtoByUserIdAsync(userAuthDto.Id);
+                var positionDtoList = await positionRepository.GetListOfPositionDtoByUserIdAsync(userAuthDto.Id, numberOfElements);
 
                 return Ok(positionDtoList);
             }

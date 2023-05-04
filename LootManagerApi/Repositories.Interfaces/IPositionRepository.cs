@@ -10,7 +10,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto, int numberOfPositions);
 
         // READ
-        Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId);
+        Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId, int numberOfElements);
 
 
         // UTILS
