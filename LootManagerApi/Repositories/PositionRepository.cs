@@ -2,6 +2,7 @@
 using LootManagerApi.Entities.logistics;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace LootManagerApi.Repositories
 {
@@ -23,6 +24,24 @@ namespace LootManagerApi.Repositories
             this.logger = logger;
             this.locationRepository = locationRepository;
         }
+
+        #endregion
+
+        #region READ
+
+        public async Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId)
+        {
+            var positionDtoList = await context.Positions
+                .Where(p => p.UserId == userId)
+                .Select(p => new PositionDto(p))
+                .ToListAsync();
+
+            if (positionDtoList.Any())
+                return positionDtoList;
+
+            throw new Exception($"You have zero positions in your collection actually.");
+        }
+
 
         #endregion
 

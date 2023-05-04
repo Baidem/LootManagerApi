@@ -9,6 +9,8 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<PositionDto> CreatePositionByDtoAsync(PositionCreateDto positionCreateDto, LocationDto locationDto);
         Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto, int numberOfPositions);
 
+        // READ
+        Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId);
 
 
         // UTILS

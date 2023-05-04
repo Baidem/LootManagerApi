@@ -83,7 +83,8 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var houseDtos = await houseRepository.GetListOfHouseDtoByUserIdAsync(userAuthDto.Id);
+                var houseDtos = await houseRepository
+                    .GetListOfHouseDtoByUserIdAsync(userAuthDto.Id);
 
                 return Ok(houseDtos);
             }

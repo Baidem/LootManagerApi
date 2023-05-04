@@ -1,5 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
+using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -64,6 +65,26 @@ namespace LootManagerApi.Controllers
                     .CreatePositionByDtoAsync(positionCreateDto, locationDto);
 
                 return Ok(positionDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region READ
+
+        public async Task<ActionResult<List<PositionDto>>> GetPositionsOfCurrentUser()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var positionDtoList = await PositionRepository.GetListOfPositionDtoByUserIdAsync(userAuthDto.Id);
+
+                return Ok(positionDtoList);
             }
             catch (Exception ex)
             {

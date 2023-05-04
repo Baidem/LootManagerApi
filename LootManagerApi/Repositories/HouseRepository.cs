@@ -50,7 +50,7 @@ namespace LootManagerApi.Repositories
 
         public async Task<List<HouseDto>> GetListOfHouseDtoByUserIdAsync(int userId)
         {
-            var houseDtoList = await context.Houses.Where(e => e.UserId == userId).Select(e => new HouseDto(e)).ToListAsync();
+            var houseDtoList = await context.Houses.Where(h => h.UserId == userId).Select(h => new HouseDto(h)).ToListAsync();
 
             if (houseDtoList.Any())
                 return houseDtoList;
