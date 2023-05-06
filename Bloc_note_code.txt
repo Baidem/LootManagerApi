@@ -232,3 +232,73 @@ public async Task<RoomUpdateDto> CompletedRoomUpdateDtoAsync(RoomUpdateDto roomU
 
             throw new Exception("An error occurred during the AutoIndice process.");
         }
+/////////////////////////////////////////////
+La fonction GetHouseBoardByUserIdAsync ne rend pas le résultat souhaité 
+///////////////////////////////////////////////
+        public async Task<List<HouseBoard>> GetHouseBoardByUserIdAsync(int userId, int houseId)
+        {
+            var houseFallList = await context.Users
+                .Where(u => u.Id == userId)
+                .Join(context.Houses, user => user.Id, house => house.UserId, (user, house) => new { User = user, House = house })
+                .Where(uh => uh.House.Id == houseId)
+                .Join(context.Rooms, uh => uh.House.Id, room => room.HouseId, (uh, room) => new { uh.User, uh.House, Room = room })
+                .Join(context.Furnitures, uhr => uhr.Room.Id, furniture => furniture.RoomId, (uhr, furniture) => new { uhr.User, uhr.House, uhr.Room, Furniture = furniture })
+                .Join(context.Shelves, uhrf => uhrf.Furniture.Id, shelf => shelf.FurnitureId, (uhrf, shelf) => new { uhrf.User, uhrf.House, uhrf.Room, uhrf.Furniture, Shelf = shelf })
+                .Join(context.Positions, uhrfs => uhrfs.Shelf.Id, position => position.ShelfId, (uhrfs, position) => new { uhrfs.User, uhrfs.House, uhrfs.Room, uhrfs.Furniture, uhrfs.Shelf, Position = position })
+                .ToListAsync();
+
+            if (houseFallList.Count > 0)
+            {
+                return houseFallList.Select(hfl => new HouseBoard
+                {
+                    UserId = hfl.User.Id,
+                    UserName = hfl.User.FullName,
+                    HouseId = hfl.House.Id,
+                    HouseName = hfl.House.Name,
+                    HouseIndice = hfl.House.Indice,
+                    RoomId = hfl.Room.Id,
+                    RoomName = hfl.Room.Name,
+                    RoomIndice = hfl.Room.Indice,
+                    FurnitureId = hfl.Furniture.Id,
+                    FurnitureName = hfl.Furniture.Name,
+                    FurnitureIndice = hfl.Furniture.Indice,
+                    ShelfId = hfl.Shelf.Id,
+                    ShelfName = hfl.Shelf.Name,
+                    ShelfIndice = hfl.Shelf.Indice
+                }).ToList();
+            }
+            else
+            {
+                throw new Exception($"You have zero houses in your collection actually.");
+            }
+        }
+
+
+
+/////
+
+namespace LootManagerApi.Dto.LogisticsDto
+{
+    public class HouseBoard
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public int? HouseId { get; set; }
+        public string? HouseName { get; set; }
+        public int? HouseIndice { get; set; }
+        public int? RoomId { get; set; }
+        public string? RoomName { get; set; }
+        public int? RoomIndice { get; set; }
+        public int? FurnitureId { get; set; }
+        public string? FurnitureName { get; set; }
+        public int? FurnitureIndice { get; set; }
+        public int? ShelfId { get; set; }
+        public string? ShelfName { get; set; }
+        public int? ShelfIndice { get; set; }
+
+    }
+
+}
+
+
+///////////////////////////////////////////////

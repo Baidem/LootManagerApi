@@ -69,36 +69,6 @@ namespace LootManagerApi.Repositories
             throw new Exception($"House was not found.");
         }
 
-        public async Task<List<HouseBoard>> GetHouseBoardByUserIdAsync(int userId, int houseId)
-        {
-            var linq = await context.Users
-                .Where(u => u.Id == userId)
-                .Join(context.Houses, user => user.Id, house => house.UserId, (user, house) => new { User = user, House = house })
-                .Where(uh => uh.House.Id == houseId)
-                .Join(context.Rooms, uh => uh.House.Id, room => room.HouseId, (uh, room) => new { uh.User, uh.House, Room = room })
-                .Join(context.Furnitures, uhr => uhr.Room.Id, furniture => furniture.RoomId, (uhr, furniture) => new { uhr.User, uhr.House, uhr.Room, Furniture = furniture })
-                .Join(context.Shelves, uhrf => uhrf.Furniture.Id, shelf => shelf.FurnitureId, (uhrf, shelf) => new { uhrf.User, uhrf.House, uhrf.Room, uhrf.Furniture, Shelf = shelf })
-                .Join(context.Positions, uhrfs => uhrfs.Shelf.Id, position => position.ShelfId, (uhrfs, position) => new { uhrfs.User, uhrfs.House, uhrfs.Room, uhrfs.Furniture, uhrfs.Shelf, Position = position })
-                .ToListAsync();
-
-            if (linq.Count > 0)
-            {
-                return linq.Select(hb => new HouseBoard
-                {
-                    User = hb.User,
-                    House = hb.House,
-                    Room = hb.Room,
-                    Furniture = hb.Furniture,
-                    Shelf = hb.Shelf,
-                    Position = hb.Position
-                }).ToList();
-            }
-            else
-            {
-                throw new Exception($"You have zero houses in your collection actually.");
-            }
-        }
-
 
         #endregion
 
