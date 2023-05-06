@@ -23,6 +23,25 @@ namespace LootManagerApi.Controllers
 
         #region READ
 
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<LocationBoard>>> ReadLocations()
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var locationBoardList = await locationRepository.ReadLocationBoardAsync(userAuthDto.Id);
+
+                return Ok(locationBoardList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
         /// <summary>
         /// Get the location address.
         /// </summary>
