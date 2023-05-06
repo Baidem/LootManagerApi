@@ -102,6 +102,11 @@ namespace LootManagerApi.Repositories
 
         #region READ
 
+        public async Task<ShelfDto> GetShelfDtoByIdAsync(int shelfId)
+        {
+            return await context.Shelves.Where(s => s.Id == shelfId).Select(s => new ShelfDto(s)).FirstAsync();
+        }
+
         public async Task<List<ShelfDto>> GetListOfShelfDtoByUserIdAsync(int userId, int numberOfElements)
         {
             var shelfDtoList = await context.Shelves

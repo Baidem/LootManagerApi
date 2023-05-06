@@ -82,6 +82,34 @@ namespace LootManagerApi.Controllers
         #region READ
 
         /// <summary>
+        /// Get user's shelf by Id.
+        /// </summary>
+        /// <param name="shelfId">The position ID</param>
+        /// <returns>PositionDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the position.</exception>
+        [HttpGet("{shelfId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<ShelfDto>> GetPositionById(int shelfId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await shelfRepository.CheckTheOwnerOfTheShelfAsync(userAuthDto.Id, shelfId);
+
+                var shelfDto = await shelfRepository.GetShelfDtoByIdAsync(shelfId);
+
+                return Ok(shelfDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+
+        /// <summary>
         /// Get the list of Shelves of the current user.
         /// </summary>
         /// <returns>List of ShelfDto</returns>

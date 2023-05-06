@@ -62,7 +62,6 @@ namespace LootManagerApi.Repositories
             throw new Exception($"You have zero positions in your collection actually.");
         }
 
-
         #endregion
 
         #region CREATE
@@ -167,8 +166,6 @@ namespace LootManagerApi.Repositories
 
             throw new Exception("This user cannot access this position.");
         }
-
-
 
         #endregion
     }

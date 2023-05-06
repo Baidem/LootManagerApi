@@ -9,6 +9,8 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<FurnitureDto> GenerateShelvesAsync(FurnitureDto furnitureDto, int numberOfShelves, int numberOfPositionsPerShelf);
 
         // READ
+
+        Task<ShelfDto> GetShelfDtoByIdAsync(int shelfId);
         Task<List<ShelfDto>> GetListOfShelfDtoByUserIdAsync(int userId, int numberOfElements);
         Task<List<ShelfDto>> GetListOfShelfDtoByFurnitureIdAsync(int furnitureId, int numberOfElements);
 
