@@ -100,6 +100,38 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region READ
+
+        public async Task<List<ShelfDto>> GetListOfShelfDtoByUserIdAsync(int userId, int numberOfElements)
+        {
+            var shelfDtoList = await context.Shelves
+                .Where(s => s.UserId == userId)
+                .Select(s => new ShelfDto(s))
+                .Take(numberOfElements)
+                .ToListAsync();
+
+            if (shelfDtoList.Any())
+                return shelfDtoList;
+
+            throw new Exception($"You have zero shelves in your collection actually.");
+        }
+
+        public async Task<List<ShelfDto>> GetListOfShelfDtoByFurnitureIdAsync(int furnitureId, int numberOfElements)
+        {
+            var shelfDtoList = await context.Shelves
+                .Where(s => s.FurnitureId == furnitureId)
+                .Select(s => new ShelfDto(s))
+                .Take(numberOfElements)
+                .ToListAsync();
+
+            if (shelfDtoList.Any())
+                return shelfDtoList;
+
+            throw new Exception($"You have zero shelves in your collection actually.");
+        }
+
+        #endregion
+
         #region UTILS
 
         public async Task<int> AutoIndiceShelf_LastAddOne(int furnitureId)

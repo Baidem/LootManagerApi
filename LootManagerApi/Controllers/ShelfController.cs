@@ -79,6 +79,61 @@ namespace LootManagerApi.Controllers
 
         #endregion
 
+        #region READ
+
+        /// <summary>
+        /// Get the list of Shelves of the current user.
+        /// </summary>
+        /// <returns>List of ShelfDto</returns>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for shelf list.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<ShelfDto>>> GetShelvesOfCurrentUser(int numberOfElements = 100)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var shelfDtoList = await shelfRepository.GetListOfShelfDtoByUserIdAsync(userAuthDto.Id, numberOfElements);
+
+                return Ok(shelfDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the list of Shelves by Furniture ID.
+        /// </summary>
+        /// <returns>List of ShelfDto</returns>
+        /// <param name="furnitureId">The furniture ID</param>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for shelf list.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<ShelfDto>>> GetFurnituresByRoomId(int furnitureId, int numberOfElements = 100)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var shelfDtoList = await shelfRepository.GetListOfShelfDtoByFurnitureIdAsync(furnitureId, numberOfElements);
+
+                return Ok(shelfDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        #endregion
+
         #region LOG
 
         /// <summary>
