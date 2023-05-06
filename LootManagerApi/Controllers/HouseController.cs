@@ -70,6 +70,32 @@ namespace LootManagerApi.Controllers
         #region READ
 
         /// <summary>
+        /// Get user's house by Id.
+        /// </summary>
+        /// <returns>HouseDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the house.</exception>
+        [HttpGet("{houseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<HouseDto>> GetHouseById(int houseId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
+
+                var houseDto = await houseRepository.GetHouseDtoByHouseIdAsync(houseId);
+
+                return Ok(houseDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get the list of houses of the current user.
         /// </summary>
         /// <returns>List of HouseDto</returns>
@@ -93,33 +119,6 @@ namespace LootManagerApi.Controllers
                 return Problem(ex.Message);
             }
         }
-
-        /// <summary>
-        /// Get user's house by Id.
-        /// </summary>
-        /// <returns>HouseDto</returns>
-        /// <exception cref="Exception">Throw if there is an error when searching for the house.</exception>
-        [HttpGet("{houseId}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<HouseDto>> GetHouse(int houseId)
-        {
-            try
-            {
-                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
-
-                await houseRepository.CheckTheOwnerOfTheHouseAsync(userAuthDto.Id, houseId);
-
-                var houseDto = await houseRepository.GetHouseDtoByHouseIdAsync(houseId);
-
-                return Ok(houseDto);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
 
         #endregion
 
