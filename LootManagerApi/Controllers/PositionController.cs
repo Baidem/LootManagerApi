@@ -78,6 +78,33 @@ namespace LootManagerApi.Controllers
         #region READ
 
         /// <summary>
+        /// Get user's position by Id.
+        /// </summary>
+        /// <param name="positionId">The position ID</param>
+        /// <returns>PositionDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the position.</exception>
+        [HttpGet("{positionId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PositionDto>> GetPositionById(int positionId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await positionRepository.CheckTheOwnerOfThePositionAsync(userAuthDto.Id, positionId);
+
+                var positionDto = await positionRepository.GetPositionDtoByIdAsync(positionId);
+
+                return Ok(positionDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get the list of Positions of the current user.
         /// </summary>
         /// <returns>List of PositionDto</returns>

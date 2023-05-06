@@ -11,6 +11,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<ShelfDto> GeneratePositionsAsync(ShelfDto shelfDto, int numberOfPositions);
 
         // READ
+        Task<PositionDto> GetPositionDtoByIdAsync(int positionId);
         Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId, int numberOfElements);
         Task<List<PositionDto>> GetListOfPositionDtoByShelfIdAsync(int shelfId, int numberOfElements);
 
@@ -18,7 +19,7 @@ namespace LootManagerApi.Repositories.Interfaces
         // UTILS
         Task<int> AutoIndicePosition_LastAddOne(int shelfId);
         Task<PositionCreateDto> CheckIndiceFreeOrUpdateDefaultIndice(PositionCreateDto positionCreateDto);
-
+        Task<bool> CheckTheOwnerOfThePositionAsync(int userId, int positionId);
 
     }
 }

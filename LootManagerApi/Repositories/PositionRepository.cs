@@ -29,6 +29,11 @@ namespace LootManagerApi.Repositories
 
         #region READ
 
+        public async Task<PositionDto> GetPositionDtoByIdAsync(int positionId)
+        {
+            return await context.Positions.Where(p => p.Id == positionId).Select(p => new PositionDto(p)).FirstAsync();
+        }
+
         public async Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId, int numberOfElements)
         {
             var positionDtoList = await context.Positions
@@ -154,6 +159,16 @@ namespace LootManagerApi.Repositories
             }
             return positionCreateDto;
         }
+
+        public async Task<bool> CheckTheOwnerOfThePositionAsync(int userId, int positionId)
+        {
+            if (await context.Positions.AnyAsync(p => p.UserId == userId && p.Id == positionId))
+                return true;
+
+            throw new Exception("This user cannot access this position.");
+        }
+
+
 
         #endregion
     }

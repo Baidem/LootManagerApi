@@ -89,6 +89,7 @@ namespace LootManagerApi.Repositories
             return await context.Rooms.Where(r => r.Id == roomId).Select(r => r.HouseId).FirstAsync();
         }
 
+        // TODO obsolete ??
         private async Task<int> GetOwnerIdOfTheRoomAsync(int roomId)
         {
             var userId = await context.Rooms
