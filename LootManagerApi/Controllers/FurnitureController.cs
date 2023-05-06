@@ -35,6 +35,33 @@ namespace LootManagerApi.Controllers
         #region READ
 
         /// <summary>
+        /// Get user's Furniture by Id.
+        /// </summary>
+        /// <param name="furnitureId">The furniture ID</param>
+        /// <returns>FurnitureDto</returns>
+        /// <exception cref="Exception">Throw if there is an error when searching for the furniture.</exception>
+        [HttpGet("{furnitureId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<FurnitureDto>> GetFurnitureById(int furnitureId)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                await furnitureRepository.CheckTheOwnerOfTheFurnitureAsync(userAuthDto.Id, furnitureId);
+
+                var furnitureDto = await furnitureRepository.GetFurnitureDtoByIdAsync(furnitureId);
+
+                return Ok(furnitureDto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get the list of Furnitures of the current user.
         /// </summary>
         /// <returns>List of FurnitureDto</returns>

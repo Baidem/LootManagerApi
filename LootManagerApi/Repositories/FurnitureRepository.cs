@@ -49,6 +49,11 @@ namespace LootManagerApi.Repositories
 
         #region READ
 
+        public async Task<FurnitureDto> GetFurnitureDtoByIdAsync(int furnitureId)
+        {
+            return await context.Furnitures.Where(f => f.Id == furnitureId).Select(f => new FurnitureDto(f)).FirstAsync();
+        }
+
         public async Task<List<FurnitureDto>> GetListOfFurnitureDtoByUserIdAsync(int userId, int numberOfElements)
         {
             var furnitureDtoList = await context.Furnitures
