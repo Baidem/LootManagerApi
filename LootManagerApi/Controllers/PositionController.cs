@@ -106,6 +106,7 @@ namespace LootManagerApi.Controllers
         /// Get the list of Positions by Shelf ID.
         /// </summary>
         /// <returns>List of PositionDto</returns>
+        /// <param name="shelfId">The shelf ID</param>
         /// <param name="numberOfElements">The maximum number of elements in the list</param>
         /// <exception cref="Exception">Throw if there is an error when searching for Position.</exception>
         [HttpGet()]

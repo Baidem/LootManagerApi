@@ -1,5 +1,6 @@
 ﻿using LootManagerApi.Dto;
 using LootManagerApi.Dto.LogisticsDto;
+using LootManagerApi.Repositories;
 using LootManagerApi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -27,6 +28,61 @@ namespace LootManagerApi.Controllers
             this.furnitureRepository = furnitureRepository;
             this.shelfRepository = shelfRepository;
             this.locationRepository = locationRepository;
+        }
+
+        #endregion
+
+        #region READ
+
+        /// <summary>
+        /// Get the list of Furnitures of the current user.
+        /// </summary>
+        /// <returns>List of FurnitureDto</returns>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for Furniture.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<FurnitureDto>>> GetFurnituresOfCurrentUser(int numberOfElements = 100)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var furnitureDtoList = await furnitureRepository.GetListOfFurnitureDtoByUserIdAsync(userAuthDto.Id, numberOfElements);
+
+                return Ok(furnitureDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the list of Furnitures by Room ID.
+        /// </summary>
+        /// <returns>List of FurnitureDto</returns>
+        /// <param name="roomId">The room ID</param>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for Furniture.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<FurnitureDto>>> GetFurnituresByRoomId(int roomId, int numberOfElements = 100)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var furnitureDtoList = await furnitureRepository.GetListOfFurnitureDtoByRoomIdAsync(roomId, numberOfElements);
+
+                return Ok(furnitureDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         #endregion

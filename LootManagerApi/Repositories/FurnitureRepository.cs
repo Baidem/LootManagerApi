@@ -47,6 +47,38 @@ namespace LootManagerApi.Repositories
 
         #endregion
 
+        #region READ
+
+        public async Task<List<FurnitureDto>> GetListOfFurnitureDtoByUserIdAsync(int userId, int numberOfElements)
+        {
+            var furnitureDtoList = await context.Furnitures
+                .Where(f => f.UserId == userId)
+                .Select(f => new FurnitureDto(f))
+                .Take(numberOfElements)
+                .ToListAsync();
+
+            if (furnitureDtoList.Any())
+                return furnitureDtoList;
+
+            throw new Exception($"You have zero furnitures in your collection actually.");
+        }
+        public async Task<List<FurnitureDto>> GetListOfFurnitureDtoByRoomIdAsync(int roomId, int numberOfElements)
+        {
+            var furnitureDtoList = await context.Furnitures
+                .Where(f => f.RoomId == roomId)
+                .Select(f => new FurnitureDto(f))
+                .Take(numberOfElements)
+                .ToListAsync();
+
+            if (furnitureDtoList.Any())
+                return furnitureDtoList;
+
+            throw new Exception($"You have zero positions in your collection actually.");
+        }
+
+
+        #endregion
+
         #region UTILS
 
         public async Task<int> AutoIndiceFurniture_FirstPlaceFinded(int roomId)

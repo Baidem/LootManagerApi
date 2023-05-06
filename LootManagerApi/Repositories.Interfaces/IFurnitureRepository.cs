@@ -7,9 +7,9 @@ namespace LootManagerApi.Repositories.Interfaces
         // CREATE
         Task<FurnitureDto> CreateFurnitureByDtoAsync(FurnitureCreateDto furnitureCreateDto, LocationDto location);
 
-        //// READ
-        //Task<List<FurnitureDto>> GetListOfFurnitureDtoByUserIdAsync(int userId);
-        //Task<FurnitureDto> GetFurnitureDtoByFurnitureIdAsync(int furnitureId);
+        // READ
+        Task<List<FurnitureDto>> GetListOfFurnitureDtoByUserIdAsync(int userId, int numberOfElements);
+        Task<List<FurnitureDto>> GetListOfFurnitureDtoByRoomIdAsync(int RoomId, int numberOfElements);
 
         //// UPDATE
         //Task<FurnitureDto> UpdateFurnitureByDtoAsync(FurnitureUpdateDto furnitureUpdateDto);
