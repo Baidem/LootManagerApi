@@ -52,128 +52,28 @@ namespace LootManagerApi.Repositories
 
         #region READ
 
-        public async Task<List<LocationBoard>> ReadLocationBoardAsync(int userId)
+        public async Task<List<LocationAddressDto>> GetLocationDtoListByUserId(int userId)
         {
-            var board = await context.Locations
-                 .Join(context.Users, location => location.UserId, user => user.Id, (location, user) =>
-                 new
-                 {
-                     LocationId = location.Id,
-                     UserId = user.Id,
-                     UserName = user.FullName,
-                     House = location.House,
-                 })
-                 .Where(l => l.UserId == userId)
+            var user = await context.Users
+                .Include(user => user.Houses)
+                .Include(user => user.Rooms)
+                .Include(user => user.Furnitures)
+                .Include(user => user.Shelves)
+                .Include(user => user.Positions)
+                .FirstAsync(user => user.Id == userId);
 
-                 //.Join(context.Houses, lu => lu.LocationId, house => house.LocationId, (lu, house) =>
-                 //new
-                 //{
-                 //    lu.LocationId,
-                 //    lu.UserId,
-                 //    lu.UserName,
-                 //    HouseId = house.Id,
-                 //    HouseName = house.Name,
-                 //    HouseIndice = house.Indice
-                 //})
-                 // .Join(context.Rooms, luh => luh.HouseId, room => room.HouseId, (luh, room) =>
-                 // new
-                 // {
-                 //     luh.LocationId,
-                 //     luh.UserId,
-                 //     luh.UserName,
-                 //     luh.HouseId,
-                 //     luh.HouseName,
-                 //     luh.HouseIndice,
-                 //     RoomId = room.Id,
-                 //     RoomName = room.Name,
-                 //     RoomIndice = room.Indice
-                 // })
-                 //.Join(context.Furnitures, luhr => luhr.RoomId, furniture => furniture.RoomId, (luhr, furniture) =>
-                 //new
-                 //{
-                 //    luhr.LocationId,
-                 //    luhr.UserId,
-                 //    luhr.UserName,
-                 //    luhr.HouseId,
-                 //    luhr.HouseName,
-                 //    luhr.HouseIndice,
-                 //    luhr.RoomId,
-                 //    luhr.RoomName,
-                 //    luhr.RoomIndice,
-                 //    FurnitureId = furniture.Id,
-                 //    FurnitureName = furniture.Name,
-                 //    FurnitureIndice = furniture.Indice
-                 //})
-                 // .Join(context.Shelves, luhrf => luhrf.FurnitureId, shelf => shelf.FurnitureId, (luhrf, shelf) => new
-                 // {
-                 //     luhrf.LocationId,
-                 //     luhrf.UserId,
-                 //     luhrf.UserName,
-                 //     luhrf.HouseId,
-                 //     luhrf.HouseName,
-                 //     luhrf.HouseIndice,
-                 //     luhrf.RoomId,
-                 //     luhrf.RoomName,
-                 //     luhrf.RoomIndice,
-                 //     luhrf.FurnitureId,
-                 //     luhrf.FurnitureName,
-                 //     luhrf.FurnitureIndice,
-                 //     ShelfId = shelf.Id,
-                 //     ShelfName = shelf.Name,
-                 //     ShelfIndice = shelf.Indice
-                 // })
-                 //.Join(context.Positions, luhrfs => luhrfs.ShelfId, position => position.ShelfId, (luhrfs, position) => new
-                 //{
-                 //    luhrfs.LocationId,
-                 //    luhrfs.UserId,
-                 //    luhrfs.UserName,
-                 //    luhrfs.HouseId,
-                 //    luhrfs.HouseName,
-                 //    luhrfs.HouseIndice,
-                 //    luhrfs.RoomId,
-                 //    luhrfs.RoomName,
-                 //    luhrfs.RoomIndice,
-                 //    luhrfs.FurnitureId,
-                 //    luhrfs.FurnitureName,
-                 //    luhrfs.FurnitureIndice,
-                 //    luhrfs.ShelfId,
-                 //    luhrfs.ShelfName,
-                 //    luhrfs.ShelfIndice,
-                 //    PositionId = position.Id,
-                 //    PositionName = position.Name,
-                 //    PositionIndice = position.Indice,
-                 //})
-                 .ToListAsync();
+            var locations = await context.Locations
+                .Include(location => location.House)
+                .Include(location => location.Room)
+                .Include(location => location.Furniture)
+                .Include(location => location.Shelf)
+                .Include(location => location.Position)
+                .Where(location => location.UserId == userId)
+                .ToListAsync();
 
-            if (board.Count > 0)
-            {
-                return board.Select(lbl => new LocationBoard
-                {
-                    LocationId = lbl.LocationId,
-                    UserId = lbl.UserId,
-                    UserName = lbl.UserName,
-                    HouseId = lbl.House?.Id
-                    //HouseName = lbl.HouseName,
-                    //HouseIndice = lbl.HouseIndice,
-                    //RoomId = lbl.RoomId,
-                    //RoomName = lbl.RoomName,
-                    //RoomIndice = lbl.RoomIndice,
-                    //FurnitureId = lbl.FurnitureId,
-                    //FurnitureName = lbl.FurnitureName,
-                    //FurnitureIndice = lbl.FurnitureIndice,
-                    //ShelfId = lbl.ShelfId,
-                    //ShelfName = lbl.ShelfName,
-                    //ShelfIndice = lbl.ShelfIndice,
-                    //PositionId = lbl.PositionId,
-                    //PositionName = lbl.PositionName,
-                    //PositionIndice = lbl.PositionIndice,
-                }).ToList();
-            }
-            else
-            {
-                throw new Exception($"You have zero houses in your collection actually.");
-            }
+            var locationDtoList = locations.Select(l => new LocationAddressDto(l, user)).ToList();
 
+            return locationDtoList;
         }
 
 
@@ -185,8 +85,7 @@ namespace LootManagerApi.Repositories
                 .Include(location => location.Furniture)
                 .Include(location => location.Shelf)
                 .Include(location => location.Position)
-                .FirstAsync(l => l.Id == locationId)
-            ;
+                .FirstAsync(l => l.Id == locationId);
 
             var user = await context.Users
                 .Include(user => user.Houses)

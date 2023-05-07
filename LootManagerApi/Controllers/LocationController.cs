@@ -26,13 +26,13 @@ namespace LootManagerApi.Controllers
         [HttpGet()]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<List<LocationBoard>>> ReadLocations()
+        public async Task<ActionResult<List<LocationBoard>>> GetLocationAddressList()
         {
             try
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                var locationBoardList = await locationRepository.ReadLocationBoardAsync(userAuthDto.Id);
+                var locationBoardList = await locationRepository.GetLocationDtoListByUserId(userAuthDto.Id);
 
                 return Ok(locationBoardList);
             }

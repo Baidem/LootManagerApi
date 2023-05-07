@@ -9,7 +9,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<LocationDto> CreateLocationByUserIdAsync(int userId);
 
         // READ
-        Task<List<LocationBoard>> ReadLocationBoardAsync(int userId);
+        Task<List<LocationAddressDto>> GetLocationDtoListByUserId(int userId);
         Task<LocationAddressDto> GetLocationAddressAsync(int locationId);
         Task<List<LocationDto>> GetLocationsAsync(int userId);
         Task<LocationDto> GetLocationAsync(int locationId);
