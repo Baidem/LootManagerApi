@@ -122,17 +122,15 @@ namespace LootManagerApi.Repositories
 
         #region UPDATE
 
-        // TODO Implement UpdateLocationByIdAsync
         public async Task<LocationDto> UpdateLocationByIdAsync(int locationId)
         {
-            throw new NotSupportedException();
-            //Location location = await context.Locations.FirstAsync(l => l.Id == locationId);
+            Location location = await context.Locations.FirstAsync(l => l.Id == locationId);
 
-            //location.UpdatedAt = DateTime.UtcNow;
+            location.UpdatedAt = DateTime.UtcNow;
 
-            //await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
-            //return new LocationDto(location);
+            return new LocationDto(location);
         }
 
         #endregion

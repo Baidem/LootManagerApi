@@ -155,6 +155,32 @@ namespace LootManagerApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the list of Positions by name search.
+        /// </summary>
+        /// <returns>List of PositionDto</returns>
+        /// <param name="nameSearch"></param>
+        /// <param name="numberOfElements">The maximum number of elements in the list</param>
+        /// <exception cref="Exception">Throw if there is an error when searching for Position.</exception>
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<PositionDto>>> GetPositionsByNameSearch(string nameSearch, int numberOfElements = 100)
+        {
+            try
+            {
+                UserAuthDto userAuthDto = loadUserAuthentifiedDto();
+
+                var positionDtoList = await positionRepository.GetListOfPositionDtoByNameSearchAsync(userAuthDto.Id, nameSearch, numberOfElements);
+
+                return Ok(positionDtoList);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
         #endregion
 
 

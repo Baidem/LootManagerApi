@@ -14,6 +14,7 @@ namespace LootManagerApi.Repositories.Interfaces
         Task<PositionDto> GetPositionDtoByIdAsync(int positionId);
         Task<List<PositionDto>> GetListOfPositionDtoByUserIdAsync(int userId, int numberOfElements);
         Task<List<PositionDto>> GetListOfPositionDtoByShelfIdAsync(int shelfId, int numberOfElements);
+        Task<List<PositionDto>> GetListOfPositionDtoByNameSearchAsync(int userId, string nameSearch, int numberOfElements);
 
 
         // UTILS

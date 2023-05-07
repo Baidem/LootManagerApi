@@ -51,8 +51,22 @@ namespace LootManagerApi.Repositories
         public async Task<List<PositionDto>> GetListOfPositionDtoByShelfIdAsync(int shelfId, int numberOfElements)
         {
             var positionDtoList = await context.Positions
-                .Where(s => s.ShelfId == shelfId)
-                .Select(s => new PositionDto(s))
+                .Where(p => p.ShelfId == shelfId)
+                .Select(p => new PositionDto(p))
+                .Take(numberOfElements)
+                .ToListAsync();
+
+            if (positionDtoList.Any())
+                return positionDtoList;
+
+            throw new Exception($"You have zero positions in your collection actually.");
+        }
+
+        public async Task<List<PositionDto>> GetListOfPositionDtoByNameSearchAsync(int userId, string nameSearch, int numberOfElements)
+        {
+            var positionDtoList = await context.Positions
+                .Where(p => p.UserId == userId && p.Name.Contains(nameSearch))
+                .Select(p => new PositionDto(p))
                 .Take(numberOfElements)
                 .ToListAsync();
 
