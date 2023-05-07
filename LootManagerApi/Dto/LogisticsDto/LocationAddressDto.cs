@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using LootManagerApi.Entities.logistics;
+using LootManagerApi.Entities;
 
 
 namespace LootManagerApi.Dto.LogisticsDto
@@ -8,7 +8,7 @@ namespace LootManagerApi.Dto.LogisticsDto
     {
         #region PROPERTIES
 
-        public int? Location_Id { get; set; }
+        public int Location_Id { get; set; }
 
         public int? House_Id { get; set; }
         public string? House_Name { get; set; }
@@ -30,92 +30,193 @@ namespace LootManagerApi.Dto.LogisticsDto
         public string? Position_Name { get; set; }
         public int? Position_Indice { get; set; }
 
-        #endregion
-
-        #region CONSTRUCTORS
-
         public LocationAddressDto()
         {
         }
 
-
-        // TODO Obosolete
-        //public LocationAddressDto(Location location)
-        //{
-        //    Location_Id = location.Id;
-
-        //    House_Id = location.House.Id;
-        //    House_Name = location.House.Name;
-        //    House_Indice = location.House.Indice;
-
-        //    if (location.Room == null)
-        //    {
-        //        Room_Id = null;
-        //        Room_Name = null;
-        //        Room_Indice = null;
-        //    }
-        //    else
-        //    {
-        //        Room_Id = location.Room.Id;
-        //        Room_Name = location.Room.Name;
-        //        Room_Indice = location.Room.Indice;
-        //    }
-
-
-        //    if (location.Furniture == null)
-        //    {
-        //        Furniture_Id = null;
-        //        Furniture_Name = null;
-        //        Furniture_Indice = null;
-        //    }
-        //    else
-        //    {
-        //        Furniture_Id = location.Furniture.Id;
-        //        Furniture_Name = location.Furniture.Name;
-        //        Furniture_Indice = location.Furniture.Indice;
-        //    }
-
-
-        //    if (location.Shelf == null)
-        //    {
-        //        Shelf_Id = null;
-        //        Shelf_Name = null;
-        //        Shelf_Indice = null;
-        //    }
-        //    else
-        //    {
-        //        Shelf_Id = location.Shelf.Id;
-        //        Shelf_Name = location.Shelf.Name;
-        //        Shelf_Indice = location.Shelf.Indice;
-        //    }
-
-
-        //    if (location.Position == null)
-        //    {
-        //        Position_Id = null;
-        //        Position_Name = null;
-        //        Position_Indice = null;
-        //    }
-        //    else
-        //    {
-        //        Position_Id = location.Position.Id;
-        //        Position_Name = location.Position.Name;
-        //        Position_Indice = location.Position.Indice;
-        //    }
-        //}
-
-        #endregion
-
-        #region METHODS
-
-        public override string? ToString()
+        public LocationAddressDto(Location location, User user)
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (PropertyInfo prop in this.GetType().GetProperties())
+            Location_Id = location.Id;
+            if (location.Position != null)
             {
-                sb.AppendLine($"{prop.Name}: {prop.GetValue(this)}");
+                Position_Id = location.Position?.Id;
+                Position_Name = location.Position?.Name;
+                Position_Indice = location.Position?.Indice;
+
+                Shelf_Id = user?.Positions?
+                    .Where(p => p.Id == Position_Id)
+                    .Select(p => p.ShelfId)
+                    .First();
+                
+                Shelf_Name = user?.Shelves?
+                    .Where(s => s.Id == Shelf_Id)
+                    .Select(s => s.Name)
+                    .First();
+
+                Shelf_Indice = user?.Shelves?
+                    .Where(s => s.Id == Shelf_Id)
+                    .Select(s => s.Indice)
+                    .First();
+
+                Furniture_Id = user?.Shelves?
+                    .Where(s => s.Id == Shelf_Id)
+                    .Select(s => s.FurnitureId)
+                    .First()
+;
+                Furniture_Name = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.Name)
+                    .First();
+
+                Furniture_Indice = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.Indice)
+                    .First();
+
+                Room_Id = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.RoomId)
+                    .First()
+;
+                Room_Name = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.Name)
+                    .First();
+
+                Room_Indice = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.Indice)
+                    .First();
+
+                House_Id = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.HouseId)
+                    .First()
+;
+                House_Name = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Name)
+                    .First();
+
+                House_Indice = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Indice)
+                    .First();
             }
-            return sb.ToString();
+            else if (location.Shelf != null)
+            {
+                Shelf_Id = location.Shelf?.Id;
+                Shelf_Name = location.Shelf?.Name;
+                Shelf_Indice = location.Shelf?.Indice;
+
+                Furniture_Id = user?.Shelves?
+                    .Where(s => s.Id == Shelf_Id)
+                    .Select(s => s.FurnitureId)
+                    .First()
+;
+                Furniture_Name = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.Name)
+                    .First();
+
+                Furniture_Indice = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.Indice)
+                    .First();
+
+                Room_Id = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.RoomId)
+                    .First()
+;
+                Room_Name = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.Name)
+                    .First();
+
+                Room_Indice = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.Indice)
+                    .First();
+
+                House_Id = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.HouseId)
+                    .First()
+;
+                House_Name = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Name)
+                    .First();
+
+                House_Indice = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Indice)
+                    .First();
+            }
+            else if (location.Furniture != null)
+            {
+                Furniture_Id = location.Furniture?.Id;
+                Furniture_Name = location.Furniture?.Name;
+                Furniture_Indice = location.Furniture?.Indice;
+
+                Room_Id = user?.Furnitures?
+                    .Where(f => f.Id == Furniture_Id)
+                    .Select(f => f.RoomId)
+                    .First()
+;
+                Room_Name = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.Name)
+                    .First();
+
+                Room_Indice = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.Indice)
+                    .First();
+
+                House_Id = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.HouseId)
+                    .First()
+;
+                House_Name = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Name)
+                    .First();
+
+                House_Indice = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Indice)
+                    .First();
+            }
+            else if (location.Room != null)
+            {
+                Room_Id = location.Room?.Id;
+                Room_Name = location.Room?.Name;
+                Room_Indice = location.Room?.Indice;
+
+                House_Id = user?.Rooms?
+                    .Where(r => r.Id == Room_Id)
+                    .Select(r => r.HouseId)
+                    .First()
+;
+                House_Name = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Name)
+                    .First();
+
+                House_Indice = user?.Houses?
+                    .Where(h => h.Id == House_Id)
+                    .Select(h => h.Indice)
+                    .First();
+            }
+            else if (location.House != null)
+            {
+                House_Id = location.House?.Id;
+                House_Name = location.House?.Name;
+                House_Indice = location.House?.Indice;
+            }
         }
 
         #endregion

@@ -57,7 +57,7 @@ namespace LootManagerApi.Controllers
             {
                 UserAuthDto userAuthDto = loadUserAuthentifiedDto();
 
-                await locationRepository.CheckOwnerOfLocationAsync(locationId, userAuthDto.Id);
+                await locationRepository.CheckOwnerOfLocationAsync(userAuthDto.Id, locationId);
 
                 var locationAddressDto = await locationRepository.GetLocationAddressAsync(locationId);
 
