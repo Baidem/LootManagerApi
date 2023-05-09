@@ -52,38 +52,31 @@ namespace LootManagerApi.Dto.LogisticsDto
                 Shelf_id = user?.Positions?
                     .Where(p => p.Id == Position_id)
                     .Select(p => p.ShelfId)
-                    .First();
-                
+                    .First();                
                 Shelf_name = user?.Shelves?
                     .Where(s => s.Id == Shelf_id)
                     .Select(s => s.Name)
                     .First();
-
                 Shelf_indice = user?.Shelves?
                     .Where(s => s.Id == Shelf_id)
                     .Select(s => s.Indice)
                     .First();
-
                 Furniture_id = user?.Shelves?
                     .Where(s => s.Id == Shelf_id)
                     .Select(s => s.FurnitureId)
-                    .First()
-;
+                    .First();
                 Furniture_name = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.Name)
                     .First();
-
                 Furniture_indice = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.Indice)
                     .First();
-
                 Room_id = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.RoomId)
-                    .First()
-;
+                    .First();
                 Room_name = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.Name)
@@ -97,13 +90,11 @@ namespace LootManagerApi.Dto.LogisticsDto
                 House_id = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.HouseId)
-                    .First()
-;
+                    .First();
                 House_name = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Name)
                     .First();
-
                 House_indice = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Indice)
@@ -118,43 +109,35 @@ namespace LootManagerApi.Dto.LogisticsDto
                 Furniture_id = user?.Shelves?
                     .Where(s => s.Id == Shelf_id)
                     .Select(s => s.FurnitureId)
-                    .First()
-;
+                    .First();
                 Furniture_name = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.Name)
                     .First();
-
                 Furniture_indice = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.Indice)
                     .First();
-
                 Room_id = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.RoomId)
-                    .First()
-;
+                    .First();
                 Room_name = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.Name)
                     .First();
-
                 Room_indice = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.Indice)
                     .First();
-
                 House_id = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.HouseId)
-                    .First()
-;
+                    .First();
                 House_name = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Name)
                     .First();
-
                 House_indice = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Indice)
@@ -169,28 +152,23 @@ namespace LootManagerApi.Dto.LogisticsDto
                 Room_id = user?.Furnitures?
                     .Where(f => f.Id == Furniture_id)
                     .Select(f => f.RoomId)
-                    .First()
-;
+                    .First();
                 Room_name = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.Name)
                     .First();
-
                 Room_indice = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.Indice)
                     .First();
-
                 House_id = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.HouseId)
-                    .First()
-;
+                    .First();
                 House_name = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Name)
                     .First();
-
                 House_indice = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Indice)
@@ -205,13 +183,11 @@ namespace LootManagerApi.Dto.LogisticsDto
                 House_id = user?.Rooms?
                     .Where(r => r.Id == Room_id)
                     .Select(r => r.HouseId)
-                    .First()
-;
+                    .First();
                 House_name = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Name)
                     .First();
-
                 House_indice = user?.Houses?
                     .Where(h => h.Id == House_id)
                     .Select(h => h.Indice)
