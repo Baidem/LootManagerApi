@@ -1,6 +1,7 @@
 ﻿using LootManagerApi.Entities.logistics;
 using LootManagerApi.Entities;
-
+using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace LootManagerApi.Dto.LogisticsDto
 {
@@ -43,162 +44,73 @@ namespace LootManagerApi.Dto.LogisticsDto
         {
             Location_id = location.Id;
             User_id = user.Id;
+
             if (location.Position != null)
             {
-                Position_id = location.Position?.Id;
-                Position_name = location.Position?.Name;
-                Position_indice = location.Position?.Indice;
-
-                Shelf_id = user?.Positions?
-                    .Where(p => p.Id == Position_id)
-                    .Select(p => p.ShelfId)
-                    .First();                
-                Shelf_name = user?.Shelves?
-                    .Where(s => s.Id == Shelf_id)
-                    .Select(s => s.Name)
-                    .First();
-                Shelf_indice = user?.Shelves?
-                    .Where(s => s.Id == Shelf_id)
-                    .Select(s => s.Indice)
-                    .First();
-                Furniture_id = user?.Shelves?
-                    .Where(s => s.Id == Shelf_id)
-                    .Select(s => s.FurnitureId)
-                    .First();
-                Furniture_name = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.Name)
-                    .First();
-                Furniture_indice = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.Indice)
-                    .First();
-                Room_id = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.RoomId)
-                    .First();
-                Room_name = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.Name)
-                    .First();
-
-                Room_indice = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.Indice)
-                    .First();
-
-                House_id = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.HouseId)
-                    .First();
-                House_name = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Name)
-                    .First();
-                House_indice = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Indice)
-                    .First();
+                MapAddressFromPosition(location.Position, user);
             }
             else if (location.Shelf != null)
             {
-                Shelf_id = location.Shelf?.Id;
-                Shelf_name = location.Shelf?.Name;
-                Shelf_indice = location.Shelf?.Indice;
-
-                Furniture_id = user?.Shelves?
-                    .Where(s => s.Id == Shelf_id)
-                    .Select(s => s.FurnitureId)
-                    .First();
-                Furniture_name = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.Name)
-                    .First();
-                Furniture_indice = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.Indice)
-                    .First();
-                Room_id = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.RoomId)
-                    .First();
-                Room_name = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.Name)
-                    .First();
-                Room_indice = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.Indice)
-                    .First();
-                House_id = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.HouseId)
-                    .First();
-                House_name = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Name)
-                    .First();
-                House_indice = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Indice)
-                    .First();
+                MapAddressFromShelf(location.Shelf, user);
             }
             else if (location.Furniture != null)
             {
-                Furniture_id = location.Furniture?.Id;
-                Furniture_name = location.Furniture?.Name;
-                Furniture_indice = location.Furniture?.Indice;
-
-                Room_id = user?.Furnitures?
-                    .Where(f => f.Id == Furniture_id)
-                    .Select(f => f.RoomId)
-                    .First();
-                Room_name = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.Name)
-                    .First();
-                Room_indice = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.Indice)
-                    .First();
-                House_id = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.HouseId)
-                    .First();
-                House_name = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Name)
-                    .First();
-                House_indice = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Indice)
-                    .First();
+                MapAddressFromFurniture(location.Furniture, user);
             }
             else if (location.Room != null)
             {
-                Room_id = location.Room?.Id;
-                Room_name = location.Room?.Name;
-                Room_indice = location.Room?.Indice;
-
-                House_id = user?.Rooms?
-                    .Where(r => r.Id == Room_id)
-                    .Select(r => r.HouseId)
-                    .First();
-                House_name = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Name)
-                    .First();
-                House_indice = user?.Houses?
-                    .Where(h => h.Id == House_id)
-                    .Select(h => h.Indice)
-                    .First();
+                MapAddressFromRoom(location.Room, user);
             }
             else if (location.House != null)
             {
-                House_id = location.House?.Id;
-                House_name = location.House?.Name;
-                House_indice = location.House?.Indice;
+                MapAddressFromHouse(location.House, user);
             }
+        }
+        private void MapAddressFromPosition(Position position, User user)
+        {
+            Position_id = position?.Id;
+            Position_name = position?.Name;
+            Position_indice = position?.Indice;
+
+            var shelf = user?.Shelves?.FirstOrDefault(s => s.Id == position?.ShelfId);
+            MapAddressFromShelf(shelf, user);
+        }
+
+        private void MapAddressFromShelf(Shelf shelf, User user)
+        {
+            Shelf_id = shelf?.Id;
+            Shelf_name = shelf?.Name;
+            Shelf_indice = shelf?.Indice;
+
+            var furniture = user?.Furnitures?.FirstOrDefault(f => f.Id == shelf?.FurnitureId);
+            MapAddressFromFurniture(furniture, user);
+        }
+
+        private void MapAddressFromFurniture(Furniture furniture, User user)
+        {
+            Furniture_id = furniture?.Id;
+            Furniture_name = furniture?.Name;
+            Furniture_indice = furniture?.Indice;
+
+            var room = user?.Rooms?.FirstOrDefault(r => r.Id == furniture?.RoomId);
+            MapAddressFromRoom(room, user);
+        }
+
+        private void MapAddressFromRoom(Room room, User user)
+        {
+            Room_id = room?.Id;
+            Room_name = room?.Name;
+            Room_indice = room?.Indice;
+
+            var house = user?.Houses?.FirstOrDefault(r => r.Id == room?.HouseId);
+            MapAddressFromHouse(house, user);
+        }
+
+        private void MapAddressFromHouse(House house, User user)
+        {
+            House_id = house?.Id;
+            House_name = house?.Name;
+            House_indice = house?.Indice;
         }
 
         #endregion
