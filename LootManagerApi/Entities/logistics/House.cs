@@ -4,19 +4,11 @@ using System.Text;
 
 namespace LootManagerApi.Entities.logistics
 {
-    public class House
+    public class House : Unit
     {
-        #region PROPERTIES
+        // PROPERTIES
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Indice { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-
-        #endregion
-
-        #region NAVIGATION PROPERTIES (3)
+        // NAVIGATION PROPERTIES (3)
 
         // One User To Many House
         public int UserId { get; set; }
@@ -29,9 +21,8 @@ namespace LootManagerApi.Entities.logistics
         // One House To Many Rooms?
         public List<Room>? Rooms { get; set; }
 
-        #endregion
 
-        #region CONSTRUCTORS
+        // CONSTRUCTORS
 
         public House()
         {
@@ -49,7 +40,7 @@ namespace LootManagerApi.Entities.logistics
             LocationId = locationDto.LocationId;
         }
 
-        #endregion
+        // METHODS
 
         public override string? ToString()
         {
